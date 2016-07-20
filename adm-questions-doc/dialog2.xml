@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog xsi:noNamespaceSchemaLocation="WatsonDialogDocument_1.1.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <flow>
+        <folder label="Main">
+            <output>
+                <prompt selectionType="RANDOM">
+                    <item>Olá! Em que posso ajudar em relação as suas férias?</item>
+					<item>Oi! Sou seu assistente sobre férias. Em que posso ajudar?</item>
+                </prompt>
+                <action varName="CLASSIFIER_CLASS_0" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CLASS_1" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CLASS_2" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CONF_0" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CONF_1" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CONF_2" operator="SET_TO_BLANK"/>
+                <getUserInput>
+                    <action varName="RESPOSTA" operator="SET_TO_BLANK"/>
+                    <search ref="folder_-2">
+                        <classifier policy="SEARCHMODE_CLASSIFIER"
+                            threshold="0.84" exactMatchFirst="true"
+                            fuzzyThreshold="0.0" trainOnInput="true" trainOnOutput="true">
+                            <customParams></customParams>
+                        </classifier>
+                    </search>
+                    <default>
+                        <action varName="CLASSIFIER_CLASS_0" operator="SET_TO_BLANK"/>
+                        <action varName="CLASSIFIER_CLASS_1" operator="SET_TO_BLANK"/>
+                        <action varName="CLASSIFIER_CLASS_2" operator="SET_TO_BLANK"/>
+                        <action varName="CLASSIFIER_CONF_0" operator="SET_TO_BLANK"/>
+                        <action varName="CLASSIFIER_CONF_1" operator="SET_TO_BLANK"/>
+                        <action varName="CLASSIFIER_CONF_2" operator="SET_TO_BLANK"/>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>Desculpe, ainda estou aprendendo....</item>
+                            </prompt>
+                            <action varName="RESPOSTA" operator="SET_TO_BLANK"/>
+                        </output>
+                    </default>
+                </getUserInput>
+            </output>
+        </folder>
+        <folder label="Library" id="folder_-2">
+            <folder label="LiveContent" id="folder_classifier_9a9388x45-nlc-888_3">
+				<input>
+                    <grammar>
+                        <item>Aprovação automática de férias</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Aprovação automática de férias</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Aprovação e Reprovação das férias</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Aprovação e Reprovação das férias</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Assinatura do recibo de férias</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Assinatura do recibo de férias</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Data de inicio de férias</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Data de inicio de férias</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Início das férias após retorno de Licença Maternidade</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Início das férias após retorno de Licença Maternidade</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Período de férias para empregados com mais de 18 e menos de 50 anos</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Período de férias para empregados com mais de 18 e menos de 50 anos</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Período de férias único para colaboradores com menos de 18 e mais de 50 anos</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Período de férias único para colaboradores com menos de 18 e mais de 50 anos</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Prazo de aprovação de férias do colaborador</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Prazo de aprovação de férias do colaborador</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Prazo de pagamento de férias</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Prazo de pagamento de férias</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Prazo de solicitação de férias do colaborador</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Prazo de solicitação de férias do colaborador</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Reprogramação de férias com prazo inferior a 40 dias</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Reprogramação de férias com prazo inferior a 40 dias</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Saldo de férias no Sistema de Solicitação de Férias</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Saldo de férias no Sistema de Solicitação de Férias</action>
+                    <goto ref="folder_204270"/>
+                </input>
+				<input>
+                    <grammar>
+                        <item>Fracionamento das férias</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Fracionamento das férias</action>
+                    <goto ref="folder_204270"/>
+                </input>
+                <input>
+                    <grammar>
+                        <item>Acúmulo de férias</item>
+                    </grammar>
+					<action varName="RESPOSTA" operator="SET_TO">Acúmulo de férias</action>
+                    <goto ref="folder_204270"/>
+                </input>
+            </folder>
+            <folder label="Personality" id="folder_2530413">
+                <folder label="Neutral">
+                    <folder label="Greetings">
+                        <input>
+                            <grammar>
+                                <item>Olá</item>
+                                <item>$ olá</item>
+                                <item>$ boa tarde</item>
+                                <item>bom dia</item>
+                                <item>$ opa</item>
+                            </grammar>
+                            <output>
+                                <prompt selectionType="RANDOM">
+                                    <item>Ola para você!</item>
+                                </prompt>
+                            </output>
+                        </input>
+                        <input>
+                            <grammar>
+                                <item>Adeus</item>
+                                <item>$ adeus</item>
+                                <item>$ abraço</item>
+                                <item>$ até mais</item>
+                                <item>$ , até mais</item>
+                                <item>$ tchau</item>
+                                <item>$ até</item>
+                            </grammar>
+                            <output>
+                                <prompt selectionType="RANDOM">
+                                    <item>Tchau.</item>
+                                    <item>Espero que tenhamos a chance de conversar novamente. Falamos depois.</item>
+                                </prompt>
+                            </output>
+                        </input>
+                    </folder>
+                </folder>
+            </folder>
+            <folder label="Desambiguação" id="folder_204270">
+                <action varName="CLASSIFIER_CLASS_0" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CLASS_1" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CLASS_2" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CONF_0" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CONF_1" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CONF_2" operator="SET_TO_BLANK"/>
+                <output>
+                    <prompt selectionType="RANDOM">
+                        <item>{"resposta":{RESPOSTA}}</item>
+                    </prompt>
+                </output>
+            </folder>
+            <folder selectionType="RANDOM" label="Seleção de Atributos" id="folder_204464">
+                <action varName="CLASSIFIER_CONF_0" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CONF_1" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CONF_2" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CLASS_0" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CLASS_1" operator="SET_TO_BLANK"/>
+                <action varName="CLASSIFIER_CLASS_2" operator="SET_TO_BLANK"/>
+            </folder>
+        </folder>
+        <folder label="Global"/>
+        <folder label="Concepts"/>
+    </flow>
+    <constants>
+        <var_folder name="Home">
+            <var_folder name="General" type="CONST"/>
+        </var_folder>
+    </constants>
+    <variables>
+        <var_folder name="Home">
+            <var_folder name="atributos" type="VAR">
+                <var name="RESPOSTA" type="TEXT"/>
+            </var_folder>
+            <var name="CLASSIFIER_CLASS_0" type="TEXT" description="auto-created"/>
+            <var name="CLASSIFIER_CONF_0" type="NUMBER" description="auto-created"/>
+            <var name="CLASSIFIER_CLASS_1" type="TEXT" description="auto-created"/>
+            <var name="CLASSIFIER_CONF_1" type="NUMBER" description="auto-created"/>
+            <var name="CLASSIFIER_CLASS_2" type="TEXT" description="auto-created"/>
+            <var name="CLASSIFIER_CONF_2" type="NUMBER" description="auto-created"/>
+        </var_folder>
+    </variables>
+    <settings>
+        <setting name="AUTOLEARN" type="USER">false</setting>
+        <setting name="LANGUAGE" type="USER">pt-BR</setting>
+        <setting name="RESPONSETIME" type="USER">-2</setting>
+        <setting name="MAXAUTOLEARNITEMS" type="USER">4</setting>
+        <setting name="NUMAUTOSETRELATED" type="USER">0</setting>
+        <setting name="TIMEZONEID" type="USER">Brazil/East</setting>
+        <setting name="AUTOSETRELATEDNODEID" type="USER">0</setting>
+        <setting name="INPUTMASKTYPE" type="USER">0</setting>
+        <setting name="CONCEPTMATCHING" type="USER">0</setting>
+        <setting name="PLATFORM_VERSION">10.1</setting>
+        <setting name="USE_CONCEPTS">3</setting>
+        <setting name="ENTITIES_SCOPE">3</setting>
+        <setting name="UI_COLOUR"></setting>
+        <setting name="USE_TRANSLATIONS">3</setting>
+        <setting name="USE_SPELLING_CORRECTIONS">3</setting>
+        <setting name="USE_STOP_WORDS">3</setting>
+        <setting name="PARENT_ACCOUNT">pt-br</setting>
+        <setting name="AL_NONE_LABEL">None of the above</setting>
+        <setting name="ENABLE_CLASSIFIERS">false</setting>
+        <setting name="USER_LOGGING">2</setting>
+        <setting name="DEFAULT_DNR_RETURN_POINT_CANDIDATE">-1</setting>
+        <setting name="MULTISENT">0</setting>
+        <setting name="DNR_NODE_ID">-16</setting>
+        <setting name="USE_AUTOMATIC_STOPWORDS_DETECTION">0</setting>
+        <setting name="CLS_SEARCH_MODE">0</setting>
+        <setting name="CLS_MODEL">0</setting>
+        <setting name="CLS_ENDPOINT"></setting>
+        <setting name="CLS_USERNAME"></setting>
+        <setting name="CLS_PASSWORD"></setting>
+        <setting name="CLS_MODELNAME">c115edx72-nlc-3031</setting>
+        <setting name="CLS_ADVANCED_SETTINGS">true</setting>
+        <setting name="CLS_MAXNBEST">5</setting>
+        <setting name="CLS_USE_OFFTOPIC">false</setting>
+    </settings>
+    <specialSettings>
+        <specialSetting label="AutoLearn Statement">
+            <variations/>
+        </specialSetting>
+        <specialSetting label="DNR Join Statement">
+            <variations/>
+        </specialSetting>
+    </specialSettings>
+</dialog>

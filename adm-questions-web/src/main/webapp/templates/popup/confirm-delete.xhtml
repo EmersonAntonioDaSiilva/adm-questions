@@ -1,0 +1,12 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+				xmlns:p="http://primefaces.org/ui">
+				
+	<p:confirmDialog severity="alert" header="Confirmação" message="Deseja realmente excluir este registro?" widgetVar="confirmation">
+		<div align="center">
+			<p:commandButton value="Sim" action="#{manager.delete}" onclick="confirmation.hide()" update="@form" />
+			<p:commandButton value="Não" onclick="confirmation.hide()" /><!-- type="button"  -->
+		</div>
+	</p:confirmDialog>
+	
+</ui:composition>

@@ -1,0 +1,61 @@
+/* DataTable
+----------------------------------*/
+.ux-column-date,.ux-column-cep,.ux-column-phone,.ux-column-fixedsize,.ux-column-download {
+	text-align: center;
+}
+
+.ux-column-currency,.ux-column-number {
+	text-align: right;
+}
+.ux-selectcheckboxmenu-selectall .ui-selectcheckboxmenu-header .ui-chkbox {
+    display: none; 
+}
+.ux-dataTable .ui-datatable-header, .ux-dataTable .ui-datatable-footer {
+	min-height: 20px;
+	line-height: 20px;
+}
+.ui-menu {
+width: auto !important;
+white-space: nowrap;
+}
+
+/* Selection */
+.disabled td.ui-selection-column .ui-radiobutton {
+	display: none;
+}
+
+
+
+/* Panelgrid
+----------------------------------*/
+.ux-panelgrid>tbody>tr {
+	border-bottom: 1px solid #e7e7e7;
+	vertical-align: bottom;
+}
+
+
+.ux-informativo {
+	background-color: #FFECB3;
+	border: solid 1px #C03B36;
+	color: #C03B36;
+	padding-top: 5px;
+	padding-bottom: 10px;
+	margin-top: 15px;
+}
+
+.ux-menubutton-actioncolumn .ui-button,
+.ux-menubutton-notext .ui-button {
+	height: 22px;
+}
+
+.textAlignLeft {
+	text-align: left;
+}
+
+.textAlignRight {
+	text-align: right;
+}
+
+.textAlignCenter {
+	text-align: center;
+}

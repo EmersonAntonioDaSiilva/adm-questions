@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 	xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+		xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<title>SGP - Sistema de Gerenciamento de adm-questions</title>
+
+	<!-- CSS -->
+	<h:outputStylesheet library="css" name="reset.css" />
+	<h:outputStylesheet library="css" name="theme.css" />
+	<h:outputStylesheet library="css" name="default.css" />
+	<h:outputStylesheet library="css" name="styles.css" />
+	
+	<!-- JS -->
+	<h:outputScript library="js" name="primefaces.locale.js" />
+	<h:outputScript library="js" name="common.js" />
+
+</h:head>
+
+<h:body>
+	<div align="center">
+		<div id="page" style="width: 1007px">
+			<ui:include src="/templates/layout/preloader.xhtml" />
+
+			<ui:insert name="top"></ui:insert>
+			<ui:insert name="center"></ui:insert>
+			<ui:insert name="bottom"></ui:insert>
+		</div>
+	</div>
+</h:body>
+
+</html>

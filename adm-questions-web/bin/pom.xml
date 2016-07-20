@@ -1,0 +1,223 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<parent>
+		<groupId>br.com.afirmanet.adm-questions</groupId>
+		<artifactId>adm-questions-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../adm-questions-parent/pom.xml</relativePath>
+	</parent>
+  
+    <modelVersion>4.0.0</modelVersion>
+	
+	<artifactId>adm-questions-web</artifactId>
+	<packaging>war</packaging>
+	
+	<name>adm-questions</name>
+	<description>SGP - Sistema de Gerenciamento de adm-questions</description>
+	
+	<properties>
+		<build.date>${maven.build.timestamp}</build.date>
+	</properties>
+	
+	
+	<dependencies>
+	
+		<!-- Arquitetura JSF 2.2 -->
+       	<!-- JAVAX SERVLET -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		</dependency>
+
+		<!-- JSF -->
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-impl</artifactId>
+		</dependency>
+
+		<!-- CDI -->
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+		</dependency>
+
+		<!-- EL - Expression Language -->
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>el-api</artifactId>
+		</dependency>
+
+		<!-- Omnifaces -->
+		<dependency>
+			<groupId>org.omnifaces</groupId>
+			<artifactId>omnifaces</artifactId>
+		</dependency>
+
+		<!-- PrimeFaces -->
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>bootstrap</artifactId>
+		</dependency>
+		
+		<!--Fim  Arquitetura JSF 2.2 -->
+	
+	
+		<dependency>
+			<groupId>org.picketlink</groupId>
+			<artifactId>picketlink-api</artifactId>
+			<!-- <scope>provided</scope>  Passar para provided na versão 8.0.1--> 
+		</dependency>
+		<dependency>
+			<groupId>org.picketlink</groupId>
+			<artifactId>picketlink-impl</artifactId>
+			<!-- <scope>provided</scope>  Passar para provided na versão 8.0.1-->
+		</dependency>
+			
+		<!-- Commons -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+		</dependency>
+
+		<!-- Google Guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>			
+	
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+
+		<!-- javax.annotation -->
+		<!-- javax.enterprise -->
+
+		<!-- Java EE -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+		</dependency>
+
+		<!-- javax.validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+
+		<!-- JBoss -->
+		<dependency>
+			<groupId>org.jboss.ws</groupId>
+			<artifactId>jbossws-api</artifactId>
+		</dependency>
+
+		<!-- Lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<!-- Módulos EJB do projeto -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>adm-questions-ejb</artifactId>
+			<version>${project.version}</version>
+			<type>ejb</type>
+		</dependency>
+
+		<!-- SLF4J -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+
+	</dependencies>
+	
+	<repositories>
+	    <repository>
+	        <id>prime-repo</id>
+	        <name>PrimeFaces Maven Repository</name>
+	        <url>http://repository.primefaces.org</url>
+	        <layout>default</layout>
+	    </repository>
+	</repositories>
+		
+	<build>
+		<finalName>adm-questions</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<archive>
+						<manifest>
+							<packageName>${project.artifactId}</packageName>
+						</manifest>
+						<manifestEntries>
+							<Specification-Title>${project.name} (${project.description})</Specification-Title>
+							<Specification-Vendor>${project.organization.name}</Specification-Vendor>
+							<Specification-Version>${project.version}</Specification-Version>
+							<Implementation-Title>${project.name} (${project.description})</Implementation-Title>
+							<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+							<Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+							<Implementation-Version>${project.version}</Implementation-Version>
+						</manifestEntries>
+					</archive>
+					<webResources>
+						<resource>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>version.jsp</include>
+							</includes>
+							<filtering>true</filtering>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+		</plugins>	
+	</build>
+	<organization>
+		<name>Afirma Net</name>
+		<url>http://www.afirmanet.com.br</url>
+	</organization>
+	<inceptionYear>2015</inceptionYear>
+</project>

@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+	<composite:interface>
+		<composite:attribute name="label" required="true" />
+		<composite:attribute name="value" required="true" />
+		<composite:attribute name="required" default="false" type="java.lang.String" />
+		<composite:attribute name="width" default="100px" type="java.lang.String" />
+	</composite:interface>
+
+	<composite:implementation>
+		<p:panelGrid id="inputContainer" columns="3" styleClass="ux-inputcontainer">
+			<p:outputLabel for="calendar" value="#{cc.attrs.label}:" style="width: #{cc.attrs.width};" />
+			<p:calendar id="calendar" value="#{cc.attrs.value}" size="12" showOn="both" pattern="yyyy" mask="true" required="#{cc.attrs.required}" effect="fadeIn" converter="LocalDateYearConverter" />
+			<p:message for="calendar" display="icon" showDetail="false" showSummary="true" />
+		</p:panelGrid>
+	</composite:implementation>
+
+</ui:composition>

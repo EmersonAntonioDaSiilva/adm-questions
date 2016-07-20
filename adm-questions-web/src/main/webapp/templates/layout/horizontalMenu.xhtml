@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html" 
+				xmlns:f="http://xmlns.jcp.org/jsf/core"
+				xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="menuForm">
+		<p:menubar>
+			<p:submenu label="M.Watson">
+				<p:menuitem value="Pergunta" url="/pages/perguntaRH.xhtml" />
+				<p:menuitem value="Bate Papo" url="/pages/dialogRH.xhtml" />
+			</p:submenu>
+			<p:submenu label="Mantenção">
+				<p:menuitem value="Clientes" url="/pages/classes.xhtml" />
+				<p:menuitem value="Tópicos" url="/pages/classes.xhtml" />
+				<p:submenu label="NLC">
+					<p:menuitem value="Respostas" url="/pages/resposta.xhtml" />
+					<p:menuitem value="Classificações" url="/pages/classificacoes.xhtml" />
+				</p:submenu>
+				<p:submenu label="Dialog">
+				</p:submenu>
+			</p:submenu>			
+		</p:menubar>
+	</h:form>
+
+</ui:composition>

@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+	<composite:interface>
+		<composite:attribute name="label" required="true" />
+		<composite:attribute name="value" required="true" />
+		<composite:attribute name="cols" default="128" type="java.lang.Integer" />
+		<composite:attribute name="rows" default="20" type="java.lang.Integer" />
+		<composite:attribute name="height" default="80px" type="java.lang.String" />
+		<composite:attribute name="maxlength" default="0" type="java.lang.Integer" />
+		<composite:attribute name="required" default="false" type="java.lang.String" />
+	</composite:interface>
+
+	<composite:implementation>
+		<p:panelGrid id="inputContainer" styleClass="ux-inputtextareacontainer">
+			<p:row>
+				<p:column colspan="2">
+					<p:outputLabel for="inputTextarea" value="#{cc.attrs.label}:" style="padding-top: 6px; padding-bottom: 3px" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:inputTextarea id="inputTextarea" value="#{cc.attrs.value}" rows="#{cc.attrs.rows}" cols="#{cc.attrs.cols}" style="height: #{cc.attrs.height};" maxlength="#{cc.attrs.maxlength}" required="#{cc.attrs.required}"
+						counter="display" counterTemplate="Quantidade de caracteres restantes: {0}" autoResize="false" />
+				</p:column>
+				<p:column>
+					<p:message for="inputTextarea" display="icon" showDetail="false" showSummary="true" />
+				</p:column>
+			</p:row>
+			<p:row rendered="#{cc.attrs.maxlength != 0}">
+				<p:column colspan="2">
+					<h:outputText id="display" style="color: #646464" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</composite:implementation>
+
+</ui:composition>

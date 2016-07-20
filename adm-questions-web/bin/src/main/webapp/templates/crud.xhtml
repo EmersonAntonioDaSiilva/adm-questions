@@ -1,0 +1,49 @@
+<ui:decorate 	xmlns="http://www.w3.org/1999/xhtml" 
+    			xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html" 
+				xmlns:f="http://xmlns.jcp.org/jsf/core" 
+				xmlns:p="http://primefaces.org/ui" 
+				template="search.xhtml">
+
+	<!-- Filtros da pesquisa -->
+	<ui:define name="middleButtonsFormSearchFilter">
+		<p:commandButton value="Incluir" icon="ui-icon-document" action="#{manager.prepareInsert}" rendered="#{manager.showInsertButton}" update="@form" immediate="true" />
+	</ui:define>
+	
+	<!-- Resultado da pesquisa -->
+	<ui:define name="actionsRowSearchResult">
+		<p:commandButton id="btAlterar" title="Alterar" icon="ui-icon-pencil" action="#{manager.prepareEdit(entity)}" rendered="#{manager.showEditButton}" immediate="true" update="@form"  />
+		<p:commandButton id="btExcluir" title="Excluir" icon="ui-icon-trash" action="#{manager.setEntity(entity)}" ajax="true" oncomplete="PF('confirmation').show()" rendered="#{manager.showDeleteButton}" update="@form:confirmDelete" />
+	</ui:define>
+	
+	<!-- Detalhe do registro -->
+	<ui:define name="lastButtonsFormRecordDetail">
+		<ui:insert name="firstButtonsFormRecordDetail" />
+		
+		<p:commandButton value="Alterar" icon="ui-icon-pencil" action="#{manager.prepareEdit(manager.entity)}" rendered="#{manager.showEditButton}" update="@form" />
+		<p:commandButton value="Excluir" icon="ui-icon-trash" action="#{manager.setEntity(manager.entity)}" oncomplete="PF('confirmation').show()" rendered="#{manager.showDeleteButton}" update="@form:confirmDelete" />
+	</ui:define>
+	
+	<!-- Inserção/edição do registro -->
+	<ui:define name="genericBlock">
+		<p:panel id="recordInsertEdit" header="#{manager.managed ? 'Alteração de' : 'Inclusão de'} #{entityName}" rendered="#{manager.insertEditAction}">
+			<p:focus context="recordInsertEdit"/>
+			
+			<ui:insert name="recordInsertEditBlock" />
+			
+			<div class="ux-action-button">
+				
+				<p:commandButton value="Salvar" icon="ui-icon-disk" action="#{manager.save}" rendered="#{not manager.managed}" update="@form" />
+				<p:commandButton value="Salvar" icon="ui-icon-disk" action="#{manager.update}" rendered="#{manager.managed}" update="@form" />
+				<p:commandButton value="Cancelar" icon="ui-icon-close" action="#{manager.cancel}" immediate="true" update="@form" escape="true" />
+		
+				<ui:insert name="lastButtonsFormRecordInsertEdit" />
+			</div>
+		</p:panel>
+
+		<ui:include src="/templates/popup/confirmDelete.xhtml" />
+		
+		<ui:insert name="genericBlock" />
+	</ui:define>
+
+</ui:decorate>

@@ -1,0 +1,32 @@
+Os pontos de partida para uma melhor compreensão do processo como um todo é a legislação trabalhista que rege esse direito.
+
+ -- Classe: Período Aquisitivo
+	Defini: A principal ponto é o direito às férias, que só pode ser exercido após 12 meses de trabalho, chamado de período aquisitivo, assim as férias só podem ser marcadas para terem seu início de gozo após 12 meses da admissão, no primeiro período e a cada 12 meses para novos períodos aquisitivos, sempre tomando a data da admissão como referência.
+
+ -- Classe: Data da comunicação de saida de férias
+	Defini: Outro ponto importante é data limite que a empresa pode comunicar ao colaborador a data da sua saída de férias que é de 30 dias antes do início do gozo. Assim, as férias têm que estar marcadas, obrigatoriamente, 30 dias antes da saída.
+
+ -- Classe: Abono pecuniário
+	Defini: O abono pecuniário só pode ser pedido no primeiro período de férias.
+
+ -- Classe: Desconto por faltas / Perca de fracionar férias
+	Defini: Colaboradores que tenham direito a menos de 30 dias de férias, devido a descontos por faltas, se decidirem solicitar o abono pecuniário não poderão parcelar as férias.
+
+ -- Classe: Fluxo do processo de solicitação de férias / Colaborador
+	Defini: O colaborador será responsável pela solicitação das mesmas no Sistema de Solicitação de Férias.
+
+ -- Classe: Fluxo do processo de solicitação de férias / Gerente de AprovadorDiretor
+ 	Defini: O Gerente de Aprovador ou de Área será responsável pela aprovação ou rejeição da solicitação deverá ser feito dentro do prazo conforme item 2.4 e, seguindo as regras definidas neste documento;
+	
+ -- Classe: Fluxo do processo de solicitação de férias / Departamento de Pessoal
+ 	Defini: O Departamento de Pessoal será responsável por verificar se a solicitação férias justificada está adequada às normas vigentes, definidas no item 2.3. É função do departamento de pessoal gerar o recibo de férias, conforme item 2.6, e providenciar os pagamentos conforme estas regras.
+	
+ -- Classe: Fluxo do processo de solicitação de férias / Diretor
+ 	Defini: Os Diretores podem ser incluídos no processo em casos que fujam dos procedimentos normais.
+
+ -- Classe: Política de solicitação de férias / Sistema
+	Defini: O “Sistema de Solicitação de Férias” deve ser usado para todas as solicitações de férias.
+
+ -- Classe: Recibo de Férias / Assinatura
+	Defini: O colaborador deverá assinar o mesmo antes da sua saída, verificando datas e valores do mesmo.
+	Para colaboradores que não podem se deslocar para a Magna, verifiquem com o Departamento de Pessoal alternativas para assinar o documento.

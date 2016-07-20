@@ -1,0 +1,99 @@
+<ui:decorate xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html" 
+				xmlns:f="http://xmlns.jcp.org/jsf/core" 
+				xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" 
+				xmlns:p="http://primefaces.org/ui" 
+				xmlns:of="http://omnifaces.org/functions"
+				template="default-page.xhtml">
+
+	<ui:param name="contentTitle" value="Cadastro de #{entityName}" />
+	
+	<ui:define name="content">
+		
+		<h:form id="form">
+			
+			<!-- Filtros da pesquisa -->
+			<p:panel id="searchFilter" header="Consulta de #{entityName}" rendered="#{manager.searchAction and manager.showFormSearchFilter}" toggleable="false">
+				<p:focus context="searchFilter"/>
+				
+				<ui:insert name="searchFilterBlock" />
+				
+				<div class="ux-action-button">
+					<ui:insert name="firstButtonsFormSearchFilter" />
+					<p:commandButton id="btConsultar" value="Consultar" icon="ui-icon-search" action="#{manager.search}" rendered="#{manager.showSearchButton}" update="@form"  />
+					<p:remoteCommand name="resetFull" actionListener="#{manager.reset}" update="@form" />
+					<ui:insert name="middleButtonsFormSearchFilter" />
+					<p:commandButton value="Limpar" icon="ui-icon-newwin" rendered="#{manager.showResetButton}" resetValues="true" process="@this" onclick="try {PF('searchResultTable').clearFilters()}catch(e){}" oncomplete="resetFull()" escape="true" />
+					<ui:insert name="lastButtonsFormSearchFilter" />
+				</div>
+			</p:panel>
+			
+			<!-- Resultado da pesquisa -->
+			<p:dataTable id="searchResult" widgetVar="searchResultTable" value="#{manager.entityList}" var="entity" rowIndexVar="rowIndex" rows="#{manager.entityList.rows}" rowsPerPageTemplate="10,25,50,100" 
+				paginator="true" paginatorAlwaysVisible="false" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+				currentPageReportTemplate="{currentPage} de {totalPages}" emptyMessage="Nenhum resultado encontrado" lazy="true" resizableColumns="true" selection="#{manager.selectedEntities}" filterDelay="1000" styleClass="ux-dataTable" 
+				rendered="#{manager.searchAction and manager.entityList.rowCount gt 0}" rowExpandMode="single" expandedRow="#{manager.isEntityExpanded(entity)}">
+				
+				<f:facet name="header">
+					<h:outputText value="Registros encontrados" />
+					
+					<c:if test="#{manager.showRefreshButton}">
+						<p:splitButton id="refreshSearchResult" update="@form:searchResult" style="float:left" styleClass="ux-menubutton-notext" icon="ui-icon-refresh" title="Atualizar resultado da pesquisa. Refresh automático a cada #{manager.refreshInterval eq 30 ? '30 segundos' : (manager.refreshInterval eq 60 ? '1 minuto' : '5 minutos')}">
+					        <p:menuitem value="Atualizar a cada 30 segundos" actionListener="#{manager.setRefreshInterval(30)}" update="@form:searchResult" />
+					        <p:menuitem value="Atualizar a cada 1 minuto" actionListener="#{manager.setRefreshInterval(60)}" update="@form:searchResult" />
+					        <p:menuitem value="Atualizar a cada 5 minutos" actionListener="#{manager.setRefreshInterval(150)}" update="@form:searchResult" />
+					    </p:splitButton>
+						<p:poll id="pollRefreshInterval" interval="#{manager.getRefreshInterval()}" update="@form" />
+						
+						<!-- h:outputLabel value="Atualizado em #{of:formatDate(now, 'dd/MM/yyyy HH:mm:ss')}" style="float:left; color: #222222; font-style: italic;" /-->
+					</c:if>
+					
+					<p:commandButton id="toggler" type="button" value="Colunas" style="float:right" icon="ui-icon-calculator" />
+					<p:columnToggler datasource="searchResult" trigger="toggler" />
+				</f:facet>
+				
+				<p:column headerText="#" toggleable="false" styleClass="ux-column-fixedsize" style="width: 15px;">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+				<p:column selectionMode="#{manager.singleSelection ? 'single' : 'multiple'}" toggleable="false" style="width:16px; text-align:center" rendered="#{manager.showSelectionColumn}" />
+						
+				<ui:insert name="searchResultBlock" />
+				
+				<p:column toggleable="false" rendered="#{manager.showActionColumn or manager.showDetailButton}" style="width: 100px;">
+					<p:commandButton id="btDetalhar" title="Detalhar" icon="ui-icon-bookmark" action="#{manager.detail(entity)}" rendered="#{manager.showDetailButton}" immediate="true" update="@form"  />
+					<ui:insert name="actionsRowSearchResult" />
+				</p:column>
+				
+				<c:if test="#{manager.showSelectionColumn}">
+					<f:facet name="footer">
+						<p:menuButton value="Ações" style="float: left;">
+					        <ui:insert name="actionsSearchResult" />
+					    </p:menuButton>
+					</f:facet>
+				</c:if>
+			</p:dataTable>
+			
+			<p:panel style="margin-top: 20px" rendered="#{manager.searchAction and manager.entityList.rowCount eq 0}">
+				<p:panelGrid columns="1" style="text-align: center">
+					<h:outputText value="Nenhum resultado encontrado" style="color: #8C291d; font-weight: bold" />
+				</p:panelGrid>
+			</p:panel>
+       		
+       		<!-- Detalhe do registro -->
+       		<p:panel id="recordDetail" header="Detalhe do(a) #{entityName}" rendered="#{manager.detailAction}">
+				<ui:insert name="recordDetailBlock" />
+				
+				<div id="divComandosDetail" class="ux-action-button">
+					<p:commandButton id="btOK" value="OK" icon="ui-icon-circle-check" action="#{manager.done}" update="@form" />
+					<ui:insert name="lastButtonsFormRecordDetail" />
+				</div>
+			</p:panel>
+			
+			<!-- Outras informações -->
+			<ui:insert name="genericBlock" />
+
+		</h:form>
+	
+	</ui:define>
+</ui:decorate>

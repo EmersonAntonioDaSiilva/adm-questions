@@ -1,0 +1,64 @@
+<ui:composition template="/templates/default-page.xhtml" 
+				xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html" 
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:f="http://xmlns.jcp.org/jsf/core" 
+				xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:param name="contentTitle" value="Classicicação" />
+	<ui:param name="hideMenu" value="true" />
+
+	<ui:define name="content">
+		<h:form id="formClassificacaoRH">
+			<p:focus />
+			<p:panelGrid style="width: 100%; background-color: #F4F4F4 !important;">
+				<p:row>
+					<p:column colspan="3">
+						<p:outputLabel value="Tópicos:" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">				        
+						<p:selectOneRadio id="selectTopico" value="#{classificacoesManager.topico}">
+						    <f:selectItems value="#{classificacoesManager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
+						    <p:ajax event="change" listener="#{classificacoesManager.carregaDadosClassificacao}" update="tableClassificacoes, tableResposta"/>
+						</p:selectOneRadio>
+					</p:column>
+				</p:row>				
+				<p:row>
+					<p:column>
+						<p:dataTable id="tableClassificacoes" widgetVar="classificacaoTable" value="#{classificacoesManager.lstClassificacao}" var="class" selection="#{classificacoesManager.selecionadosClassificacao}" selectionMode="multiple">
+							<p:column headerText="Pergunta">
+						        <h:outputText value="#{class.pergunta}" />
+						    </p:column>
+							<p:column headerText="Resposta">
+						        <h:outputText value="#{class.resposta}" />
+						    </p:column>
+							<p:column headerText="%">
+						        <h:outputText value="#{class.confidence}" />
+						    </p:column>
+							<p:column headerText="dt Cadastro">
+						        <h:outputText value="#{class.dataCadastro}" />
+						    </p:column>
+							<p:column headerText="Sentimento">
+						        <h:outputText value="#{class.sentimento}" />
+						    </p:column>
+							<p:column style="width: 30px;">
+								<p:commandButton id="btDeletar" title="Deletar" icon="ui-icon-trash" action="#{manager.deletePergunta(pergunta)}" immediate="true" update="@form"  />
+							</p:column>
+						</p:dataTable>
+					</p:column>
+					<p:column style="width: 5px;"></p:column>
+					<p:column>
+						<p:dataTable id="tableResposta" widgetVar="respostaTable" value="#{classificacoesManager.lstResposta}" var="resposta" selection="#{classificacoesManager.resposta}" selectionMode="single">							
+							<p:column headerText="Titulo">
+						        <h:outputText value="#{resposta.titulo}" />
+						    </p:column>
+						</p:dataTable>					
+					</p:column>					
+				</p:row>
+			</p:panelGrid>
+		</h:form>	
+	</ui:define>
+</ui:composition>

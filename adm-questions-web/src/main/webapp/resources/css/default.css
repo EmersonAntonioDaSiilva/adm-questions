@@ -1,0 +1,229 @@
+/* HTML
+----------------------------------*/
+button,td img {
+	margin-left: 5px;
+}
+
+button span {
+	font-weight: bold;
+	color: black;
+}
+
+label {
+	display: inline-block;
+	font-weight: bold;
+}
+
+legend {
+	padding-top: 5px !important;
+	padding-bottom: 5px !important;
+}
+
+a:hover {
+	color: #8C291d;
+}
+
+
+/* Preloader
+----------------------------------*/
+.ux-preloader .ui-dialog-titlebar {
+	display: none !important;
+}
+
+/* alert 
+----------------------------------*/
+.ux-content-alert {
+	color: #C03B36;
+	font-family: arial, sans-serif;
+	font-weight: bold;
+	padding-left: 10px;
+	font-size: 12px;
+}
+
+/* Header / Title
+----------------------------------*/
+.ux-content-title,.ux-header-title {
+	color: #C03B36;
+	font-family: arial, sans-serif;
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+.ux-content-title {
+	font-size: 18px;
+	padding-left: 0px;
+	margin-bottom: 15px;
+}
+
+.ux-header {
+	height: 54px;
+	background: #c4c4c4 linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.6));
+	background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 1)), to(rgba(255, 255, 255, 0.6)));
+	background: #c4c4c4 -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.6) 100%);
+	border: 1px solid #a8a8a8;
+}
+
+.ux-header-title {
+	font-size: 12px;
+}
+
+.ux-header-subtitle {
+	padding-top: 3px;
+	color: #686868;
+	font-family: arial, sans-serif;
+	font-size: 21px;
+	font-weight: bold;
+	text-align: left;
+	padding-left: 10px;
+}
+
+.ux-header-text {
+	padding-top: 5px;
+	float: left;
+}
+
+.ux-header-image {
+	float: right;
+	padding-right: 3px;
+}
+
+
+/* Menu
+----------------------------------*/
+.ux-menubar {
+	margin-top: 3px;
+}
+
+
+/* Identification
+----------------------------------*/
+.ux-identification {
+	background: #c4c4c4 linear-gradient(top, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 1));
+	background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.4)), to(rgba(255, 255, 255, 1)));
+	background: #c4c4c4 -moz-linear-gradient(top, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 1) 100%);
+	text-align: right;
+}
+
+
+
+.ux-identification-text {
+	font-family: arial, sans-serif;
+	color: #6E6E6E;
+	font-size: 10px;
+	vertical-align: middle;
+}
+
+
+
+.ux-cell {
+	background: #000000 linear-gradient(top, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 1));
+	background: #000000 -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.4)), to(rgba(255, 255, 255, 1)));
+	background: #000000 -moz-linear-gradient(top, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 1) 100%);
+}
+    
+
+/* Body
+----------------------------------*/
+.ux-body {
+	box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+	margin: 0;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 0px;
+	padding-right: 0px;
+	position: relative;
+	width: 100%;
+}
+
+.ux-body-content {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #D3CCCC;
+	box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+	margin: 0 auto 3px;
+	padding-bottom: 10px;
+	min-height: 480px;
+}
+
+
+/* Footer
+----------------------------------*/
+.ux-footer {
+	height: 22px;
+	background: #c4c4c4 linear-gradient(top, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 1));
+	background: #c4c4c4 -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.5)), to(rgba(255, 255, 255, 1)));
+	background: #c4c4c4 -moz-linear-gradient(top, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 1) 100%);
+	border: 1px solid #D3CCCC;
+	margin-top: 20px;
+	margin-bottom: 1px;
+}
+
+.ux-footer-text {
+	float: left;
+	padding-top: 5px;
+	padding-left: 5px;
+	color: #686868;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 9px;
+	font-weight: bold;
+	text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.7);
+}
+
+.ux-footer-image {
+	float: right;
+	padding-top: 2px;
+	padding-right: 5px;
+}
+
+.ux-footer-image img {
+	border: 0px;
+}
+
+
+/* DataTable
+----------------------------------*/
+.ux-dataTable {
+	margin-top: 20px;
+}
+
+
+/* Inputcontainer / Outputcontainer
+----------------------------------*/
+.ux-inputcontainer>tbody>tr>td {
+	width: auto;
+	height: 30px;
+	vertical-align: middle;
+}
+
+/* Inputtextareacontainer 
+----------------------------------*/
+.ux-inputtextareacontainer {
+	margin-top: 4px;
+	margin-bottom: 5px;
+}
+	
+.ux-inputtextareacontainer>tbody>tr>td {
+	width: auto;
+	vertical-align: top;
+}
+
+.ux-outputcontainer>tbody>tr>td {
+	width: auto;
+	height: 30px;
+	vertical-align: middle;
+}
+
+
+/* Action Button
+----------------------------------*/
+.ux-action-button {
+	text-align: right;
+	padding-top: 15px;
+	padding-bottom: 5px;
+	border-top: 1px solid #a8a8a8;
+	box-shadow: 0 1px 0 #FFFFFF inset;
+	margin-top: 20px;
+}
+
+.ux-action-button button {
+	min-width: 80px;
+}

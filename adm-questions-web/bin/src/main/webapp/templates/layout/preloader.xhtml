@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html" 
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+				xmlns:p="http://primefaces.org/ui">
+    
+	<script type="text/javascript">
+		var infoWindowAMShown = false;
+		var infoWindowAMTimer;
+
+		function showPreloader() {
+			infoWindowAMTimer = setTimeout("if(!infoWindowAMShown){PF('preloader').show();infoWindowAMShown=true;}", 500);
+		}
+		function hidePreloader() {
+			if (infoWindowAMShown){
+				PF('preloader').hide();
+				infoWindowAMShown=false;
+			} else { 
+				if(infoWindowAMTimer) 
+					clearTimeout(infoWindowAMTimer);
+			}
+		}
+   	</script>
+   	
+	<p:dialog modal="true" widgetVar="preloader" draggable="false" closable="false" resizable="false" styleClass="ux-preloader">
+		<div align="center">
+			<h:graphicImage style="clear: both;" library="images" name="preloader.gif" /><br />
+			<h:outputText style="clear: both;" value="Carregando solicitação..." />
+		</div>
+	</p:dialog>
+   				
+	<p:ajaxStatus onstart="showPreloader();" onsuccess="hidePreloader();" />
+
+</ui:composition>

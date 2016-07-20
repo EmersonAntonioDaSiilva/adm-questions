@@ -1,0 +1,75 @@
+Os pontos de partida para uma melhor compreensão do processo como um todo é a legislação trabalhista que rege esse direito.
+
+ -- Classe: Período Aquisitivo
+	Defini: A principal ponto é o direito às férias, que só pode ser exercido após 12 meses de trabalho, chamado de período aquisitivo, assim as férias só podem ser marcadas para terem seu início de gozo após 12 meses da admissão, no primeiro período e a cada 12 meses para novos períodos aquisitivos, sempre tomando a data da admissão como referência.
+
+ -- Classe: Data da comunicação de saida de férias
+	Defini: Outro ponto importante é data limite que a empresa pode comunicar ao colaborador a data da sua saída de férias que é de 30 dias antes do início do gozo. Assim, as férias têm que estar marcadas, obrigatoriamente, 30 dias antes da saída.
+
+ -- Classe: Abono pecuniário
+	Defini: O abono pecuniário só pode ser pedido no primeiro período de férias.
+
+ -- Classe: Desconto por faltas / Perca de fracionar férias
+	Defini: Colaboradores que tenham direito a menos de 30 dias de férias, devido a descontos por faltas, se decidirem solicitar o abono pecuniário não poderão parcelar as férias.
+
+ -- Classe: Fluxo do processo de solicitação de férias / Colaborador
+	Defini: O colaborador será responsável pela solicitação das mesmas no Sistema de Solicitação de Férias.
+
+ -- Classe: Fluxo do processo de solicitação de férias / Gerente de AprovadorDiretor
+ 	Defini: O Gerente de Aprovador ou de Área será responsável pela aprovação ou rejeição da solicitação deverá ser feito dentro do prazo conforme item 2.4 e, seguindo as regras definidas neste documento;
+	
+ -- Classe: Fluxo do processo de solicitação de férias / Departamento de Pessoal
+ 	Defini: O Departamento de Pessoal será responsável por verificar se a solicitação férias justificada está adequada às normas vigentes, definidas no item 2.3. É função do departamento de pessoal gerar o recibo de férias, conforme item 2.6, e providenciar os pagamentos conforme estas regras.
+	
+ -- Classe: Fluxo do processo de solicitação de férias / Diretor
+ 	Defini: Os Diretores podem ser incluídos no processo em casos que fujam dos procedimentos normais.
+
+ -- Classe: Política de solicitação de férias / Sistema
+	Defini: O “Sistema de Solicitação de Férias” deve ser usado para todas as solicitações de férias.
+
+ -- Classe: Política de solicitação de férias / Data de inicio das férias
+	Defini: As férias sempre deverão ser iniciadas em uma segunda-feira, ou no dia subsequente quando a segunda-feira coincidir com um feriado.
+	
+ -- Classe: Política de solicitação de férias / Data de inicio das férias pos Licença-Maternidade
+	Defini: Em se tratando de retorno de Licença-Maternidade, o início do gozo das férias poderá ser concedido também em dia que não seja na segunda-feira.
+	
+ -- Classe: Política de solicitação de férias / Saldo de férias fracionada
+	Defini: Os saldos de férias que aparecem no Sistema de Solicitação de Férias são obtidos no ERP adotado pela Magna, distorções podem aparecer devido as fases de processamento das mesmas, em caso de dúvida consulte o Departamento de Pessoal.
+	
+ -- Classe: Política de solicitação de férias / Quantidade de dias de descanso fracionar férias
+	Defini: As férias poderão ser solicitadas como 30 dias de descanso ou um período de 20 dias de descanso + 10 dias de abono pecuniário e poderão ser fracionadas somente em dois períodos, sendo que nenhum deles poderá ser inferior a 10 dias.
+	Opções disponíveis para quem tem 30 dias:
+		a) dois períodos de 15 dias;
+		b) um período de 10 dias + 10 dias de abono pecuniário (obrigatoriamente o primeiro) e um período de 10 dias;
+		b) um período de 10 dias e um período de 20 dias; ou
+		c) um período de 20 dias e um período de 10 dias.
+	Ex. Para escolher receber abono, preencha sim em Abono pecuniário e se for tirar 10 dias de férias (10 em dinheiro e dez em férias) escolha a opção 20 na Qtde de dias. Caso seja 10 e 20, escolha a opção 30 dias.
+	Os Gerentes Departamentais farão a aprovação ou reprovação das solicitações semanalmente.
+ 
+ -- Classe: Prazos / Colaborador 
+	Defini: O colaborador deve solicitar o seu período de férias até no máximo 40 dias antes do início das mesmas
+	
+ -- Classe: Prazos / Gerente Aprovador
+ 	Defini: Os gerentes têm até 10 (dez) dias corridos para aprovar as férias do colaborador. 
+
+ -- Classe: Prazos de pagamento / Departamento de Pessoal
+ 	Defini: O pagamento das férias será feito por meio de crédito em conta corrente com 2 (dois) dias de antecedência da data do descanso.
+
+ -- Classe: Solicitações / Reprogramações - Fora de tempo
+	Defini: A reprogramação com prazo inferior a 40 (quarenta) dias da data que antecede a saída de férias do colaborador, só pode ser feita em casos excepcionais e deverá ser solicitada pelo colaborador em carta de próprio punho explicando as razões pessoais da solicitação. O aceite da reprogramação somente será efetuado após análise do Departamento Pessoal e mediante justificativa e aprovação da Diretoria da Área solicitante.
+
+ -- Classe: Recibo de Férias / Comunicação
+	Defini: O colaborador será informado, via e-mail, da disponibilidade do recibo de férias para assinatura (15 dias antes das férias).
+
+ -- Classe: Recibo de Férias / Assinatura
+	Defini: O colaborador deverá assinar o mesmo antes da sua saída, verificando datas e valores do mesmo.
+	Para colaboradores que não podem se deslocar para a Magna, verifiquem com o Departamento de Pessoal alternativas para assinar o documento.
+
+ -- Classe: Considerações Gerais / Acumulo de férias
+	Defini: Não será permitido ao colaborador acumular dois períodos de férias;
+ 
+ -- Classe:	Considerações Gerais / Periodo unico de férias obrigratório
+	Defini: Os colaboradores com menos de 18 (dezoito) anos e mais de 50 (cinquenta) deverão gozar necessariamente as férias em um único período.
+	
+ -- Classe:	Considerações Gerais / Periodo fracionado de férias
+	Defini: Para os empregados maiores de 18 anos e menores de 50 anos, o fracionamento poderá ser solicitado por expresso pelo empregado ou definido com seus superiores hierárquicos, para que não ocorram prejuízos ao andamento e conclusão dos trabalhos, ou em caso de força maior.

@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+	<composite:interface>
+		<composite:attribute name="value" required="true" />
+		<composite:attribute name="action" required="true" method-signature="void action()" />
+		<composite:attribute name="header" default="Atenção" type="java.lang.String" />
+		<composite:attribute name="message" default="Confirma?" type="java.lang.String" />
+		<composite:attribute name="disabled" default="false" type="java.lang.String" />
+	</composite:interface>
+
+	<composite:implementation>
+		<p:commandButton value="#{cc.attrs.value}" action="#{cc.attrs.action}" disabled="#{cc.attrs.disabled}" update="@form">
+			<p:confirm header="#{cc.attrs.header}" message="#{cc.attrs.message}" icon="ui-icon-alert-confirm" />
+		</p:commandButton>
+	</composite:implementation>
+
+</ui:composition>

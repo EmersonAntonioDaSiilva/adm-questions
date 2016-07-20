@@ -1,0 +1,16 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+	<composite:interface>
+		<composite:attribute name="emptyMessage" default="Nenhum resultado encontrado" type="java.lang.String" />
+	</composite:interface>
+
+	<composite:implementation>
+		<p:panel style="margin-top: 20px">
+			<p:panelGrid columns="1" style="text-align: center">
+				<h:outputText value="#{cc.attrs.emptyMessage}" style="color: #8C291d; font-weight: bold" />
+			</p:panelGrid>
+		</p:panel>
+	</composite:implementation>
+
+</ui:composition>
