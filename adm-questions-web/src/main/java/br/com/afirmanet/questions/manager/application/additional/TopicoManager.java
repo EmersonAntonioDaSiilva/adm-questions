@@ -5,20 +5,20 @@ import java.util.List;
 
 import javax.inject.Named;
 
-import lombok.Getter;
-
 import org.omnifaces.cdi.ViewScoped;
 
 import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.core.manager.GenericCRUD;
-import br.com.afirmanet.questions.dao.TopicoDAO;
+import br.com.afirmanet.core.persistence.Order;
 import br.com.afirmanet.questions.dao.ClienteDAO;
-import br.com.afirmanet.questions.entity.Topico;
+import br.com.afirmanet.questions.dao.TopicoDAO;
 import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.Topico;
+import lombok.Getter;
 
 @Named
 @ViewScoped
-public class ClasseManager extends GenericCRUD<Topico, Integer, TopicoDAO> implements Serializable {
+public class TopicoManager extends GenericCRUD<Topico, Integer, TopicoDAO> implements Serializable {
 	private static final long serialVersionUID = 3925507169074921562L;
 	
 	@Getter
