@@ -31,6 +31,10 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	private List<Cliente> lstCliente;
 	
 	@Getter
+	@Setter
+	private Cliente cliente;
+	
+	@Getter
 	private List<Topico> lstTopico;
 	
 	@Getter
@@ -46,14 +50,15 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 		showDeleteButton = true;
 		descricaoPergunta = "";
 		lstCliente = carregaDescricaoCliente();
-		
-		carregaDescricaoClasse(lstCliente.get(0));
+		cliente = lstCliente.get(0);
+		carregaDescricaoClasse(cliente);
 	}	
 
 	@Override
 	protected void beforeSave() {
 		descricaoPergunta = "";
 		perguntas = null;
+		entity.setCliente(cliente);
 		validarDados();
 	}
 
