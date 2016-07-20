@@ -6,12 +6,12 @@
 				xmlns:afirmanet="http://afirmanet.com.br/componentes" 
 				template="/templates/crud.xhtml">
 
-	<ui:param name="entityName" value="Classe" />
-	<ui:param name="manager" value="#{classeManager}" />
+	<ui:param name="entityName" value="Topico" />
+	<ui:param name="manager" value="#{TopicoManager}" />
 		
 	<ui:define name="searchFilterBlock">
 		<p:panelGrid columns="2">
-			<afirmanet:inputText label="Nome da Classe" id="searchNome" value="#{manager.searchParam.descricao}" maxlength="100"/>
+			<afirmanet:inputText label="Nome da Topico" id="searchNome" value="#{manager.searchParam.descricao}" maxlength="100"/>
 		</p:panelGrid>
 	</ui:define>
 	<!-- ./searchFilterBlock -->
@@ -24,7 +24,7 @@
 
 	<ui:define name="recordDetailBlock">
 		<p:panelGrid columns="1">
-			<afirmanet:outputText label="Nome da Classe" value="#{manager.entity.descricao}" />
+			<afirmanet:outputText label="Nome da Topico" value="#{manager.entity.descricao}" />
 		</p:panelGrid>
 	</ui:define>
 	<!-- ./recordDetailBlock -->
@@ -35,7 +35,7 @@
 				<f:selectItems value="#{manager.lstCliente}" var ="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}"/>
 			</afirmanet:selectOneMenu>
 		
-			<afirmanet:inputText label="Nome Classe" id="insertNome" value="#{manager.entity.descricao}" maxlength="100" />
+			<afirmanet:inputText label="Nome Topico" id="insertNome" value="#{manager.entity.descricao}" maxlength="100" />
 		</p:panelGrid>		
 	</ui:define>
 	<!-- ./recordInsertEditBlock -->
