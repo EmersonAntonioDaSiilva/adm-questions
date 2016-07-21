@@ -2,6 +2,7 @@ package br.com.afirmanet.questions.manager.application.additional;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,17 +20,18 @@ import com.ibm.watson.developer_cloud.dialog.v1.model.Conversation;
 import com.ibm.watson.developer_cloud.dialog.v1.model.Dialog;
 
 import br.com.afirmanet.core.producer.ApplicationManaged;
-import br.com.afirmanet.questions.dao.TopicoDAO;
 import br.com.afirmanet.questions.dao.ClienteDAO;
-import br.com.afirmanet.questions.entity.Topico;
+import br.com.afirmanet.questions.dao.TopicoDAO;
 import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.entity.UsuarioPerfil;
+import br.com.afirmanet.questions.manager.vo.DialogVO;
 import lombok.Getter;
 import lombok.Setter;
 
 @Named
 @ViewScoped
-public class DialogRH extends NaturalLanguage implements Serializable {
+public class DialogRHManager extends NaturalLanguage implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 
 	private static final Integer Hora_0 = 0;
@@ -64,6 +66,12 @@ public class DialogRH extends NaturalLanguage implements Serializable {
 	@Setter	
 	private UsuarioPerfil usuarioPerfil;
 	
+	
+	@Getter
+	@Setter
+	private List<DialogVO> lstDialog;
+	
+	
 	@Override
 	protected void inicializar() {
 		ClienteDAO clieteDAO = new ClienteDAO(entityManager);
@@ -73,6 +81,8 @@ public class DialogRH extends NaturalLanguage implements Serializable {
 		lstClasse = classeDAO.findbyCliente(cliente);
 		
 		setTitulo("Chat com o RH da Magna Sistemas");
+		
+		lstDialog = new ArrayList<>();
 	}
 	
 	@Transactional
@@ -80,40 +90,37 @@ public class DialogRH extends NaturalLanguage implements Serializable {
 		limparVariaveis();
 		
 		if(pergunta != null &&  !"".equals(pergunta)){
-			conversation = getServiceDialog().converse(getVariavelPerfil());
+			conversation = getServiceDialog().converse(getDialog());
+
+			DialogVO dialogVO = new DialogVO();
+			dialogVO.setPessoa("M.Watson");
+			dialogVO.setDialogo(conversation.getResponse().get(0));
+			lstDialog.add(dialogVO);
+			
+			usuarioPerfil.setClientId(conversation.getClientId().toString());
+			usuarioPerfil.setConversationId(conversation.getId().toString());
+			usuarioPerfil.setDialogId(conversation.getDialogId());
+			
 		}
 	}
 
-	private Map<String, Object> getVariavelPerfil() {
+	private Map<String, Object> getDialog() {
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put(DialogService.DIALOG_ID, getIdDialog());
 		params.put(DialogService.CLIENT_ID, usuarioPerfil.getClientId());
-		params.put(DialogService.INPUT, getCongratulacoes());
+		params.put(DialogService.INPUT, getDialogoUsuario());
 		params.put(DialogService.CONVERSATION_ID, usuarioPerfil.getConversationId());
 		
 		return params;
 	}
 
-	private Object getCongratulacoes() {
-		String saucoes = "Ola, ";
-		LocalDateTime dateTime = LocalDateTime.now();
-
-		if(dateTime.getHour() >= Hora_0 && dateTime.getHour() < Hora_6){ 
-			// 00h as 06h = Boa madrugad
-			saucoes = "Boa madrugada, ";
-		} else if(dateTime.getHour() >= Hora_6 && dateTime.getHour() < Hora_12){ 
-			// 06h as 12h = Bom dia
-			saucoes = "Bom dia, ";
-		} else if(dateTime.getHour() >= Hora_12 && dateTime.getHour() < Hora_18){ 
-			// 12h as 18h = Boa tarde
-			saucoes = "Boa tarde, ";
-		} else if(dateTime.getHour() >= Hora_18){ 
-			// // 18h as 00h = Boa noite
-			saucoes = "Boa noite, ";
-		}
-
-		return saucoes;
+	private String getDialogoUsuario() {
+		DialogVO dialogVO = new DialogVO();
+		dialogVO.setPessoa(usuarioPerfil.getNome() != null ? usuarioPerfil.getNome() : "EU");
+		dialogVO.setDialogo(pergunta);
+		lstDialog.add(dialogVO);
+		return pergunta;
 	}
 
 	private void limparVariaveis(){

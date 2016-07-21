@@ -10,28 +10,34 @@
 	<ui:param name="hideMenu" value="true" />
 
 	<ui:define name="content">
-		<h:form id="formQuestuionRH">
+		<h:form id="formDialogRH">
 			<section id="formulario">
 				<p:panelGrid>
-					<p:row style="height: 50px;">
+					<p:row>
 						<p:column rowspan="4">
 							<h:graphicImage class="mascote" value="/resources/images/mascoteMW.gif" />					
 						</p:column>
-						<p:column colspan="3">
-							<p:outputLabel class="txtDefinicao" value="#{indexManager.definicao}" />					
+						<p:column colspan="2" style="width: 100%; vertical-align: top;" >
+							<p:dataTable id="dialogTable" widgetVar="dialogTable" value="#{DialogRHManager.lstDialog}" var="dialog" >
+								<p:column>
+							        <h:outputText value="#{dialog.pessoa}" />
+							    </p:column>
+								<p:column>
+							        <h:outputText value="#{dialog.dialogo}" />
+							    </p:column>
+							</p:dataTable>
 						</p:column>
 					</p:row>
-					<p:row>
-						<p:column colspan="2">
-							<p:inputText class="txtPergunta" value="#{indexManager.pergunta}" placeholder="Faça a sua pergunta aqui..."/>					
+					<p:row style="height: 50px;">
+						<p:column>
+							<p:inputText class="txtPergunta" value="#{dialogRHManager.pergunta}" placeholder="Faça a sua pergunta aqui..."/>					
 						</p:column>
-						<p:column style="width: 85px; text-align: right; vertical-align: bottom;">
-							<p:commandLink actionListener="#{indexManager.btPergunta}" update="@form">
+						<p:column style="width: 30px; text-align:left; vertical-align: bottom;">
+							<p:commandLink actionListener="#{dialogRHManager.btPergunta}" update="@form">
 								<h:graphicImage value="/resources/images/icon-buscar.gif" style="width: 50px; height: 50px;" />
 							</p:commandLink>					
 						</p:column>
 					</p:row>
-
 				</p:panelGrid>
 			</section>
 		</h:form>	

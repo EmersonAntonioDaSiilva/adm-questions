@@ -30,7 +30,7 @@ public abstract class NaturalLanguage implements Serializable {
 		serviceNLC.setUsernameAndPassword("571a35dd-ad5d-42a0-8775-d44d9152a9bd", "A4nFDssYwktc");
 		
 		serviceDialog = new DialogService();
-		serviceDialog.setUsernameAndPassword("65588874-09e7-443d-ba3c-dbaea30bd1e4", "gujjWbDHRNNe");
+		serviceDialog.setUsernameAndPassword("f618b7dd-c8f7-47fb-9b90-b5d6e39ecd72", "hNl4yQmgZOMI");
 		
 		inicializar();
 	}

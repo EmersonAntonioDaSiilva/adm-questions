@@ -1,9 +1,10 @@
 ﻿CREATE TABLE usuario_perfil (
 	id_usuario_perfil	integer	not null,
-	client_id		integer,
-	conversation_id		integer,
-	nome			text not null,
-	email			text not null,	
+	client_id		text,
+	conversation_id		text,
+	dialog_id		text,
+	nome			text,
+	email			text,	
 	data_nascimento		date,
 	data_admissao		date
 );
