@@ -1,7 +1,6 @@
 package br.com.afirmanet.questions.manager.application.additional;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,12 +32,6 @@ import lombok.Setter;
 @ViewScoped
 public class DialogRHManager extends NaturalLanguage implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
-
-	private static final Integer Hora_0 = 0;
-	private static final Integer Hora_6 = 6;
-	private static final Integer Hora_12 = 12;
-	private static final Integer Hora_18 = 18;
-
 	
 	@Inject
 	@ApplicationManaged
