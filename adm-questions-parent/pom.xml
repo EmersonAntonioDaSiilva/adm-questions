@@ -63,7 +63,7 @@
 		<cdi-api.version>1.2</cdi-api.version>
 		<omnifaces.version>1.8.1</omnifaces.version>
 
-		<watson.developer.java-sdk.version>2.0.0</watson.developer.java-sdk.version>
+		<watson.developer.java-sdk.version>2.10.0</watson.developer.java-sdk.version>
 		<watson.developer.java-wrapper.version>1.0.3</watson.developer.java-wrapper.version>
 		
 		<guava.version>18.0</guava.version>		
