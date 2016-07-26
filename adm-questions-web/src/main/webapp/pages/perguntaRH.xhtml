@@ -36,7 +36,7 @@
 						<p:outputLabel class="txtDefinicao" value="#{perguntaRHManager.definicao}" />					
 					</p:column>
 				</p:row>
-				<p:row  style="height: 50px;" rendered="#{perguntaRHManager.likeBox}">
+				<p:row style="height: 50px;" rendered="#{perguntaRHManager.likeBox}">
 					<p:column style="width: 400px">
 						<p:outputLabel value="Está resposta te ajudou?" style="margin-left: 10px; color: #666; font-size: 1.3em !important;" />
 					</p:column>
@@ -47,6 +47,11 @@
 						<p:commandLink actionListener="#{perguntaRHManager.sentimentoImparcial}" update="@form">
 							<h:graphicImage value="/resources/images/negativo.png" style="width: 50px; height: 50px;" />
 						</p:commandLink>					
+					</p:column>
+				</p:row>
+				<p:row style="height: 50px;">
+					<p:column colspan="3">
+						<p:messages id="sentimentoMessage" />
 					</p:column>
 				</p:row>
 			</p:panelGrid>
