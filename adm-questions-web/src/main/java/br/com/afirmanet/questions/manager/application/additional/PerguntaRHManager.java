@@ -4,28 +4,31 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.omnifaces.cdi.ViewScoped;
+
+import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.questions.dao.ClassificacaoDAO;
+import br.com.afirmanet.questions.dao.ClienteDAO;
+import br.com.afirmanet.questions.dao.RespostaDAO;
+import br.com.afirmanet.questions.dao.TopicoDAO;
+import br.com.afirmanet.questions.entity.Classificacao;
+import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.Topico;
+import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
 
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifiers;
-
-import br.com.afirmanet.core.producer.ApplicationManaged;
-import br.com.afirmanet.questions.dao.TopicoDAO;
-import br.com.afirmanet.questions.dao.ClassificacaoDAO;
-import br.com.afirmanet.questions.dao.ClienteDAO;
-import br.com.afirmanet.questions.dao.RespostaDAO;
-import br.com.afirmanet.questions.entity.Topico;
-import br.com.afirmanet.questions.entity.Classificacao;
-import br.com.afirmanet.questions.entity.Cliente;
-import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
-import lombok.Getter;
-import lombok.Setter;
 
 @Named
 @ViewScoped
@@ -89,7 +92,7 @@ public class PerguntaRHManager extends NaturalLanguage implements Serializable {
 		limparVariaveis();
 		
 		if(pergunta != null &&  !"".equals(pergunta)){
-			classificacao = getServiceNLC().classify(getIdClassificação(), pergunta);
+			classificacao = getServiceNLC().classify(getIdClassificacao(), pergunta);
 			
 			if (classificacao.getTopConfidence().compareTo(CONFIDENCE_MINIMO) == -1) {
 				gravaPerguntaNaoEncontrada(classificacao, SENTIMENTO_NEGATIVO);
@@ -126,16 +129,23 @@ public class PerguntaRHManager extends NaturalLanguage implements Serializable {
 	}
 
 	@Transactional
-	public void sentimentoImparcial(){
+	public void sentimentoImparcial() {
 		gravaPerguntaNaoEncontrada(classificacao, SENTIMENTO_IMPARCIAL);
 		limparVariaveis();
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage("sentimentoMessage", new FacesMessage(
+				FacesMessage.SEVERITY_INFO, "Obrigado pela sua opinião", "Obrigado pela sua opinião"));
+
 		pergunta = "";
 	}
 	
 	@Transactional
-	public void sentimentoPositivo(){
-		gravaPerguntaNaoEncontrada(classificacao,SENTIMENTO_POSITIVO);
+	public void sentimentoPositivo() {
+		gravaPerguntaNaoEncontrada(classificacao, SENTIMENTO_POSITIVO);
 		limparVariaveis();
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage("sentimentoMessage", new FacesMessage(
+				FacesMessage.SEVERITY_INFO, "Obrigado pela sua opinião", "Obrigado pela sua opinião"));
 		pergunta = "";
 	}
 
@@ -146,7 +156,7 @@ public class PerguntaRHManager extends NaturalLanguage implements Serializable {
 		likeBox = false;
 	}
 	
-	private String getIdClassificação() {
+	private String getIdClassificacao() {
 		Classifiers classifiers;
 		try {
 			classifiers = getServiceNLC().getClassifiers();
