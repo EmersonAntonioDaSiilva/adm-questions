@@ -42,7 +42,7 @@ public class UploadManager extends NaturalLanguage implements Serializable {
 	
 	@Override
 	protected void inicializar() {
-		setTitulo("Upload de Arquivos.");
+
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {

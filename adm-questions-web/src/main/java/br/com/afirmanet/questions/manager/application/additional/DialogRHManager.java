@@ -72,9 +72,7 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 
 		TopicoDAO classeDAO = new TopicoDAO(entityManager);
 		lstClasse = classeDAO.findbyCliente(cliente);
-		
-		setTitulo("Chat com o RH da Magna Sistemas");
-		
+				
 		lstDialog = new ArrayList<>();
 	}
 	

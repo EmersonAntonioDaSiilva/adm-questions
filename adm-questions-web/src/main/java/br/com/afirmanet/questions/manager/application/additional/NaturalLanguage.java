@@ -13,10 +13,10 @@ import lombok.Setter;
 public abstract class NaturalLanguage implements Serializable {
 	private static final long serialVersionUID = 5946605316434150596L;
 
-	
-	@Getter
-	@Setter
-	private String titulo;
+	protected static final Integer SENTIMENTO_POSITIVO = 1;
+	protected static final Integer SENTIMENTO_IMPARCIAL = 0;
+	protected static final Integer SENTIMENTO_NEGATIVO = -1;
+
 	
 	@Getter
 	private NaturalLanguageClassifier serviceNLC;

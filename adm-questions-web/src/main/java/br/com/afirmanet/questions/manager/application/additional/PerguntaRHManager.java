@@ -34,10 +34,8 @@ public class PerguntaRHManager extends NaturalLanguage implements Serializable {
 	
 	private static final String RESPOSTA_PADRAO = ApplicationPropertiesUtils.getValue("index.manager.resposta.padrao"); 
 	private static final double CONFIDENCE_MINIMO = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo");
-	private static final Integer SENTIMENTO_POSITIVO = 1;
-	private static final Integer SENTIMENTO_IMPARCIAL = 0;
-	private static final Integer SENTIMENTO_NEGATIVO = -1;
-	
+	private static final String RESPOSTA_SAUDACOES = ApplicationPropertiesUtils.getValue("index.manager.resposta.saudacoes");
+		
 	@Inject
 	@ApplicationManaged
 	protected EntityManager entityManager;
@@ -83,9 +81,7 @@ public class PerguntaRHManager extends NaturalLanguage implements Serializable {
 		lstTopico = topicoDAO.findbyCliente(cliente);
 		topico = lstTopico.get(0);
 		
-		setTitulo("Pergunta para o RH da Magna Sistemas");
-		
-		resposta = "Olá, meu nome é M. Watson. Em que posso te ajudar?";
+		resposta = RESPOSTA_SAUDACOES;
 	}
 	
 	@Transactional
@@ -99,16 +95,9 @@ public class PerguntaRHManager extends NaturalLanguage implements Serializable {
 				gravaPerguntaNaoEncontrada(classificacao, SENTIMENTO_NEGATIVO);
 				
 				System.out.println (classificacao);
-				TopicoDAO classeDAO = new TopicoDAO(entityManager);
-				List<Topico> lstClasse = classeDAO.findbyCliente(cliente);
 				resposta = RESPOSTA_PADRAO;
 				
-				if(lstClasse.size() > 0){
-					resposta += " Só conheço estes tópicos = ";
-					for(Topico classe : lstClasse){
-						resposta += classe.getDescricao() + ", ";
-					}
-				}
+				resposta += " No momento tenho conhecomento apenas deste tópico = " + topico.getDescricao();
 				
 				this.likeBox = false;
 			} else {
@@ -151,7 +140,7 @@ public class PerguntaRHManager extends NaturalLanguage implements Serializable {
 	}
 
 	private void limparVariaveis(){
-		resposta = "";
+		resposta = RESPOSTA_SAUDACOES;
 		definicao = "";
 		classificacao = null;
 		likeBox = false;

@@ -38,6 +38,8 @@ public class Classificacao implements Serializable {
 	private Integer sentimento;
 	
 	private LocalDateTime dataCadastro;
+	private LocalDateTime dataClassificacao;
+
 	private String classifier;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

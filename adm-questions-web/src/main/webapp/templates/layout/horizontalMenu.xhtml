@@ -5,7 +5,7 @@
 				xmlns:p="http://primefaces.org/ui">
 
 	<h:form id="menuForm">
-		<p:menubar>
+		<p:menubar rendered="#{empty hideMenu ? true : hideMenu}">
 			<p:submenu label="M.Watson">
 				<p:menuitem value="Pergunta" url="/pages/perguntaRH.xhtml" />
 				<p:menuitem value="Bate Papo" url="/pages/dialogRH.xhtml" />
