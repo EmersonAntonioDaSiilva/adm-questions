@@ -98,9 +98,9 @@ public class PerguntaRHManager extends NaturalLanguage implements Serializable {
 				gravaPerguntaNaoEncontrada(classificacao, SENTIMENTO_NEGATIVO);
 				
 				System.out.println (classificacao);
-				resposta = RESPOSTA_PADRAO;
+				definicao = RESPOSTA_PADRAO;
 				
-				resposta += " No momento tenho conhecomento apenas deste tópico = " + topico.getDescricao();
+				definicao += " No momento tenho conhecomento apenas deste tópico = " + topico.getDescricao();
 				
 				this.likeBox = false;
 			} else {
