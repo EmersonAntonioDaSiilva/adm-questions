@@ -10,6 +10,10 @@
 	<ui:param name="manager" value="#{respostaManager}" />
 	
 	<ui:define name="searchFilterBlock">
+		<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.topico}" required="true">
+			<f:selectItem itemLabel="Selecione aqui..." itemValue="" />
+		    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
+		</afirmanet:selectOneMenu>	
 		<afirmanet:inputText label="Resposta" id="searchNome" value="#{manager.searchParam.titulo}" maxlength="100" size="80" />
 	</ui:define>
 

@@ -3,7 +3,8 @@
 				xmlns:h="http://xmlns.jcp.org/jsf/html" 
 				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 				xmlns:f="http://xmlns.jcp.org/jsf/core" 
-				xmlns:p="http://primefaces.org/ui">
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:afirmanet="http://afirmanet.com.br/componentes" >
 
 
 	<ui:param name="contentTitle" value="M.Watson" />
@@ -11,35 +12,53 @@
 
 	<ui:define name="content">
 		<h:form id="formDialogRH">
-			<section id="formulario">
+			<p:panel id="emailFilter" rendered="#{dialogRHManager.actionUsuarioPerfil}" toggleable="false">
 				<p:panelGrid>
 					<p:row>
-						<p:column rowspan="4">
-							<h:graphicImage class="mascote" value="/resources/images/mascoteMW.gif" />					
-						</p:column>
-						<p:column colspan="2" style="width: 100%; vertical-align: top;" >
-							<p:dataTable id="dialogTable" widgetVar="dialogTable" value="#{DialogRHManager.lstDialog}" var="dialog" >
-								<p:column>
-							        <h:outputText value="#{dialog.pessoa}" />
-							    </p:column>
-								<p:column>
-							        <h:outputText value="#{dialog.dialogo}" />
-							    </p:column>
-							</p:dataTable>
-						</p:column>
-					</p:row>
-					<p:row style="height: 50px;">
 						<p:column>
-							<p:inputText class="txtPergunta" value="#{dialogRHManager.pergunta}" placeholder="Faça a sua pergunta aqui..."/>					
+							<afirmanet:inputMail label="e-mail" class="txtPergunta" value="#{dialogRHManager.email}"  maxlength="200" size="100"/>					
 						</p:column>
 						<p:column style="width: 30px; text-align:left; vertical-align: bottom;">
-							<p:commandLink actionListener="#{dialogRHManager.btPergunta}" update="@form">
+							<p:commandLink actionListener="#{dialogRHManager.btEmail}" update="@form">
 								<h:graphicImage value="/resources/images/icon-buscar.gif" style="width: 50px; height: 50px;" />
 							</p:commandLink>					
-						</p:column>
+						</p:column>			
 					</p:row>
 				</p:panelGrid>
-			</section>
+			</p:panel>
+			
+			
+			<p:panel id="dialogFilter" rendered="#{dialogRHManager.actionDialog}" toggleable="false">
+				<section id="formulario">
+					<p:panelGrid>
+						<p:row>
+							<p:column rowspan="4">
+								<h:graphicImage class="mascote" value="/resources/images/mascoteMW.gif" />					
+							</p:column>
+							<p:column colspan="2" style="width: 100%; vertical-align: top;" >
+								<p:dataTable id="dialogTable" widgetVar="dialogTable" value="#{dialogRHManager.lstDialog}" var="dialog" scrollable="true" scrollHeight="250" >
+									<p:column>
+								        <h:outputText value="#{dialog.pessoa}" />
+								    </p:column>
+									<p:column>
+								        <h:outputText value="#{dialog.dialogo}" />
+								    </p:column>
+								</p:dataTable>
+							</p:column>
+						</p:row>
+						<p:row style="height: 50px;">
+							<p:column>
+								<p:inputText id="txtPergunta" class="txtPergunta" value="#{dialogRHManager.pergunta}" placeholder="Faça a sua pergunta aqui..."/>					
+							</p:column>
+							<p:column style="width: 30px; text-align:left; vertical-align: bottom;">
+								<p:commandLink actionListener="#{dialogRHManager.btPergunta}" update="dialogTable, txtPergunta">
+									<h:graphicImage value="/resources/images/icon-buscar.gif" style="width: 50px; height: 50px;" />
+								</p:commandLink>					
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</section>
+			</p:panel>
 		</h:form>	
 	</ui:define>
 </ui:composition>

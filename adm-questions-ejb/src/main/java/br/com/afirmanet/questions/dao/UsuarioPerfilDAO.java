@@ -51,7 +51,7 @@ public @Stateless class UsuarioPerfilDAO extends GenericDAO<UsuarioPerfil, Integ
 	}
 
 
-	public UsuarioPerfil findByNome(String email) {
+	public UsuarioPerfil findByEmail(String email) {
 		UsuarioPerfil retornoUsuarioPerfil = null;
 		
 		try {
@@ -73,4 +73,5 @@ public @Stateless class UsuarioPerfilDAO extends GenericDAO<UsuarioPerfil, Integ
 		return retornoUsuarioPerfil;
 
 	}
+
 }
