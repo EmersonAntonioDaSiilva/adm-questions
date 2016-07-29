@@ -94,3 +94,7 @@ white-space: nowrap;
 	margin-left: 10px !important; 
 	padding: 5px !important;
 }
+
+.tree-table-no-header thead {
+    display: none;
+}

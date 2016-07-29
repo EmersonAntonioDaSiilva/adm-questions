@@ -27,7 +27,6 @@
 				</p:panelGrid>
 			</p:panel>
 			
-			
 			<p:panel id="dialogFilter" rendered="#{dialogRHManager.actionDialog}" toggleable="false">
 				<section id="formulario">
 					<p:panelGrid>
@@ -36,7 +35,7 @@
 								<h:graphicImage class="mascote" value="/resources/images/mascoteMW.gif" />					
 							</p:column>
 							<p:column colspan="2" style="width: 100%; vertical-align: top;" >
-								<p:dataTable id="dialogTable" widgetVar="dialogTable" value="#{dialogRHManager.lstDialog}" var="dialog" scrollable="true" scrollHeight="250" >
+								<p:dataTable id="dialogTable" value="#{dialogRHManager.lstDialog}" var="dialog" scrollable="true" scrollHeight="250" styleClass="tree-table-no-header">
 									<p:column>
 								        <h:outputText value="#{dialog.pessoa}" />
 								    </p:column>
