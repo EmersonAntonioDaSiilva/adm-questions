@@ -97,4 +97,8 @@ white-space: nowrap;
 
 .tree-table-no-header thead {
     display: none;
+	font-weight:bold !important; 
+	font-size: 1.5em !important; 
+	border: 0px solid !important; 
+
 }

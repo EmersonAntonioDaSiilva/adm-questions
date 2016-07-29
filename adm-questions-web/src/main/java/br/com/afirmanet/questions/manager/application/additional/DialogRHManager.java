@@ -20,6 +20,7 @@ import com.ibm.watson.developer_cloud.dialog.v1.model.Dialog;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 
 import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.core.util.TimeUtils;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.RespostaDAO;
 import br.com.afirmanet.questions.dao.TopicoDAO;
@@ -94,12 +95,12 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 	public void btPergunta(){
 		limparVariaveis();
 		
-		if(pergunta != null &&  !"".equals(pergunta)){
+		if(pergunta != null &&  !"".equals(pergunta)){		
 			conversation = getDialog();
 			Conversation converse = getServiceDialog().converse(conversation, getDialogoUsuario());
 
 			DialogVO dialogVO = new DialogVO();
-			dialogVO.setPessoa("M.Watson");
+			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson");
 			dialogVO.setDialogo(tratarRespostas(converse));
 
 			lstDialog.add(dialogVO);
@@ -153,7 +154,7 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 			Conversation converse = getServiceDialog().converse(conversation, "Oi");
 			
 			DialogVO dialogVO = new DialogVO();
-			dialogVO.setPessoa("M.Watson");
+			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson");
 			dialogVO.setDialogo(converse.getResponse().get(0));
 			lstDialog.add(dialogVO);
 			
@@ -185,7 +186,7 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 
 	private String getDialogoUsuario() {
 		DialogVO dialogVO = new DialogVO();
-		dialogVO.setPessoa(usuarioPerfil.getNome() != null ? usuarioPerfil.getNome() : "EU");
+		dialogVO.setPessoa(TimeUtils.timeNow() + " - " + usuarioPerfil.getNome() != null ? usuarioPerfil.getNome() : "EU");
 		dialogVO.setDialogo(pergunta);
 		lstDialog.add(dialogVO);
 		return pergunta;
@@ -196,15 +197,10 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 	}
 	
 	private String getIdDialog() {
-//		String retorno = "961aa6a0-b781-4908-b58c-e191a5da4791";
-		
 		//Pega todos os Dialog configurados
 		List<Dialog> dialogs = getServiceDialog().getDialogs();
 
 		//Retorna o id do Dialog encontrado
 		return dialogs.get(0).getId();
-		
-//		return retorno;
-		
 	}
 }

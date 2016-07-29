@@ -218,4 +218,9 @@ public final class TimeUtils {
 		return time.isAfter(start) && time.isBefore(end);
 	}
 
+	public static String timeNow() {
+		return LocalTime.now().format(DateTimeFormatter.ofPattern(DEFAULT_TIME_PATTERN));
+	}
+
+	
 }
