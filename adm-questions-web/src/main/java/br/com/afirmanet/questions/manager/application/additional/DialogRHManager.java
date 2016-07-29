@@ -100,8 +100,8 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 			Conversation converse = getServiceDialog().converse(conversation, getDialogoUsuario());
 
 			DialogVO dialogVO = new DialogVO();
-			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson");
-			dialogVO.setDialogo(tratarRespostas(converse));
+			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
+			dialogVO.setDialogo(dialogVO.getPessoa() + tratarRespostas(converse));
 
 			lstDialog.add(dialogVO);
 			pergunta = "";
@@ -154,8 +154,8 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 			Conversation converse = getServiceDialog().converse(conversation, "Oi");
 			
 			DialogVO dialogVO = new DialogVO();
-			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson");
-			dialogVO.setDialogo(converse.getResponse().get(0));
+			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
+			dialogVO.setDialogo(dialogVO.getPessoa() + converse.getResponse().get(0));
 			lstDialog.add(dialogVO);
 			
 			usuarioPerfil.setClientId(converse.getClientId());
@@ -186,8 +186,13 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 
 	private String getDialogoUsuario() {
 		DialogVO dialogVO = new DialogVO();
-		dialogVO.setPessoa(TimeUtils.timeNow() + " - " + usuarioPerfil.getNome() != null ? usuarioPerfil.getNome() : "EU");
-		dialogVO.setDialogo(pergunta);
+		
+		String pessoa = TimeUtils.timeNow() + " - ";
+		pessoa += usuarioPerfil.getNome() != null ? usuarioPerfil.getNome(): "EU";
+		pessoa += ": ";
+		
+		dialogVO.setPessoa(pessoa);
+		dialogVO.setDialogo(dialogVO.getPessoa() + pergunta);
 		lstDialog.add(dialogVO);
 		return pergunta;
 	}
