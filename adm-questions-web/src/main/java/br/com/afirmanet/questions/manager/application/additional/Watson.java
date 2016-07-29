@@ -1,7 +1,9 @@
 package br.com.afirmanet.questions.manager.application.additional;
 
+import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -11,6 +13,7 @@ import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
 
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
@@ -32,6 +35,7 @@ public abstract class Watson implements Serializable {
 	protected static final Integer SENTIMENTO_ENCONTRADA_RR = 300;
 	
 	protected static final double CONFIDENCE_MINIMO = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo");
+	protected static final String CAMINHO_ZIP_ARQUIVO_FERIAS  = ApplicationPropertiesUtils.getValue("index.manager.caminho.arquivo.ferias");
 	
 	@Inject
 	@ApplicationManaged
@@ -69,6 +73,31 @@ public abstract class Watson implements Serializable {
 		inicializar();
 	}
 
+	protected void uploadConfiguration(){
+		List<SolrCluster> solrClusters = serviceRR.getSolrClusters().getSolrClusters();
+		SolrCluster solrCluster = solrClusters.get(0);
+
+		File configZip = new File(CAMINHO_ZIP_ARQUIVO_FERIAS);
+		serviceRR.uploadSolrClusterConfigurationZip(solrCluster.getId(), "FERIAS", configZip);
+		
+	}
+	
+	protected void createCollection(){
+		
+	}
+	
+	protected void indexDocumentAndCommit(){
+		
+	}
+	
+	protected void searchAllDocs(){
+		
+	}
+	
+	protected void cleanupResources(){
+		
+	}
+	
 	protected void gravaPerguntaEncontrada(Classification classificacao, Integer sentimento) {
 		ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
 		Classificacao classificacaoEntity = new Classificacao();

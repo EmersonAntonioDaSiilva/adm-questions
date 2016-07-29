@@ -161,7 +161,6 @@ public class DialogRHManager extends Watson implements Serializable {
 
 			if(usuarioPerfil == null){
 				usuarioPerfil = new UsuarioPerfil();
-
 			}
 
 			usuarioPerfil.setClientId(converse.getClientId());
