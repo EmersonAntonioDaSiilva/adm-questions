@@ -143,6 +143,7 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 	@Transactional
 	public void btEmail(){
 		if(email != null &&  !"".equals(email)){
+			
 			actionUsuarioPerfil = Boolean.FALSE;
 			actionDialog  = Boolean.TRUE;	
 			
@@ -157,13 +158,22 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
 			dialogVO.setDialogo(dialogVO.getPessoa() + converse.getResponse().get(0));
 			lstDialog.add(dialogVO);
-			
+
+			if(usuarioPerfil == null){
+				usuarioPerfil = new UsuarioPerfil();
+
+			}
+
 			usuarioPerfil.setClientId(converse.getClientId());
 			usuarioPerfil.setConversationId(converse.getId());
 			usuarioPerfil.setDialogId(converse.getDialogId());
+			usuarioPerfil.setEmail(email);
 			
-			usuarioPerfilDAO.update(usuarioPerfil);
-			
+			if(usuarioPerfil.getId() == null){
+				usuarioPerfilDAO.save(usuarioPerfil);
+			}else{
+				usuarioPerfilDAO.update(usuarioPerfil);
+			}
 			
 		}
 	}	
@@ -175,12 +185,14 @@ public class DialogRHManager extends NaturalLanguage implements Serializable {
 			if(usuarioPerfil.getClientId() != null){
 				params.setClientId(usuarioPerfil.getClientId());
 			}
+			if(usuarioPerfil.getConversationId() != null){
+				params.setId(usuarioPerfil.getConversationId());
+			}
 		}
 
 		params.setDialogId(getIdDialog());
 		params.setConfidence(CONFIDENCE_MINIMO);
-		params.setId(usuarioPerfil.getConversationId());
-		
+
 		return params;
 	}
 
