@@ -65,6 +65,7 @@
 
 		<watson.developer.java-sdk.version>2.10.0</watson.developer.java-sdk.version>
 		<watson.developer.java-wrapper.version>1.0.3</watson.developer.java-wrapper.version>
+		<watson.developer.org.apache.solr.version>5.5.1</watson.developer.org.apache.solr.version>
 		
 		<guava.version>18.0</guava.version>		
 		<afirmanet-core.version>1.0.0-SNAPSHOT</afirmanet-core.version>
@@ -77,6 +78,11 @@
 	
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.apache.solr:solr-solrj</groupId>
+				<artifactId>java-wrapper</artifactId>
+				<version>${watson.developer.org.apache.solr.version}</version>
+			</dependency>	
 			<dependency>
 				<groupId>com.ibm.watson.developer_cloud</groupId>
 				<artifactId>java-sdk</artifactId>

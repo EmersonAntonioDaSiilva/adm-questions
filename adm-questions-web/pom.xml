@@ -23,6 +23,10 @@
 	
 	<dependencies>
 		<dependency>
+		  <groupId>org.apache.solr:solr-solrj</groupId>
+		  <artifactId>java-wrapper</artifactId>
+		</dependency>	
+		<dependency>
 			<groupId>com.ibm.watson.developer_cloud</groupId>
 			<artifactId>java-sdk</artifactId>
 		</dependency>
