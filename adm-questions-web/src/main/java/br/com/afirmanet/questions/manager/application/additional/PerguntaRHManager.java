@@ -24,7 +24,7 @@ import lombok.Setter;
 
 @Named
 @ViewScoped
-public class PerguntaRHManager extends NaturalLanguage implements Serializable {
+public class PerguntaRHManager extends Watson implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 	
 	private static final String RESPOSTA_PADRAO = ApplicationPropertiesUtils.getValue("index.manager.resposta.padrao"); 

@@ -79,7 +79,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.apache.solr:solr-solrj</groupId>
+				<groupId>org.apache.solr</groupId>
 				<artifactId>java-wrapper</artifactId>
 				<version>${watson.developer.org.apache.solr.version}</version>
 			</dependency>	

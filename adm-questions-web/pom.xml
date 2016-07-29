@@ -23,7 +23,7 @@
 	
 	<dependencies>
 		<dependency>
-		  <groupId>org.apache.solr:solr-solrj</groupId>
+		  <groupId>org.apache.solr</groupId>
 		  <artifactId>java-wrapper</artifactId>
 		</dependency>	
 		<dependency>

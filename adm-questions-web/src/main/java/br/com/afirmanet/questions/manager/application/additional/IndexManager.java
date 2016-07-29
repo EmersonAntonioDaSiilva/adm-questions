@@ -12,7 +12,7 @@ import br.com.afirmanet.core.producer.ApplicationManaged;
 
 @Named
 @ViewScoped
-public class IndexManager extends NaturalLanguage implements Serializable {
+public class IndexManager extends Watson implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 
 	@Inject

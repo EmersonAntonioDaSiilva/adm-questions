@@ -33,7 +33,7 @@ import lombok.Setter;
 
 @Named
 @ViewScoped
-public class DialogRHManager extends NaturalLanguage implements Serializable {
+public class DialogRHManager extends Watson implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 	
 	private static final int PESQUISAR_DB = 1;

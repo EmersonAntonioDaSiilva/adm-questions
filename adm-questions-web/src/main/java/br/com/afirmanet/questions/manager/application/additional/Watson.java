@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
@@ -20,7 +21,7 @@ import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class NaturalLanguage implements Serializable {
+public abstract class Watson implements Serializable {
 	private static final long serialVersionUID = 5946605316434150596L;
 
 	protected static final Integer SENTIMENTO_POSITIVO = 1;
@@ -28,6 +29,7 @@ public abstract class NaturalLanguage implements Serializable {
 	protected static final Integer SENTIMENTO_NEGATIVO = -1;
 	protected static final Integer SENTIMENTO_ENCONTRADA_NLC = 100;
 	protected static final Integer SENTIMENTO_ENCONTRADA_DIALOG = 200;
+	protected static final Integer SENTIMENTO_ENCONTRADA_RR = 300;
 	
 	protected static final double CONFIDENCE_MINIMO = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo");
 	
@@ -40,6 +42,9 @@ public abstract class NaturalLanguage implements Serializable {
 
 	@Getter
 	private DialogService serviceDialog;
+	
+	@Getter
+	private RetrieveAndRank serviceRR;
 	
 	@Getter
 	@Setter
@@ -57,6 +62,9 @@ public abstract class NaturalLanguage implements Serializable {
 
 		serviceDialog = new DialogService();
 		serviceDialog.setUsernameAndPassword("e0572543-d32c-4ef0-af7e-7186245ada9d", "4mJSU0JnG87X");
+		
+		serviceRR = new RetrieveAndRank();
+		serviceRR.setUsernameAndPassword("80b1d296-9eda-4326-93cc-a36122dfa187","XCOtytypqONK");
 		
 		inicializar();
 	}

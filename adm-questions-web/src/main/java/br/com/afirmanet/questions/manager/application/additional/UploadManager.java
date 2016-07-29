@@ -31,7 +31,7 @@ import lombok.Setter;
 
 @Named
 @ViewScoped
-public class UploadManager extends NaturalLanguage implements Serializable {
+public class UploadManager extends Watson implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 	
 	@Getter
