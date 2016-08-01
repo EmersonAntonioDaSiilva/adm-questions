@@ -20,6 +20,7 @@ import com.ibm.watson.developer_cloud.dialog.v1.model.Dialog;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 
 import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.core.util.DateUtils;
 import br.com.afirmanet.core.util.TimeUtils;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.RespostaDAO;
@@ -36,6 +37,10 @@ import lombok.Setter;
 public class DialogRHManager extends Watson implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 	
+	private static final String INFORMAR_NOME = "informar o seu nome:";
+	private static final String INFORMAR_DATA_NASCIMENTO = "informar a sua data de nascimento:";
+	private static final String INFORMAR_DATA_ADMISSAO = "informar a sua data de admissão:";
+
 	private static final int PESQUISAR_DB = 1;
 	
 	@Inject
@@ -95,13 +100,14 @@ public class DialogRHManager extends Watson implements Serializable {
 	public void btPergunta(){
 		limparVariaveis();
 		
-		if(pergunta != null &&  !"".equals(pergunta)){		
-			conversation = getDialog();
-			Conversation converse = getServiceDialog().converse(conversation, getDialogoUsuario());
+		if(pergunta != null &&  !"".equals(pergunta)){
+			
+			conversation = getDialog(conversation);
+			conversation = getServiceDialog().converse(conversation, getDialogoUsuario());
 
 			DialogVO dialogVO = new DialogVO();
 			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
-			dialogVO.setDialogo(dialogVO.getPessoa() + tratarRespostas(converse));
+			dialogVO.setDialogo(dialogVO.getPessoa() + tratarRespostas(conversation));
 
 			lstDialog.add(dialogVO);
 			pergunta = "";
@@ -150,53 +156,92 @@ public class DialogRHManager extends Watson implements Serializable {
 			UsuarioPerfilDAO usuarioPerfilDAO = new UsuarioPerfilDAO(entityManager);
 			usuarioPerfil = usuarioPerfilDAO.findByEmail(email);
 			
-			
-			conversation = getDialog();
-			Conversation converse = getServiceDialog().converse(conversation, "Oi");
-			
-			DialogVO dialogVO = new DialogVO();
-			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
-			dialogVO.setDialogo(dialogVO.getPessoa() + converse.getResponse().get(0));
-			lstDialog.add(dialogVO);
-
 			if(usuarioPerfil == null){
 				usuarioPerfil = new UsuarioPerfil();
 			}
 
-			usuarioPerfil.setClientId(converse.getClientId());
-			usuarioPerfil.setConversationId(converse.getId());
-			usuarioPerfil.setDialogId(converse.getDialogId());
+			conversation = getDialog(conversation);
+			conversation = getServiceDialog().converse(conversation, "Oi");
+			
+			DialogVO dialogVO = new DialogVO();
+			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
+			dialogVO.setDialogo(dialogVO.getPessoa() + conversation.getResponse().get(0));
+			lstDialog.add(dialogVO);
+		}
+	}	
+	
+	private Conversation getDialog(Conversation conversation) {
+		
+		if(conversation == null){
+			conversation = new Conversation();
+		}
+		
+		if(usuarioPerfil != null){
+			if(usuarioPerfil.getClientId() != null){
+				conversation.setClientId(usuarioPerfil.getClientId());
+			}
+			
+			if(usuarioPerfil.getConversationId() != null){
+				conversation.setId(usuarioPerfil.getConversationId());
+			}
+		}
+
+		updateUsuarioPerfil(conversation);
+
+		conversation.setDialogId(getIdDialog());
+		conversation.setConfidence(CONFIDENCE_MINIMO);
+
+		return conversation;
+	}
+
+	private void updateUsuarioPerfil(Conversation conversation) {
+		Boolean isUpdate = Boolean.FALSE;
+		
+		if(conversation.getResponse() != null){
+			String resposta = conversation.getResponse().get(0);
+
+			if(resposta.indexOf(INFORMAR_NOME) >= 0){
+				usuarioPerfil.setNome(pergunta);
+				isUpdate = Boolean.TRUE;
+			}
+			
+			if(resposta.indexOf(INFORMAR_DATA_NASCIMENTO) >= 0){
+				usuarioPerfil.setDataNascimento(DateUtils.parseLocalDate(pergunta));
+				isUpdate = Boolean.TRUE;
+			}
+			
+			if(resposta.indexOf(INFORMAR_DATA_ADMISSAO) >= 0){
+				usuarioPerfil.setDataAdmissao(DateUtils.parseLocalDate(pergunta));
+				isUpdate = Boolean.TRUE;
+			}
+		}
+
+		if(email != null && !"".equals(email) && usuarioPerfil.getId() == null){
+			isUpdate = Boolean.TRUE;
+		}
+		
+		
+		if(isUpdate){
+			usuarioPerfil.setClientId(conversation.getClientId());
+			usuarioPerfil.setConversationId(conversation.getId());
+			usuarioPerfil.setDialogId(conversation.getDialogId());
 			usuarioPerfil.setEmail(email);
+			
+			UsuarioPerfilDAO usuarioPerfilDAO = new UsuarioPerfilDAO(entityManager);
 			
 			if(usuarioPerfil.getId() == null){
 				usuarioPerfilDAO.save(usuarioPerfil);
 			}else{
 				usuarioPerfilDAO.update(usuarioPerfil);
 			}
-			
+
 		}
-	}	
-	
-	private Conversation getDialog() {
-		Conversation params = new Conversation();
-
-		if(usuarioPerfil != null){
-			if(usuarioPerfil.getClientId() != null){
-				params.setClientId(usuarioPerfil.getClientId());
-			}
-			if(usuarioPerfil.getConversationId() != null){
-				params.setId(usuarioPerfil.getConversationId());
-			}
-		}
-
-		params.setDialogId(getIdDialog());
-		params.setConfidence(CONFIDENCE_MINIMO);
-
-		return params;
 	}
 
 	private String getDialogoUsuario() {
 		DialogVO dialogVO = new DialogVO();
+		
+		
 		
 		String pessoa = TimeUtils.timeNow() + " - ";
 		pessoa += usuarioPerfil.getNome() != null ? usuarioPerfil.getNome(): "EU";

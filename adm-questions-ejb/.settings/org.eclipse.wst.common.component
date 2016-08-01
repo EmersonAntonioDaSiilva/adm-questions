@@ -4,6 +4,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/.apt_generated"/>
         <wb-resource deploy-path="/" source-path="/target/metamodel"/>
+        <wb-resource deploy-path="/" source-path="/target/generated-sources/annotations"/>
         <property name="java-output-path" value="/adm-questions-ejb/target/classes"/>
     </wb-module>
 </project-modules>

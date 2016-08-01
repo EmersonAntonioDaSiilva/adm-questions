@@ -45,7 +45,7 @@
 		<primefaces-extensions.version>3.0.0</primefaces-extensions.version>
 		<primefaces-themes.version>1.0.10</primefaces-themes.version>
 		
-		<lombok.version>1.16.4</lombok.version>
+		<lombok.version>1.16.10</lombok.version>
 		<slf4j-api.version>1.7.7</slf4j-api.version>
 		
 		<jboss-javaee.version>1.0.3.Final</jboss-javaee.version>
@@ -64,8 +64,8 @@
 		<omnifaces.version>1.8.1</omnifaces.version>
 
 		<watson.developer.java-sdk.version>2.10.0</watson.developer.java-sdk.version>
-		<watson.developer.java-wrapper.version>1.0.3</watson.developer.java-wrapper.version>
-		<watson.developer.org.apache.solr.version>5.5.1</watson.developer.org.apache.solr.version>
+		<watson.developer.java-wrapper.version>1.1.1</watson.developer.java-wrapper.version>
+		<watson.solr-solrj.version>6.1.0</watson.solr-solrj.version>
 		
 		<guava.version>18.0</guava.version>		
 		<afirmanet-core.version>1.0.0-SNAPSHOT</afirmanet-core.version>
@@ -79,10 +79,10 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.apache.solr</groupId>
-				<artifactId>java-wrapper</artifactId>
-				<version>${watson.developer.org.apache.solr.version}</version>
-			</dependency>	
+			    <groupId>org.apache.solr</groupId>
+			    <artifactId>solr-solrj</artifactId>
+			    <version>${watson.solr-solrj.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.ibm.watson.developer_cloud</groupId>
 				<artifactId>java-sdk</artifactId>

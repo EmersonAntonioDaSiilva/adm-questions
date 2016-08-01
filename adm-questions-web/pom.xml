@@ -23,9 +23,9 @@
 	
 	<dependencies>
 		<dependency>
-		  <groupId>org.apache.solr</groupId>
-		  <artifactId>java-wrapper</artifactId>
-		</dependency>	
+		    <groupId>org.apache.solr</groupId>
+		    <artifactId>solr-solrj</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.ibm.watson.developer_cloud</groupId>
 			<artifactId>java-sdk</artifactId>
