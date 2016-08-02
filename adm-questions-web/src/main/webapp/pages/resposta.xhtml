@@ -11,12 +11,12 @@
 	
 	<ui:define name="searchFilterBlock">
 		<p:panelGrid columns="1">
-			<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.cliente}" listener="#{respostaManager.carregaDescricaoClasse}" required="true">
+			<afirmanet:selectOneMenu label="Cliente" value="#{manager.searchParam.cliente}" listener="#{respostaManager.carregaDescricaoClasse}" required="true">
 			    <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}" />
 			</afirmanet:selectOneMenu>	
 
-			<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.topico}">
-			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" required="true" />
+			<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.topico}" required="true">
+			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
 			</afirmanet:selectOneMenu>	
 
 			<afirmanet:inputText label="Resposta" id="searchNome" value="#{manager.searchParam.titulo}" maxlength="100" size="80" />
@@ -60,8 +60,8 @@
 			    <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}" />
 			</afirmanet:selectOneMenu>	
 
-			<afirmanet:selectOneMenu label="Topico" value="#{manager.entity.topico}">
-			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" required="true" />
+			<afirmanet:selectOneMenu label="Topico" value="#{manager.entity.topico}" required="true">
+			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
 			</afirmanet:selectOneMenu>		
 		
 			<afirmanet:inputText label="Titulo" id="insertDescricao" value="#{manager.entity.titulo}" maxlength="100" size="80" />

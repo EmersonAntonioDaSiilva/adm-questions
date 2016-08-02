@@ -11,12 +11,12 @@
 	
 	<ui:define name="searchFilterBlock">
 		<p:panelGrid columns="1">
-			<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.cliente}" listener="#{camposRelacionadosManager.carregaDescricaoClasse}" required="true">
+			<afirmanet:selectOneMenu label="Cliente" value="#{manager.searchParam.cliente}" listener="#{camposRelacionadosManager.carregaDescricaoClasse}" required="true">
 			    <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}" />
 			</afirmanet:selectOneMenu>	
 
-			<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.topico}">
-			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" required="true" />
+			<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.topico}" required="true">
+			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
 			</afirmanet:selectOneMenu>	
 		
 			<afirmanet:selectOneMenu label="Tipo Doc" value="#{manager.searchParam.typoDoc}">
