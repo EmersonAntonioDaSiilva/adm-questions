@@ -8,15 +8,16 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.criteria.Predicate;
 
 import org.omnifaces.cdi.ViewScoped;
+
+import com.google.common.io.Files;
 
 import br.com.afirmanet.core.manager.GenericCRUD;
 import br.com.afirmanet.questions.dao.ClienteDAO;
@@ -26,22 +27,14 @@ import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Pergunta;
 import br.com.afirmanet.questions.entity.Resposta;
 import br.com.afirmanet.questions.entity.Topico;
-
-import com.google.common.io.Files;
+import lombok.Getter;
+import lombok.Setter;
 
 @Named
 @ViewScoped
 public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> implements Serializable {
-
 	private static final long serialVersionUID = -5823701722365522817L;
 	
-	@Getter
-	@Setter
-	private Cliente cliente;
-	
-	@Getter
-	@Setter
-	private Topico topico;
 	
 	@Getter
 	@Setter
@@ -58,53 +51,32 @@ public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> 
 	
 	@Override
 	public void init() {
-		lstCliente = carregaDescricaoCliente();
+		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
+		lstCliente = clienteDAO.findAll();
+		
 		boxPesquisarPergunta = false;
 		showInsertButton = false;
 	}	
 	
-	private List<Cliente> carregaDescricaoCliente() {
-		List<Cliente> lstDescricaoCliente;
-		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
-		lstDescricaoCliente = clienteDAO.findAll();
-		
-		return lstDescricaoCliente;
-	}
-	
 	private List<Topico> carregarTopicosPorCliente() {
-		List<Topico> lstTopico;
-		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
-		
-		Cliente cliente = searchParam.getCliente();
-		
-		if (cliente != null) {	
-			lstTopico = topicoDAO.findbyCliente(cliente);
-			return lstTopico;
-		} else {
-			return new ArrayList<Topico>();
+		List<Topico> lstTopico = new ArrayList<Topico>();
+
+		if (searchParam.getCliente() != null) {	
+			TopicoDAO topicoDAO = new TopicoDAO(entityManager);
+			lstTopico = topicoDAO.findbyCliente(searchParam.getCliente());
 		}
+		
+		return lstTopico;
 	}
 	
 	private void recuperarResposta() {
 		List<Resposta> respostas = null;
 		
-		if(entityList != null) {
-			respostas = (List<Resposta>) entityList.getWrappedData();
-		}
+		RespostaDAO respostaDAO =  new RespostaDAO(entityManager);
+		respostas = respostaDAO.getDadosGeraArquivo(genericDAO.createPaginationPredicates(searchParam));
 		
 		File file = criarDiretorioEArquivoCSV();  
 		gravarRespostasCSV(file, respostas);
-		
-//		RespostaDAO respostaDAO = new RespostaDAO(entityManager);
-//		Collection<Predicate> createPaginationPredicates = respostaDAO.createPaginationPredicates(searchParam);
-//		
-//		List<Resposta> entities = respostaDAO.getResultList(createPaginationPredicates, null);
-//		
-//		System.out.println("Lista de Resposta");
-//		for (Resposta resposta : entities) {
-//			System.out.println(resposta.getDefinicao() + " - " + resposta.getCliente().getDescricao());
-//		}
-		System.out.println();
 	}
 
 	private File criarDiretorioEArquivoCSV() {

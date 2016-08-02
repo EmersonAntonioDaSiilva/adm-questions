@@ -14,13 +14,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import br.com.afirmanet.core.persistence.GenericDAO;
-import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Resposta;
 import br.com.afirmanet.questions.entity.Topico;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -111,6 +110,23 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 
 			predicates.add(cb.equal(root.get("cliente"), cliente));
 			predicates.add(cb.equal(root.get("topico"), topico));
+
+			if(!predicates.isEmpty()){
+				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
+
+				retornoResposta = entityManager.createQuery(criteriaQuery).getResultList();
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return retornoResposta;
+	}
+	
+	public List<Resposta> getDadosGeraArquivo(Collection<Predicate> predicates) {
+		List<Resposta> retornoResposta = null;
+
+		try {
+			CriteriaQuery<Resposta> criteriaQuery = createCriteriaQuery();
 
 			if(!predicates.isEmpty()){
 				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));

@@ -11,7 +11,7 @@
 	
 	<ui:define name="searchFilterBlock">
 		<p:panelGrid columns="2">
-			<p:selectOneMenu value="#{manager.searchParam.cliente}" style="width: 250px;" converter="omnifaces.SelectItemsConverter">
+			<p:selectOneMenu value="#{manager.searchParam.cliente}" style="width: 250px;" converter="omnifaces.SelectItemsConverter" rendered="true">
 				<f:selectItem itemLabel="Selecione um cliente" itemValue="" />
 	            <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}"  />
 	            
@@ -66,7 +66,7 @@
 	<!-- ./recordDetailBlock -->
 	
 	<ui:define name="generateFilebutton">
-		<p:commandButton action="#{manager.gerarArquivoCSV}" style="margin: 10px auto;" value="Gerar arquivo CSV" />
+		<p:commandButton action="#{manager.gerarArquivoCSV}" style="margin: 10px auto;" value="Gerar arquivo CSV" ajax="true" />
 	</ui:define>
 
 	<ui:define name="recordInsertEditBlock">
