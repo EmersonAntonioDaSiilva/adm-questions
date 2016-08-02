@@ -109,14 +109,14 @@ public abstract class Watson implements Serializable {
 
 	@SuppressWarnings("deprecation")
 	protected void searchAllDocs(String pergunta) {
-		HttpSolrClient solrClient = new HttpSolrClient(serviceRR.getSolrUrl(getSolrCluster().getId()),
-				HttpSolrClientUtils.createHttpClient(serviceRR.getEndPoint(), usernameRR, passwordRR));
-
-		solrUtils = new SolrUtils(solrClient, groundTruth, collectionName, rankerId);
-		
-		SolrQuery query = new SolrQuery(pergunta);
-		QueryResponse response = solrClient.query("example_collection", query);
-		Ranking ranking = serviceRR.rank("B2E325-rank-67", response);
+//		HttpSolrClient solrClient = new HttpSolrClient(serviceRR.getSolrUrl(getSolrCluster().getId()),
+//				HttpSolrClientUtils.createHttpClient(serviceRR.getEndPoint(), usernameRR, passwordRR));
+//
+//		solrUtils = new SolrUtils(solrClient, groundTruth, collectionName, rankerId);
+//		
+//		SolrQuery query = new SolrQuery(pergunta);
+//		QueryResponse response = solrClient.query("example_collection", query);
+//		Ranking ranking = serviceRR.rank("B2E325-rank-67", response);
 	}
 
 	protected void cleanupResources() {

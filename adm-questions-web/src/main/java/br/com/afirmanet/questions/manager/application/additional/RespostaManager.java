@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.omnifaces.cdi.ViewScoped;
 
+import br.com.afirmanet.core.enumeration.CrudActionEnum;
 import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.core.interceptor.Message;
 import br.com.afirmanet.core.manager.GenericCRUD;
@@ -29,11 +30,7 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	
 	@Getter
 	private List<Cliente> lstCliente;
-	
-	@Getter
-	@Setter
-	private Cliente cliente;
-	
+		
 	@Getter
 	private List<Topico> lstTopico;
 	
@@ -49,16 +46,15 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	public void init() {
 		showDeleteButton = true;
 		descricaoPergunta = "";
-		lstCliente = carregaDescricaoCliente();
-		cliente = lstCliente.get(0);
-		carregaDescricaoClasse(cliente);
+		
+		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
+		lstCliente = clienteDAO.findAll();
 	}	
 
 	@Override
 	protected void beforeSave() {
 		descricaoPergunta = "";
 		perguntas = null;
-		entity.setCliente(cliente);
 		validarDados();
 	}
 
@@ -73,21 +69,16 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	protected void afterUpdate() {
 		beforeDetail();
 	}
-	
-	public List<Cliente> carregaDescricaoCliente(){
-		List<Cliente> lstDescricaoCliente;
-
-		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
 		
-		lstDescricaoCliente = clienteDAO.findAll();
-		
-		return lstDescricaoCliente;
-	}
-	
-	public void carregaDescricaoClasse(Cliente cliente){
+	public void carregaDescricaoClasse(){
 		TopicoDAO classeDAO = new TopicoDAO(entityManager);
 		
-		lstTopico = classeDAO.findbyCliente(cliente);
+		
+		if(currentAction.equals(CrudActionEnum.SEARCH)){
+			lstTopico = classeDAO.findbyCliente(searchParam.getCliente());
+		}else{
+			lstTopico = classeDAO.findbyCliente(entity.getCliente());
+		}
 	}
 	
 	private void validarDados() {

@@ -1,0 +1,26 @@
+ - Document Conversion
+ -- Answer Units (JSON) para utilizar no RR
+ -- Configurar conversion_target
+ --- normalized_html = retirar ou manter um atributo no html ("exclude_tags_completely", "exclude_tags_keep_content", "exclude_content", "keep_content", "keep_tag_attributes")
+ --- answer_units 
+
+
+ - Retrieve - Apache Solr - API para indexar
+ -- Configurar: indexar palavras, stopwords, sinonimos, radicalização (valor semanticos, normalização)
+
+ -- Administrativa 
+ --- Criar um cluster = retorna um id
+ --- Criar uma collection, 
+ ---- Informando o tipo de dados (Idioma, quais os campos"Documento") shema.xml dentro de um zip
+ ---- Lista de sinonimos
+ ---- Lista de stopwords
+ ---- Lista de radicalização
+
+
+API a ser estudadas
+ - News API
+ - Concept insights
+ - Image link extraction
+ - Text extraction
+ - Feed detection
+ - Publication date

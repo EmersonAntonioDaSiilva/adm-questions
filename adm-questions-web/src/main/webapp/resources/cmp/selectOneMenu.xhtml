@@ -22,7 +22,9 @@
 			<p:selectOneMenu disabled="#{cc.attrs.disabled}" id="select" value="#{cc.attrs.value}" required="#{cc.attrs.required}" converter="omnifaces.SelectItemsConverter">
 				<f:selectItem itemLabel="#{cc.attrs.itemLabel}" itemValue="" />
 				<composite:insertChildren />
-				
+				<c:if test="#{not empty cc.getValueExpression('listener')}">
+					<p:ajax listener="#{cc.attrs.listener}" update="@form" />
+				</c:if>
 			</p:selectOneMenu>
 			<p:message for="select" display="icon" showDetail="false" showSummary="true" />
 		</p:panelGrid>
