@@ -12,22 +12,22 @@
 
 	<ui:define name="content">
 		<h:form id="formDialogRH">
-			<p:dialog visible="#{dialogRHManager.actionUsuarioPerfil}" widgetVar="dlgEmail" modal="true" height="100">
-    			<p:panelGrid>
+			<p:panel id="emailFilter" rendered="#{dialogRHManager.actionUsuarioPerfil}" toggleable="false">
+				<p:panelGrid>
 					<p:row>
 						<p:column>
 							<afirmanet:inputMail label="e-mail" class="txtPergunta" value="#{dialogRHManager.email}"  maxlength="200" size="100"/>					
 						</p:column>
 						<p:column style="width: 30px; text-align:left; vertical-align: bottom;">
-							<p:commandLink actionListener="#{dialogRHManager.btEmail}" update="dialogTable" onclick="PF('dlgEmail').hide();">
+							<p:commandLink actionListener="#{dialogRHManager.btEmail}" update="@form">
 								<h:graphicImage value="/resources/images/icon-buscar.gif" style="width: 50px; height: 50px;" />
 							</p:commandLink>					
 						</p:column>			
 					</p:row>
 				</p:panelGrid>
-			</p:dialog> 
+			</p:panel>
 			
-			<p:panel id="dialogFilter">
+			<p:panel id="dialogFilter" rendered="#{dialogRHManager.actionDialog}" toggleable="false">
 				<section id="formulario">
 					<p:panelGrid>
 						<p:row>
@@ -43,10 +43,10 @@
 							</p:column>
 						</p:row>
 						<p:row style="height: 50px;">
-							<p:column style="width: 200px;">
+							<p:column>
 								<p:inputText id="txtPergunta" class="txtPergunta" value="#{dialogRHManager.pergunta}" placeholder="Faça a sua pergunta aqui..."/>					
 							</p:column>
-							<p:column style="width: 50px; text-align:right; vertical-align: bottom; margin-top: 2px !important;">
+							<p:column style="width: 30px; text-align:left; vertical-align: bottom;">
 								<p:commandLink actionListener="#{dialogRHManager.btPergunta}" update="dialogTable, txtPergunta">
 									<h:graphicImage value="/resources/images/icon-buscar.gif" style="width: 50px; height: 50px;" />
 								</p:commandLink>					

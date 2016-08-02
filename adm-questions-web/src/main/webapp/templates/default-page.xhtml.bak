@@ -28,7 +28,7 @@
 				</ui:fragment>
 
 				<div style="padding: 10px;">
-					<div class="ux-content-title"></div>
+					<div class="ux-content-title">#{contentTitle}</div>
 					<p:messages id="msgs" autoUpdate="true" globalOnly="true" />
 
 					<ui:insert name="content" />
