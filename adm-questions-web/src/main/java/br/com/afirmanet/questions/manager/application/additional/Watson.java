@@ -9,10 +9,16 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
 import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.Rankers;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.Ranking;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
 
 import br.com.afirmanet.core.producer.ApplicationManaged;
@@ -21,6 +27,7 @@ import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
+import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,32 +40,36 @@ public abstract class Watson implements Serializable {
 	protected static final Integer SENTIMENTO_ENCONTRADA_NLC = 100;
 	protected static final Integer SENTIMENTO_ENCONTRADA_DIALOG = 200;
 	protected static final Integer SENTIMENTO_ENCONTRADA_RR = 300;
-	
-	protected static final double CONFIDENCE_MINIMO = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo");
-	protected static final String CAMINHO_ZIP_ARQUIVO_FERIAS  = ApplicationPropertiesUtils.getValue("index.manager.caminho.arquivo.ferias");
-	
+
+	protected static final double CONFIDENCE_MINIMO = ApplicationPropertiesUtils
+			.getValueAsDouble("index.manager.confidence.minimo");
+	protected static final String CAMINHO_ZIP_ARQUIVO_FERIAS = ApplicationPropertiesUtils
+			.getValue("index.manager.caminho.arquivo.ferias");
+
+	private static final String usernameRR = "80b1d296-9eda-4326-93cc-a36122dfa187";
+	private static final String passwordRR = "XCOtytypqONK";
+
 	@Inject
 	@ApplicationManaged
-	protected EntityManager entityManager;	
-	
+	protected EntityManager entityManager;
+
 	@Getter
 	private NaturalLanguageClassifier serviceNLC;
 
 	@Getter
 	private DialogService serviceDialog;
-	
+
 	@Getter
 	private RetrieveAndRank serviceRR;
-	
+
 	@Getter
 	@Setter
 	private Cliente cliente;
-		
+
 	@Getter
 	@Setter
 	private Topico topico;
-	
-	
+
 	@PostConstruct
 	public void init() {
 		serviceNLC = new NaturalLanguageClassifier();
@@ -66,42 +77,56 @@ public abstract class Watson implements Serializable {
 
 		serviceDialog = new DialogService();
 		serviceDialog.setUsernameAndPassword("e0572543-d32c-4ef0-af7e-7186245ada9d", "4mJSU0JnG87X");
-		
+
 		serviceRR = new RetrieveAndRank();
-		serviceRR.setUsernameAndPassword("80b1d296-9eda-4326-93cc-a36122dfa187","XCOtytypqONK");
-		
+		serviceRR.setUsernameAndPassword(usernameRR, passwordRR);
+
 		inicializar();
 	}
 
-	protected void uploadConfiguration(){
-		List<SolrCluster> solrClusters = serviceRR.getSolrClusters().getSolrClusters();
-		SolrCluster solrCluster = solrClusters.get(0);
+	protected void uploadConfiguration() {
+		SolrCluster solrCluster = getSolrCluster();
 
 		File configZip = new File(CAMINHO_ZIP_ARQUIVO_FERIAS);
 		serviceRR.uploadSolrClusterConfigurationZip(solrCluster.getId(), "FERIAS", configZip);
-		
+
 	}
-	
-	protected void createCollection(){
-		
+
+	private SolrCluster getSolrCluster() {
+		List<SolrCluster> solrClusters = serviceRR.getSolrClusters().getSolrClusters();
+		SolrCluster solrCluster = solrClusters.get(0);
+
+		return solrCluster;
 	}
-	
-	protected void indexDocumentAndCommit(){
-		
+
+	protected void createCollection() {
+
 	}
-	
-	protected void searchAllDocs(){
-		
+
+	protected void indexDocumentAndCommit() {
+
 	}
-	
-	protected void cleanupResources(){
+
+	@SuppressWarnings("deprecation")
+	protected void searchAllDocs(String pergunta) {
+		HttpSolrClient solrClient = new HttpSolrClient(serviceRR.getSolrUrl(getSolrCluster().getId()),
+				HttpSolrClientUtils.createHttpClient(serviceRR.getEndPoint(), usernameRR, passwordRR));
+
+		solrUtils = new SolrUtils(solrClient, groundTruth, collectionName, rankerId);
 		
+		SolrQuery query = new SolrQuery(pergunta);
+		QueryResponse response = solrClient.query("example_collection", query);
+		Ranking ranking = serviceRR.rank("B2E325-rank-67", response);
 	}
-	
+
+	protected void cleanupResources() {
+
+	}
+
 	protected void gravaPerguntaEncontrada(Classification classificacao, Integer sentimento) {
 		ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
 		Classificacao classificacaoEntity = new Classificacao();
-		
+
 		classificacaoEntity.setDataCadastro(LocalDateTime.now());
 		classificacaoEntity.setConfidence(classificacao.getTopConfidence());
 		classificacaoEntity.setPergunta(classificacao.getText());
@@ -110,9 +135,9 @@ public abstract class Watson implements Serializable {
 		classificacaoEntity.setCliente(cliente);
 		classificacaoEntity.setTopico(topico);
 		classificacaoEntity.setClassifier(classificacao.getId());
-		
+
 		classificacaoDAO.save(classificacaoEntity);
 	}
-	
+
 	protected abstract void inicializar();
 }
