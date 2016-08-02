@@ -8,12 +8,10 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.persistence.criteria.Predicate;
 
 import org.omnifaces.cdi.ViewScoped;
 
