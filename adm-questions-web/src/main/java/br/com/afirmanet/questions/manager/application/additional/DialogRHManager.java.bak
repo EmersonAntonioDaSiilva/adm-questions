@@ -2,7 +2,6 @@ package br.com.afirmanet.questions.manager.application.additional;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -159,14 +158,8 @@ public class DialogRHManager extends Watson implements Serializable {
 			
 			if(usuarioPerfil == null){
 				usuarioPerfil = new UsuarioPerfil();
-			}else{
-				HashMap<String, String> profileValues = new HashMap<>();
-				profileValues.put("NOME", usuarioPerfil.getNome());
-				profileValues.put("DATA_ADM", DateUtils.format(usuarioPerfil.getDataAdmissao()));
-				profileValues.put("DATA_NASC", DateUtils.format(usuarioPerfil.getDataNascimento()));
-				getServiceDialog().updateProfile(usuarioPerfil.getDialogId(), usuarioPerfil.getClientId(), profileValues);
 			}
-			
+
 			conversation = getDialog(conversation);
 			conversation = getServiceDialog().converse(conversation, "Oi");
 			

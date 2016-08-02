@@ -62,13 +62,13 @@ white-space: nowrap;
 
 .txtPergunta{
 	background-color: #fff; 
-	font-size: 1.4em !important; 
+	font-size: 1.8em !important; 
 	border: 0px solid !important; 
 	height: 30px !important; 
-	width: 115.5% !important; 
-	margin-top: 2px !important; 
+	width: 100% !important; 
+	margin-top: 10px !important; 
 	color: #999 !important; 
-	/* margin-left: 10px !important; */ 
+	margin-left: 10px !important; 
 	padding: 10px !important;
 }
 
@@ -95,11 +95,6 @@ white-space: nowrap;
 	padding: 5px !important;
 }
 
-.tree-table-no-header {
-	font-size: 1.4em !important;
-}
-
 .tree-table-no-header thead {
     display: none;
-    
 }

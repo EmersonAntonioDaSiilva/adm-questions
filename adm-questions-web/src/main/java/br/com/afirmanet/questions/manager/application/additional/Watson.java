@@ -77,7 +77,7 @@ public abstract class Watson implements Serializable {
 
 		serviceDialog = new DialogService();
 		serviceDialog.setUsernameAndPassword("e0572543-d32c-4ef0-af7e-7186245ada9d", "4mJSU0JnG87X");
-
+		
 		serviceRR = new RetrieveAndRank();
 		serviceRR.setUsernameAndPassword(usernameRR, passwordRR);
 
