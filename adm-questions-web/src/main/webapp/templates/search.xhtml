@@ -74,6 +74,8 @@
 				</c:if>
 			</p:dataTable>
 			
+			<ui:insert name="generateFilebutton" />
+			
 			<p:panel style="margin-top: 20px" rendered="#{manager.searchAction and manager.entityList.rowCount eq 0}">
 				<p:panelGrid columns="1" style="text-align: center">
 					<h:outputText value="Nenhum resultado encontrado" style="color: #8C291d; font-weight: bold" />
