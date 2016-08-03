@@ -10,28 +10,26 @@
 	<ui:param name="manager" value="#{arquivoManager}" />
 	
 	<ui:define name="searchFilterBlock">
-		<p:panelGrid columns="2">
-			<p:selectOneMenu value="#{manager.searchParam.cliente}" style="width: 250px;" converter="omnifaces.SelectItemsConverter" rendered="true">
-				<f:selectItem itemLabel="Selecione um cliente" itemValue="" />
+		
+		<afirmanet:selectOneMenu listener="#{arquivoManager.selecionarCliente}"
+								 value="#{manager.searchParam.cliente}" 
+								 label="Cliente" required="true"
+								 selectWidth="250px">
 	            <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}"  />
-	            
-	            <p:ajax listener="#{manager.selecionarCliente}" event="change" update="topicoSelect" />
-			</p:selectOneMenu>
-	
-			<p:selectOneMenu id="topicoSelect" value="#{manager.searchParam.topico}" style="width: 250px;" converter="omnifaces.SelectItemsConverter">
-				<f:selectItem itemLabel="Selecione um tópico" itemValue="" />
+		</afirmanet:selectOneMenu>
+		
+		<afirmanet:selectOneMenu value="#{manager.searchParam.topico}" 
+								 label="Tópico" required="true"
+								 style="width: 250px;"
+								 selectWidth="250px">
 	            <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}"  />
-	            
-	            <p:ajax event="change" update="@form" />
-			</p:selectOneMenu>
-		</p:panelGrid>
-		<p:panelGrid>
-			<afirmanet:inputText label="Resposta" 
-			 					 id="searchNome" 
-			 					 value="#{manager.searchParam.titulo}"  
-			 					 rendered="#{manager.lstTopico.size() > 0 and manager.searchParam.topico != null and manager.searchParam.topico != ''}"
-			 					 maxlength="100" size="80" /> 
-		</p:panelGrid>
+		</afirmanet:selectOneMenu>
+		
+		<afirmanet:inputText label="Resposta" 
+		 					 id="searchNome" 
+		 					 value="#{manager.searchParam.titulo}"  
+		 					 maxlength="100" size="80" /> 
+
 	</ui:define>
 
 	<ui:define name="searchResultBlock">
@@ -66,7 +64,10 @@
 	<!-- ./recordDetailBlock -->
 	
 	<ui:define name="generateFilebutton">
-		<p:commandButton action="#{manager.gerarArquivoCSV}" style="margin: 10px auto;" value="Gerar arquivo CSV" ajax="true" />
+		<p:commandButton action="#{manager.gerarArquivoCSV}" 
+						 style="margin: 10px auto;" 
+						 rendered="#{manager.entityList != null and manager.entityList.rowCount > 0}"		 					 
+						 value="Gerar arquivo CSV" ajax="true" />
 	</ui:define>
 
 	<ui:define name="recordInsertEditBlock">
