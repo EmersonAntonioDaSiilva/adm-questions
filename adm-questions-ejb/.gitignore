@@ -1,4 +1,7 @@
-
+*.classpath
+*.factorypath
+*.project
+*.tern-project
 *.class
 *.DS_Store
 
