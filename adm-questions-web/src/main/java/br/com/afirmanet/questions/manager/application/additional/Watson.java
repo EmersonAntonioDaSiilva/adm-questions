@@ -7,9 +7,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import com.google.gson.JsonObject;
 import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
 import com.ibm.watson.developer_cloud.document_conversion.v1.DocumentConversion;
 import com.ibm.watson.developer_cloud.document_conversion.v1.model.Answers;
@@ -90,13 +92,28 @@ public abstract class Watson implements Serializable {
 	}
 
 	protected void getDadosDocumentConversion(){
-		serviceDC.loadCustomConfig(customConfig)
+		String caminho = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
+		caminho = caminho + "/resources/files/Document/";
 		
-		File doc = new File("full/file/path/sample.doc");
-		Answers htmlToAnswers = serviceDC.convertDocumentToAnswer(doc);
+		File arquivos[];
+		File diretorio = new File(caminho);
+		arquivos = diretorio.listFiles();
+		for(int i = 0; i < arquivos.length; i++){
+			serviceDC.convertDocumentToAnswer(arquivos, null, getCustomConfigDC());
+			
+		}
+//		
+//		
+//		File doc = new File("full/file/path/sample.doc");
+//		Answers htmlToAnswers = serviceDC.convertDocumentToAnswer(doc);
 		
 	}
 	
+	private JsonObject getCustomConfigDC() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	protected void uploadConfiguration() {
 		SolrCluster solrCluster = getSolrCluster();
 

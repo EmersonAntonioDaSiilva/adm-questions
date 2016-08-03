@@ -18,6 +18,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.ibm.watson.developer_cloud.dialog.v1.model.Conversation;
 import com.ibm.watson.developer_cloud.dialog.v1.model.Dialog;
+import com.ibm.watson.developer_cloud.http.ServiceCall;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 
 import br.com.afirmanet.core.producer.ApplicationManaged;
@@ -104,8 +105,9 @@ public class DialogRHManager extends Watson implements Serializable {
 		if(pergunta != null &&  !"".equals(pergunta)){
 			
 			conversation = getDialog(conversation);
-			conversation = getServiceDialog().converse(conversation, getDialogoUsuario());
-
+			conversation = getServiceDialog().converse(conversation, getDialogoUsuario()).execute();
+			
+			
 			DialogVO dialogVO = new DialogVO();
 			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
 			dialogVO.setDialogo(dialogVO.getPessoa() + tratarRespostas(conversation));
@@ -132,7 +134,6 @@ public class DialogRHManager extends Watson implements Serializable {
 				resposta = respostaDAO.findByDescricao(topClass);
 				
 				Classification classificacao =new Classification();
-				classificacao.setTopConfidence(CONFIDENCE_MINIMO);
 				classificacao.setText(converse.getInput());
 				classificacao.setTopClass(topClass);
 				classificacao.setId(converse.getDialogId());
@@ -168,7 +169,7 @@ public class DialogRHManager extends Watson implements Serializable {
 			}
 			
 			conversation = getDialog(conversation);
-			conversation = getServiceDialog().converse(conversation, "Oi");
+			conversation = getServiceDialog().converse(conversation, "Oi").execute();
 			
 			DialogVO dialogVO = new DialogVO();
 			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
@@ -266,7 +267,7 @@ public class DialogRHManager extends Watson implements Serializable {
 	
 	private String getIdDialog() {
 		//Pega todos os Dialog configurados
-		List<Dialog> dialogs = getServiceDialog().getDialogs();
+		List<Dialog> dialogs = getServiceDialog().getDialogs().execute();
 
 		//Retorna o id do Dialog encontrado
 		return dialogs.get(0).getId();
