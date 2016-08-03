@@ -2,6 +2,7 @@ package br.com.afirmanet.questions.manager.application.additional;
 
 import java.io.File;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,12 +11,15 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
+import com.ibm.watson.developer_cloud.document_conversion.v1.DocumentConversion;
+import com.ibm.watson.developer_cloud.document_conversion.v1.model.Answers;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
 
 import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.core.util.DateUtils;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
 import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
@@ -56,6 +60,9 @@ public abstract class Watson implements Serializable {
 	private RetrieveAndRank serviceRR;
 
 	@Getter
+	private DocumentConversion serviceDC;
+	
+	@Getter
 	@Setter
 	private Cliente cliente;
 
@@ -74,9 +81,22 @@ public abstract class Watson implements Serializable {
 		serviceRR = new RetrieveAndRank();
 		serviceRR.setUsernameAndPassword(usernameRR, passwordRR);
 
+		serviceDC = new DocumentConversion(DateUtils.format(LocalDate.now()));
+		serviceDC.setUsernameAndPassword("bf53ed57-6340-4d79-8b48-fa81183e47a3","8krJUjillsLD");
+				
+		
+		
 		inicializar();
 	}
 
+	protected void getDadosDocumentConversion(){
+		serviceDC.loadCustomConfig(customConfig)
+		
+		File doc = new File("full/file/path/sample.doc");
+		Answers htmlToAnswers = serviceDC.convertDocumentToAnswer(doc);
+		
+	}
+	
 	protected void uploadConfiguration() {
 		SolrCluster solrCluster = getSolrCluster();
 
@@ -86,10 +106,8 @@ public abstract class Watson implements Serializable {
 	}
 
 	private SolrCluster getSolrCluster() {
-		List<SolrCluster> solrClusters = serviceRR.getSolrClusters().getSolrClusters();
-		SolrCluster solrCluster = solrClusters.get(0);
 
-		return solrCluster;
+		return null;
 	}
 
 	protected void createCollection() {
@@ -120,7 +138,7 @@ public abstract class Watson implements Serializable {
 		Classificacao classificacaoEntity = new Classificacao();
 
 		classificacaoEntity.setDataCadastro(LocalDateTime.now());
-		classificacaoEntity.setConfidence(classificacao.getTopConfidence());
+		classificacaoEntity.setConfidence(classificacao.getClasses().get(0).getConfidence());
 		classificacaoEntity.setPergunta(classificacao.getText());
 		classificacaoEntity.setResposta(classificacao.getTopClass());
 		classificacaoEntity.setSentimento(sentimento);
