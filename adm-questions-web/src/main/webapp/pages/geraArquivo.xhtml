@@ -65,6 +65,7 @@
 	
 	<ui:define name="generateFilebutton">
 		<p:commandButton action="#{manager.gerarArquivoCSV}" 
+						 id="generateFileCSV"
 						 style="margin: 10px auto;" 
 						 rendered="#{manager.entityList != null and manager.entityList.rowCount > 0}"		 					 
 						 value="Gerar arquivo CSV" ajax="true" />
