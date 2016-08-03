@@ -7,7 +7,7 @@
            targetNamespace="http://www.esocial.gov.br/schema/evt/retornoEvento/v1_1_0"
            elementFormDefault="qualified" attributeFormDefault="unqualified">
 
-  <xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="../xmldsig/xmldsig-core-schema.xsd"/>
+<!--   <xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="../xmldsig/xmldsig-core-schema.xsd"/> -->
 
   <xs:element name="eSocial">
     <xs:annotation>
