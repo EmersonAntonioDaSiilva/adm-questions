@@ -9,16 +9,10 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.response.QueryResponse;
-
 import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
-import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.Rankers;
-import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.Ranking;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
 
 import br.com.afirmanet.core.producer.ApplicationManaged;
@@ -27,7 +21,6 @@ import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
-import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -107,7 +100,6 @@ public abstract class Watson implements Serializable {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void searchAllDocs(String pergunta) {
 //		HttpSolrClient solrClient = new HttpSolrClient(serviceRR.getSolrUrl(getSolrCluster().getId()),
 //				HttpSolrClientUtils.createHttpClient(serviceRR.getEndPoint(), usernameRR, passwordRR));

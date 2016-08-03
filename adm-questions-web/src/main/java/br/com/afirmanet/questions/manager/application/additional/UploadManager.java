@@ -1,9 +1,6 @@
 package br.com.afirmanet.questions.manager.application.additional;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.text.Normalizer;
 import java.util.List;
@@ -79,27 +76,29 @@ public class UploadManager extends Watson implements Serializable {
 		}
     }
 
-	private File getFileUpload(UploadedFile file2) {
-		try {
-			InputStreamReader reader = new InputStreamReader(file2.getInputstream());
-			int partition = 1024;
-			int length = 0;
-			int position = 0;
-			char[] buffer = new char[partition];
-			FileWriter fstream = new FileWriter("../../" + file2.getFileName());
-			do{
-			    length = reader.read(buffer, position, partition);
-			    if(length > 0)
-			    	fstream.write(buffer, position, length);
-			}while(length > 0);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		File fileRetorno = new File("../../" + file2.getFileName());
-		
-		return fileRetorno;
-	}
+//	private File getFileUpload(UploadedFile file2) {
+//		try {
+//			InputStreamReader reader = new InputStreamReader(file2.getInputstream());
+//			int partition = 1024;
+//			int length = 0;
+//			int position = 0;
+//			char[] buffer = new char[partition];
+//			FileWriter fstream = new FileWriter("../../" + file2.getFileName());
+//			do{
+//			    length = reader.read(buffer, position, partition);
+//			    if(length > 0)
+//			    	fstream.write(buffer, position, length);
+//			}while(length > 0);
+//
+//			fstream.close();
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		File fileRetorno = new File("../../" + file2.getFileName());
+//		
+//		return fileRetorno;
+//	}
 	
 	public static String removeAccents(String str) {
 	    str = Normalizer.normalize(str, Normalizer.Form.NFD);

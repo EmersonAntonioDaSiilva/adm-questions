@@ -2,6 +2,7 @@
 				xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
 				xmlns:h="http://xmlns.jcp.org/jsf/html" 
 				xmlns:rich="http://richfaces.org/rich" 
+				xmlns:p="http://primefaces.org/ui" 
 				xmlns:composite="http://xmlns.jcp.org/jsf/composite">
 
 	<composite:interface>
@@ -12,7 +13,7 @@
 		<composite:attribute name="disabled" default="false" />
 	</composite:interface>
 
-	<composite:implementation xmlns:p="http://xmlns.jcp.org/jsf/composite/cmp">
+	<composite:implementation>
 		<p:inputContainer label="#{cc.attrs.label}" required="#{cc.attrs.required}">
 			<rich:calendar name="#{cc.attrs.name}" value="#{cc.attrs.value}" datePattern="#{cc.attrs.pattern}" inputSize="#{cc.attrs.inputSize}" required="#{cc.attrs.required}" disabled="#{cc.attrs.disabled}" />
 		</p:inputContainer>

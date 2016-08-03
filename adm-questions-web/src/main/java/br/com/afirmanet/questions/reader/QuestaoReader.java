@@ -29,6 +29,11 @@ public class QuestaoReader {
 			
 			questoes.add(questao);
 		}
+		
+		if(br.ready()){
+			br.close();
+		}
+		
 		return questoes;
 	}
 }
