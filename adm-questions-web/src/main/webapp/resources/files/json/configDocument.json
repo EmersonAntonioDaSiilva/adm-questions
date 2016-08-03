@@ -1,0 +1,38 @@
+{"conversion_target":"answer_units",
+	"word": {
+        "heading": {
+            "fonts": [
+                {"level": 1, "min_size": 24},
+                {"level": 2, "min_size": 18, "max_size": 23, "bold": true},
+                {"level": 3, "min_size": 14, "max_size": 17,"italic": false},
+                {"level": 4, "min_size": 12, "max_size": 13, "name": "Times New Roman"}
+            ],
+            "styles": [
+                {"level": 1, "names": ["pullout heading", "pulloutheading", "heading"]},
+                {"level": 2, "names": ["subtitle"]}
+            ]
+        }
+	},
+    "pdf": {
+        "heading": {
+            "fonts": [
+                {"level": 1, "min_size": 24, "max_size": 80},
+                {"level": 2, "min_size": 18, "max_size": 24, "bold": false, "italic": false},
+                {"level": 2, "min_size": 18, "max_size": 24, "bold": true},
+                {"level": 3, "min_size": 13, "max_size": 18, "bold": false, "italic": false},
+                {"level": 3, "min_size": 13, "max_size": 18, "bold": true},
+                {"level": 4, "min_size": 11, "max_size": 13, "bold": true, "italic": false}
+            ]
+        }
+    },    
+ 	"normalized_html": {  
+      "exclude_tags_completely":["script", "sup"],
+      "exclude_tags_keep_content":["font", "em", "span"],
+      "keep_content":{"xpaths":["//body/div[@id='content']"]},
+      "exclude_content":{"xpaths":["//*[@id='footer']","//*[@id='navigation']"]},
+      "keep_tag_attributes":["*"]
+    },
+    "answer_units": {
+        "selector_tags": ["h1","h2","h3","h4","h5","h6"]
+		}
+}
