@@ -1,0 +1,23 @@
+c:\Tools\curl\curl -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters"
+
+c:\Tools\curl\curl -X DELETE -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40"
+
+c:\Tools\curl\curl -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40/stats"
+
+
+
+
+c:\Tools\curl\curl -H "Content-Type: application/json" -X POST -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" -d "{\"cluster_name\":\"Cluster_Magna_RH\"}" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters"
+{"solr_cluster_id":"sce9825bfa_ae11_4994_abc3_99ecea56de40","cluster_name":"Cluster_Magna_RH","cluster_size":"","solr_cluster_status":"NOT_AVAILABLE"}
+
+c:\Tools\curl\curl -X POST -H "Content-Type: application/zip" -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK"  "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40/config/magna-rh" --data-binary @solrconfig.zip
+{"message":"WRRCSR026: Successfully uploaded named config [magna-rh] for Solr cluster [sce9825bfa_ae11_4994_abc3_99ecea56de40].","statusCode":200}
+
+c:\Tools\curl\curl -X POST -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK"  "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40/solr/admin/collections" -d "action=CREATE&name=collection-magna-rh&collection.configName=magna-rh"
+
+c:\Tools\curl\curl -X POST -H "Content-Type: application/json" -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40/solr/collection-magna-rh/update" --data-binary @data.json
+
+c:\Tools\curl\curl -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40/solr/collection-magna-rh/select?q=*&wt=json&fl=id,title,body"
+
+c:\Tools\curl\curl -u "cc085b67-69c8-47a4-a606-edc3686ed1a7":"XRDrkVCZ7qGq" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sc5a387061_3b6b_429a_9936_a9ad02dfbb83/solr/collection-magna-rh/select?q=*&wt=html&fl=body"
+
