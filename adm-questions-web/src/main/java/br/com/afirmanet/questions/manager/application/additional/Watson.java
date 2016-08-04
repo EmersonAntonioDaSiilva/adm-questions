@@ -6,15 +6,34 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import java.lang.reflect.Type;
-import com.google.common.reflect.TypeToken;
+import lombok.Getter;
+import lombok.Setter;
+
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.request.CollectionAdminRequest;
+import org.apache.solr.client.solrj.response.CollectionAdminResponse;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrInputDocument;
+
+import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.questions.dao.ClassificacaoDAO;
+import br.com.afirmanet.questions.entity.Classificacao;
+import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.Topico;
+import br.com.afirmanet.questions.manager.vo.SolrResult;
+import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
+import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -28,16 +47,8 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLang
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
-
-import br.com.afirmanet.core.producer.ApplicationManaged;
-import br.com.afirmanet.questions.dao.ClassificacaoDAO;
-import br.com.afirmanet.questions.entity.Classificacao;
-import br.com.afirmanet.questions.entity.Cliente;
-import br.com.afirmanet.questions.entity.Topico;
-import br.com.afirmanet.questions.manager.vo.SolrResult;
-import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
-import lombok.Getter;
-import lombok.Setter;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster.Status;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOptions;
 
 public abstract class Watson implements Serializable {
 	private static final long serialVersionUID = 5946605316434150596L;
@@ -51,8 +62,9 @@ public abstract class Watson implements Serializable {
 
 	protected static final double CONFIDENCE_MINIMO = ApplicationPropertiesUtils
 			.getValueAsDouble("index.manager.confidence.minimo");
-	protected static final String CAMINHO_ZIP_ARQUIVO_FERIAS = ApplicationPropertiesUtils
+	protected static final String CAMINHO_ZIP_ARQUIVO_CONFIG_FERIAS = ApplicationPropertiesUtils
 			.getValue("index.manager.caminho.arquivo.ferias");
+	
 
 	private static final String usernameRR = "80b1d296-9eda-4326-93cc-a36122dfa187";
 	private static final String passwordRR = "XCOtytypqONK";
@@ -151,36 +163,110 @@ public abstract class Watson implements Serializable {
 		return retorno;
 	}
 
-	protected void uploadConfiguration() {
-		SolrCluster solrCluster = getSolrCluster();
-
-		File configZip = new File(CAMINHO_ZIP_ARQUIVO_FERIAS);
-		serviceRR.uploadSolrClusterConfigurationZip(solrCluster.getId(), "FERIAS", configZip);
-
+	protected void uploadConfiguration(String idCluster, String nomeConfig) {
+		//File configZip = new File(CAMINHO_ZIP_ARQUIVO_CONFIG_FERIAS);
+		File configZip = new File("C:\\diretorio\\config\\ferias\\solrconfig.zip");
+		serviceRR.uploadSolrClusterConfigurationZip(idCluster, nomeConfig, configZip);
 	}
 
-	private SolrCluster getSolrCluster() {
-
-		return null;
+	private SolrCluster getSolrCluster(String idCluster) {
+		return serviceRR.getSolrCluster(idCluster).execute();
 	}
 
-	protected void createCollection() {
-
+	protected String createCluster(String nomeCluster, Integer unit) {
+		SolrClusterOptions optionCluster = null;
+		
+		// Se a unit for null ele não definirá a unit size do cluster
+		/// Com isso o cluster fica limitado a 500mb para testes
+		if(unit == null)
+		{
+			optionCluster = new SolrClusterOptions(nomeCluster);
+		}
+		else
+		{
+			optionCluster = new SolrClusterOptions(nomeCluster,unit);
+		}
+		
+		// Criação do cluster
+		SolrCluster cluster = serviceRR.createSolrCluster(optionCluster).execute();
+		while (cluster.getStatus() == Status.NOT_AVAILABLE) {
+		   
+		   try{
+			   Thread.sleep(30000);
+			   cluster = getSolrCluster(cluster.getId());
+		   }
+		   catch(InterruptedException e){
+			   return null; 
+		   }
+	    }
+		
+		// Retorno do id do cluster
+		return cluster.getId();
 	}
 
-	protected void indexDocumentAndCommit() {
+	@SuppressWarnings("deprecation")
+	protected void createCollection(String idCluster, String nomeConfig, String nomeColection) throws Exception {
+		final CollectionAdminRequest.Create createCollectionRequest = new CollectionAdminRequest.Create();
+	    createCollectionRequest.setCollectionName(nomeColection);
+	    createCollectionRequest.setConfigName(nomeConfig);
 
+	    final CollectionAdminResponse response = createCollectionRequest.process(getSolrClient(idCluster));
+	    if (!response.isSuccess()) {
+	      throw new IllegalStateException("Falha ao criar collection: "+ response.getErrorMessages().toString());
+	    }
+	}
+	
+	@SuppressWarnings("deprecation")
+	protected HttpSolrClient getSolrClient(String idCluster) {
+		return new HttpSolrClient(serviceRR.getSolrUrl(idCluster), 
+									HttpSolrClientUtils.createHttpClient(serviceRR.getSolrUrl(idCluster), usernameRR, passwordRR));
 	}
 
-	protected void searchAllDocs(String pergunta) {
-//		HttpSolrClient solrClient = new HttpSolrClient(serviceRR.getSolrUrl(getSolrCluster().getId()),
-//				HttpSolrClientUtils.createHttpClient(serviceRR.getEndPoint(), usernameRR, passwordRR));
-//
-//		solrUtils = new SolrUtils(solrClient, groundTruth, collectionName, rankerId);
-//		
-//		SolrQuery query = new SolrQuery(pergunta);
-//		QueryResponse response = solrClient.query("example_collection", query);
-//		Ranking ranking = serviceRR.rank("B2E325-rank-67", response);
+	protected void indexDocumentAndCommit(String idCluster, String nomeCollection) throws Exception{
+		// Instância do Solr
+		HttpSolrClient solrCliente = getSolrClient(idCluster);
+		
+		// Lista de documentos
+		solrCliente.add(nomeCollection, getDocuments());
+	    
+		// Commit da coleção 
+	    solrCliente.commit(nomeCollection);
+	}
+	
+	private Collection<SolrInputDocument> getDocuments(){
+		
+		Collection<SolrInputDocument> colecao = Collections.emptyList();
+		
+		Gson gson = new Gson();
+		
+		JsonArray jsonArray = getDadosDocumentConversion();
+    	
+		if(jsonArray.size() > 0)
+		{
+			colecao = new ArrayList<SolrInputDocument>();
+			
+			for(JsonElement jsonElement :  jsonArray){
+				JsonObject JsonObject =  jsonElement.getAsJsonObject();
+				SolrResult fromJson2 = gson.fromJson(JsonObject, SolrResult.class);
+				
+				SolrInputDocument document = new SolrInputDocument();
+				document.addField("id", fromJson2.getId());
+    			document.addField("title", fromJson2.getTitle());
+    			document.addField("body", fromJson2.getBody());
+    			colecao.add(document);
+				
+			}
+		}
+    	
+		return colecao;
+	}
+
+	protected QueryResponse searchAllDocs(String idCluster,String collection,String pergunta) throws Exception {
+		HttpSolrClient solrClient = getSolrClient(idCluster);
+		
+		String pesquisa = "*:".concat(pergunta); // monta String da pesquisa
+		SolrQuery query = new SolrQuery(pesquisa); // cria os critérios da pesquisa
+		return  solrClient.query(collection, query); // retorna pesquisa
 	}
 
 	protected void cleanupResources() {
