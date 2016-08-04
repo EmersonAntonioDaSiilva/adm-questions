@@ -11,9 +11,9 @@ import org.omnifaces.cdi.ViewScoped;
 public class ClusterSolrManager extends Watson implements Serializable {
 	private static final long serialVersionUID = 3925507169074921562L;
 
-	private static String nomeCluster = "MAGNA-RH-TESTE",
-						  nomeConfig = "CONFIG-MAGNA-RH-TESTE",
-			 			  nomeColection = "COLLECTION-MAGNA-RH-TESTE"; 
+	private static String nomeCluster = "MAGNA_RH_TEST",
+						  nomeConfig = "CONF_RH_TEST",
+			 			  nomeColection = "COLLEC_RH_TEST"; 
 	
 	@Override
 	protected void inicializar() {}
@@ -28,7 +28,7 @@ public class ClusterSolrManager extends Watson implements Serializable {
 			indexDocumentAndCommit(idCluster, nomeColection);
 		}
 		catch(Exception e){
-			
+			e.printStackTrace();
 		}
 	}
 	

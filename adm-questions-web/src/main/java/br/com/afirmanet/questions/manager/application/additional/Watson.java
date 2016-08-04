@@ -31,6 +31,7 @@ import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
 import com.ibm.watson.developer_cloud.document_conversion.v1.DocumentConversion;
 import com.ibm.watson.developer_cloud.document_conversion.v1.model.Answers;
 import com.ibm.watson.developer_cloud.document_conversion.v1.util.ConversionUtils;
+import com.ibm.watson.developer_cloud.http.ServiceCall;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
@@ -62,8 +63,6 @@ public abstract class Watson extends AbstractManager implements Serializable {
 
 	protected static final double CONFIDENCE_MINIMO = ApplicationPropertiesUtils
 			.getValueAsDouble("index.manager.confidence.minimo");
-	protected static final String CAMINHO_ZIP_ARQUIVO_CONFIG_FERIAS = ApplicationPropertiesUtils
-			.getValue("index.manager.caminho.arquivo.ferias");
 	
 
 	private static final String usernameRR = "80b1d296-9eda-4326-93cc-a36122dfa187";
@@ -164,9 +163,11 @@ public abstract class Watson extends AbstractManager implements Serializable {
 	}
 
 	protected void uploadConfiguration(String idCluster, String nomeConfig) {
-		//File configZip = new File(CAMINHO_ZIP_ARQUIVO_CONFIG_FERIAS);
-		File configZip = new File("C:\\diretorio\\config\\ferias\\solrconfig.zip");
-		serviceRR.uploadSolrClusterConfigurationZip(idCluster, nomeConfig, configZip);
+		String caminho = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
+		caminho = caminho.concat("/resources/files/zip/solrconfig.zip");
+		
+		File configZip = new File(caminho);
+		serviceRR.uploadSolrClusterConfigurationZip(idCluster, nomeConfig, configZip).execute();
 	}
 
 	private SolrCluster getSolrCluster(String idCluster) {
@@ -212,7 +213,7 @@ public abstract class Watson extends AbstractManager implements Serializable {
 
 	    final CollectionAdminResponse response = createCollectionRequest.process(getSolrClient(idCluster));
 	    if (!response.isSuccess()) {
-	      throw new IllegalStateException("Falha ao criar collection: "+ response.getErrorMessages().toString());
+	    	throw new IllegalStateException("Falha ao criar collection: "+ response.getErrorMessages().toString());
 	    }
 	}
 	
