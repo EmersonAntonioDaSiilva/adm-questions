@@ -15,24 +15,12 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.response.CollectionAdminResponse;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
-
-import br.com.afirmanet.core.producer.ApplicationManaged;
-import br.com.afirmanet.questions.dao.ClassificacaoDAO;
-import br.com.afirmanet.questions.entity.Classificacao;
-import br.com.afirmanet.questions.entity.Cliente;
-import br.com.afirmanet.questions.entity.Topico;
-import br.com.afirmanet.questions.manager.vo.SolrResult;
-import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
-import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -50,7 +38,19 @@ import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster.Status;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOptions;
 
-public abstract class Watson implements Serializable {
+import br.com.afirmanet.core.manager.AbstractManager;
+import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.questions.dao.ClassificacaoDAO;
+import br.com.afirmanet.questions.entity.Classificacao;
+import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.Topico;
+import br.com.afirmanet.questions.manager.vo.SolrResult;
+import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
+import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
+import lombok.Getter;
+import lombok.Setter;
+
+public abstract class Watson extends AbstractManager implements Serializable {
 	private static final long serialVersionUID = 5946605316434150596L;
 
 	protected static final Integer SENTIMENTO_POSITIVO = 1;
