@@ -1,6 +1,6 @@
 c:\Tools\curl\curl -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters"
 
-c:\Tools\curl\curl -X DELETE -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40"
+c:\Tools\curl\curl -X DELETE -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/scd4408fe3_af5d_4979_859d_97eccb33a089"
 
 c:\Tools\curl\curl -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40/stats"
 
@@ -8,12 +8,12 @@ c:\Tools\curl\curl -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "htt
 
 
 c:\Tools\curl\curl -H "Content-Type: application/json" -X POST -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" -d "{\"cluster_name\":\"Cluster_Magna_RH\"}" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters"
-{"solr_cluster_id":"sce9825bfa_ae11_4994_abc3_99ecea56de40","cluster_name":"Cluster_Magna_RH","cluster_size":"","solr_cluster_status":"NOT_AVAILABLE"}
+{"solr_cluster_id":"sc50fa448e_fc42_4614_8916_11fd71f9e381","cluster_name":"Cluster_Magna_RH","cluster_size":"","solr_cluster_status":"NOT_AVAILABLE"}
 
-c:\Tools\curl\curl -X POST -H "Content-Type: application/zip" -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK"  "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40/config/magna-rh" --data-binary @solrconfig.zip
+c:\Tools\curl\curl -X POST -H "Content-Type: application/zip" -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK"  "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sc50fa448e_fc42_4614_8916_11fd71f9e381/config/magna-rh" --data-binary @solrconfig.zip
 {"message":"WRRCSR026: Successfully uploaded named config [magna-rh] for Solr cluster [sce9825bfa_ae11_4994_abc3_99ecea56de40].","statusCode":200}
 
-c:\Tools\curl\curl -X POST -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK"  "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40/solr/admin/collections" -d "action=CREATE&name=collection-magna-rh&collection.configName=magna-rh"
+c:\Tools\curl\curl -X POST -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK"  "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sc50fa448e_fc42_4614_8916_11fd71f9e381/solr/admin/collections" -d "action=CREATE&numShards=1&maxShardsPerNode=1&name=collection-magna-rh&collection.configName=magna-rh"
 
 c:\Tools\curl\curl -X POST -H "Content-Type: application/json" -u "80b1d296-9eda-4326-93cc-a36122dfa187":"XCOtytypqONK" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sce9825bfa_ae11_4994_abc3_99ecea56de40/solr/collection-magna-rh/update" --data-binary @data.json
 
