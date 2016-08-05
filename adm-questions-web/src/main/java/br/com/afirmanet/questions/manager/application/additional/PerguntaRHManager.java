@@ -3,9 +3,12 @@ package br.com.afirmanet.questions.manager.application.additional;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.omnifaces.cdi.ViewScoped;
@@ -14,26 +17,33 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Class
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifiers;
 
+import br.com.afirmanet.core.manager.AbstractManager;
+import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.RespostaDAO;
 import br.com.afirmanet.questions.dao.TopicoDAO;
+import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Topico;
+import br.com.afirmanet.questions.service.ServiceNLC;
 import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
 import lombok.Getter;
 import lombok.Setter;
 
 @Named
 @ViewScoped
-public class PerguntaRHManager extends Watson implements Serializable {
+public class PerguntaRHManager extends AbstractManager implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 	
 	private static final String RESPOSTA_PADRAO = ApplicationPropertiesUtils.getValue("index.manager.resposta.padrao"); 
 	private static final String RESPOSTA_SAUDACOES = ApplicationPropertiesUtils.getValue("index.manager.resposta.saudacoes");
-			
+
+	@Inject
+	@ApplicationManaged
+	private EntityManager entityManager;
+	
 	@Getter
 	@Setter
 	private String pergunta;
-	
 	
 	@Getter
 	@Setter
@@ -54,14 +64,20 @@ public class PerguntaRHManager extends Watson implements Serializable {
 	@Getter
 	private List<Topico> lstTopico;
 	
-	@Override
+	private ServiceNLC service;
+	private Cliente cliente;
+	private Topico topico;
+	
+	@PostConstruct
 	protected void inicializar() {
 		ClienteDAO clieteDAO = new ClienteDAO(entityManager);
-		setCliente(clieteDAO.findByNome("m.watson"));
+		cliente = clieteDAO.findByNome("m.watson");
 
+		service = new ServiceNLC(cliente, entityManager);
+		
 		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
-		lstTopico = topicoDAO.findbyCliente(getCliente());
-		setTopico(lstTopico.get(0));
+		lstTopico = topicoDAO.findbyCliente(cliente);
+		topico = lstTopico.get(0);
 		
 		resposta = RESPOSTA_SAUDACOES;
 	}
@@ -71,19 +87,19 @@ public class PerguntaRHManager extends Watson implements Serializable {
 		limparVariaveis();
 		
 		if(pergunta != null &&  !"".equals(pergunta)){
-			classificacao = getServiceNLC().classify(getIdClassificacao(), pergunta).execute();
+			classificacao = service.getService().classify(getIdClassificacao(), pergunta).execute();
 			
-			if (classificacao.getClasses().get(0).getConfidence().compareTo(CONFIDENCE_MINIMO) == -1) {
-				gravaPerguntaEncontrada(classificacao, SENTIMENTO_NEGATIVO);
+			if (classificacao.getClasses().get(0).getConfidence().compareTo(service.CONFIDENCE_MINIMO) == -1) {
+				service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_NEGATIVO);
 				
 				System.out.println (classificacao);
 				definicao = RESPOSTA_PADRAO;
 				
-				definicao += " No momento tenho conhecimento apenas deste tópico = " + getTopico().getDescricao();
+				definicao += " No momento tenho conhecimento apenas deste tópico = " + topico.getDescricao();
 				
 				this.likeBox = false;
 			} else {
-				gravaPerguntaEncontrada(classificacao, SENTIMENTO_ENCONTRADA_NLC);
+				service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_ENCONTRADA_NLC);
 				
 				resposta = classificacao.getTopClass();
 				RespostaDAO respostaDAO = new RespostaDAO(entityManager);
@@ -95,7 +111,7 @@ public class PerguntaRHManager extends Watson implements Serializable {
 
 	@Transactional
 	public void sentimentoImparcial() {
-		gravaPerguntaEncontrada(classificacao, SENTIMENTO_IMPARCIAL);
+		service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_IMPARCIAL);
 		limparVariaveis();
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.addMessage("sentimentoMessage", new FacesMessage(
@@ -106,7 +122,7 @@ public class PerguntaRHManager extends Watson implements Serializable {
 	
 	@Transactional
 	public void sentimentoPositivo() {
-		gravaPerguntaEncontrada(classificacao, SENTIMENTO_POSITIVO);
+		service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_POSITIVO);
 		limparVariaveis();
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.addMessage("sentimentoMessage", new FacesMessage(
@@ -124,7 +140,7 @@ public class PerguntaRHManager extends Watson implements Serializable {
 	private String getIdClassificacao() {
 		Classifiers classifiers;
 		try {
-			classifiers = getServiceNLC().getClassifiers().execute();
+			classifiers = service.getService().getClassifiers().execute();
 			List<Classifier> lstClassifiers = classifiers.getClassifiers();
 			Classifier classifier = lstClassifiers.get(0);
 			

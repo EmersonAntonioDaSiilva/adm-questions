@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import br.com.afirmanet.questions.enums.TypeDocEnum;
+import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,29 +24,29 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "campos_relacionados")
+@Table(name = "dados_watson")
 @EqualsAndHashCode(of = "id")
-public class CamposRelacionados implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class DadosWatson implements Serializable {
+	private static final long serialVersionUID = 7669388365460088024L;
 
 	@Id
-	@SequenceGenerator(name = "sq_campos_relacionados", sequenceName = "sq_campos_relacionados", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_campos_relacionados")
-	@Column(name = "id_campo")
+	@SequenceGenerator(name = "sq_dados_watson", sequenceName = "sq_dados_watson", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sq_dados_watson")
+	@Column(name = "id_watson")
 	private Integer id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_topico")
-	private Topico topico;	
-	
+	private Topico topico;
+
 	@Enumerated(EnumType.STRING)
-	private TypeDocEnum typeDoc;
-	
-	private String campo;
-	
-	private LocalDate  dataCadastro;
+	private TypeServicoEnum typeServico;
+	  
+	private String usuario;
+	private String senha;
+	private LocalDate dataCadastro;
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -18,9 +19,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.ibm.watson.developer_cloud.dialog.v1.model.Conversation;
 import com.ibm.watson.developer_cloud.dialog.v1.model.Dialog;
-import com.ibm.watson.developer_cloud.http.ServiceCall;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 
+import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.core.util.DateUtils;
 import br.com.afirmanet.core.util.TimeUtils;
@@ -28,15 +29,17 @@ import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.RespostaDAO;
 import br.com.afirmanet.questions.dao.TopicoDAO;
 import br.com.afirmanet.questions.dao.UsuarioPerfilDAO;
+import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.entity.UsuarioPerfil;
 import br.com.afirmanet.questions.manager.vo.DialogVO;
+import br.com.afirmanet.questions.service.ServiceDialog;
 import lombok.Getter;
 import lombok.Setter;
 
 @Named
 @ViewScoped
-public class DialogRHManager extends Watson implements Serializable {
+public class DialogRHManager extends AbstractManager implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 	
 	private static final String INFORMAR_NOME = "informar o seu nome:";
@@ -47,7 +50,7 @@ public class DialogRHManager extends Watson implements Serializable {
 	
 	@Inject
 	@ApplicationManaged
-	protected EntityManager entityManager;
+	private EntityManager entityManager;
 	
 	@Getter
 	@Setter
@@ -82,14 +85,21 @@ public class DialogRHManager extends Watson implements Serializable {
 	@Setter
 	private Boolean actionDialog;	
 	
-	@Override
+	private ServiceDialog serviceDialog;
+	private Cliente cliente;
+	private Topico topico;
+	
+	@PostConstruct
 	protected void inicializar() {
-		ClienteDAO clieteDAO = new ClienteDAO(entityManager);
-		setCliente(clieteDAO.findByNome("m.watson"));
 
+		ClienteDAO clieteDAO = new ClienteDAO(entityManager);
+		cliente = clieteDAO.findByNome("m.watson");
+
+		serviceDialog = new ServiceDialog(cliente, entityManager);
+		
 		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
-		lstTopico = topicoDAO.findbyCliente(getCliente());
-		setTopico(lstTopico.get(0));
+		lstTopico = topicoDAO.findbyCliente(cliente);
+		topico = lstTopico.get(0);
 		
 		lstDialog = new ArrayList<>();
 		
@@ -105,7 +115,7 @@ public class DialogRHManager extends Watson implements Serializable {
 		if(pergunta != null &&  !"".equals(pergunta)){
 			
 			conversation = getDialog(conversation);
-			conversation = getServiceDialog().converse(conversation, getDialogoUsuario()).execute();
+			conversation = serviceDialog.getService().converse(conversation, getDialogoUsuario()).execute();
 			
 			
 			DialogVO dialogVO = new DialogVO();
@@ -138,7 +148,7 @@ public class DialogRHManager extends Watson implements Serializable {
 				classificacao.setTopClass(topClass);
 				classificacao.setId(converse.getDialogId());
 				
-				gravaPerguntaEncontrada(classificacao, SENTIMENTO_ENCONTRADA_DIALOG);
+				serviceDialog.gravaPerguntaEncontrada(topico, classificacao, serviceDialog.SENTIMENTO_ENCONTRADA_DIALOG);
 				
 			}
 		} catch (JsonSyntaxException e) {
@@ -165,11 +175,11 @@ public class DialogRHManager extends Watson implements Serializable {
 				profileValues.put("NOME", usuarioPerfil.getNome());
 				profileValues.put("DATA_ADM", DateUtils.format(usuarioPerfil.getDataAdmissao()));
 				profileValues.put("DATA_NASC", DateUtils.format(usuarioPerfil.getDataNascimento()));
-				getServiceDialog().updateProfile(usuarioPerfil.getDialogId(), usuarioPerfil.getClientId(), profileValues);
+				serviceDialog.getService().updateProfile(usuarioPerfil.getDialogId(), usuarioPerfil.getClientId(), profileValues);
 			}
 			
 			conversation = getDialog(conversation);
-			conversation = getServiceDialog().converse(conversation, "Oi").execute();
+			conversation = serviceDialog.getService().converse(conversation, "Oi").execute();
 			
 			DialogVO dialogVO = new DialogVO();
 			dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
@@ -197,7 +207,7 @@ public class DialogRHManager extends Watson implements Serializable {
 		updateUsuarioPerfil(conversation);
 
 		conversation.setDialogId(getIdDialog());
-		conversation.setConfidence(CONFIDENCE_MINIMO);
+		conversation.setConfidence(serviceDialog.CONFIDENCE_MINIMO);
 
 		return conversation;
 	}
@@ -267,7 +277,7 @@ public class DialogRHManager extends Watson implements Serializable {
 	
 	private String getIdDialog() {
 		//Pega todos os Dialog configurados
-		List<Dialog> dialogs = getServiceDialog().getDialogs().execute();
+		List<Dialog> dialogs = serviceDialog.getService().getDialogs().execute();
 
 		//Retorna o id do Dialog encontrado
 		return dialogs.get(0).getId();
