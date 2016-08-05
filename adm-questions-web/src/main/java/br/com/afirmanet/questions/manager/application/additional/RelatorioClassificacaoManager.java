@@ -93,7 +93,38 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
     private BarChartModel initBarModel() {
         BarChartModel model = new BarChartModel();
         
-        List<ClassificacaoChart> listaClassificacaoChart = new ArrayList<>();
+        List<ClassificacaoChart> listaClassificacaoChart = listarClassificacaoChart();
+
+        ChartSeries positivos = new ChartSeries();
+        positivos.setLabel("Positivo");
+        
+        for (ClassificacaoChart positivo : listaClassificacaoChart) {
+        	positivos.set(positivo.dataCadastroFormatada(), positivo.getPositivos().size());
+		}
+ 
+        ChartSeries negativos = new ChartSeries();
+        negativos.setLabel("Negativo");
+        
+        for (ClassificacaoChart negativo : listaClassificacaoChart) {
+        	negativos.set(negativo.dataCadastroFormatada(), negativo.getNegativos().size());
+		}
+        
+        ChartSeries naoSeAplicam = new ChartSeries();
+        naoSeAplicam.setLabel("Não se Aplica");
+        
+        for (ClassificacaoChart naoSeAplica : listaClassificacaoChart) {
+        	naoSeAplicam.set(naoSeAplica.dataCadastroFormatada(), naoSeAplica.getNaoSeAplicam().size());
+		}
+        
+        model.addSeries(positivos);
+        model.addSeries(negativos);
+        model.addSeries(naoSeAplicam);
+         
+        return model;
+    }
+
+	private List<ClassificacaoChart> listarClassificacaoChart() {
+		List<ClassificacaoChart> listaClassificacaoChart = new ArrayList<>();
         ClassificacaoChart classificacaoChart = new ClassificacaoChart();
        
         classificacaoChart.setDataCadastro(this.lstClassificao.get(0).getDataCadastro());
@@ -123,37 +154,8 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
     		}
         	
 		}
-
-        ChartSeries positivos = new ChartSeries();
-        positivos.setLabel("Positivo");
-        
-        for (ClassificacaoChart positivo : listaClassificacaoChart) {
-        	positivos.set(positivo.dataCadastroFormatada(), positivo.getPositivos().size());
-		}
-
- 
-        ChartSeries negativos = new ChartSeries();
-        negativos.setLabel("Negativo");
-        
-        for (ClassificacaoChart negativo : listaClassificacaoChart) {
-        	negativos.set(negativo.dataCadastroFormatada(), negativo.getNegativos().size());
-		}
-        
-        
-        ChartSeries naoSeAplicam = new ChartSeries();
-        naoSeAplicam.setLabel("Não se Aplica");
-        
-        for (ClassificacaoChart naoSeAplica : listaClassificacaoChart) {
-        	naoSeAplicam.set(naoSeAplica.dataCadastroFormatada(), naoSeAplica.getNaoSeAplicam().size());
-		}
-        
- 
-        model.addSeries(positivos);
-        model.addSeries(negativos);
-        model.addSeries(naoSeAplicam);
-         
-        return model;
-    }
+		return listaClassificacaoChart;
+	}
 
 	private void atualizarValorMaximoEixoY(ClassificacaoChart classificacaoChart) {
 		if(classificacaoChart.getPositivos().size() > this.valorMaximoEixoY) {
