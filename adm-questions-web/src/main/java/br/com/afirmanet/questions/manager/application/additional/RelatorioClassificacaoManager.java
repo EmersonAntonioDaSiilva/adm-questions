@@ -6,7 +6,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.model.chart.Axis;
@@ -14,6 +17,8 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
+import br.com.afirmanet.core.manager.AbstractManager;
+import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.TopicoDAO;
@@ -26,7 +31,7 @@ import lombok.Setter;
 
 @Named
 @ViewScoped
-public class RelatorioClassificacaoManager extends Watson implements Serializable {
+public class RelatorioClassificacaoManager extends AbstractManager implements Serializable {
 
 	private static final long serialVersionUID = -331556378253936963L;
 	
@@ -60,8 +65,12 @@ public class RelatorioClassificacaoManager extends Watson implements Serializabl
 	
 	private int valorMaximoEixoY;
 	
-	@Override
-	protected void inicializar() {
+	@Inject
+	@ApplicationManaged
+	private EntityManager entityManager;
+	
+	@PostConstruct
+	public void inicializar() {
 		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
 		lstCliente = clienteDAO.findAll();
 	}
