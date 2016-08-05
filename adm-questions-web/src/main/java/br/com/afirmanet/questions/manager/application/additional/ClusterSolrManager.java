@@ -30,7 +30,6 @@ public class ClusterSolrManager extends AbstractManager implements Serializable 
 	
 	private ServiceRetrieveAndRank service;
 	private Cliente cliente;
-
 	
 	@PostConstruct
 	protected void inicializar() {
@@ -38,13 +37,9 @@ public class ClusterSolrManager extends AbstractManager implements Serializable 
 		cliente = clieteDAO.findByNome("m.watson");
 	
 		service = new ServiceRetrieveAndRank(cliente, entityManager);
-
-		
 	}
-	
-	
+
 	public void btGeraCluster(){
-		
 		try{
 			String idCluster = service.createCluster(nomeCluster, null);
 			service.uploadConfiguration(idCluster, nomeConfig);
