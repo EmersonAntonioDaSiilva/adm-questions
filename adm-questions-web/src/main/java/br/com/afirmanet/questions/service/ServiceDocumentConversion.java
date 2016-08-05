@@ -5,13 +5,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import org.apache.solr.common.SolrInputDocument;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ibm.watson.developer_cloud.document_conversion.v1.DocumentConversion;
@@ -21,7 +22,6 @@ import com.ibm.watson.developer_cloud.document_conversion.v1.util.ConversionUtil
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
-import br.com.afirmanet.questions.manager.vo.SolrResult;
 import lombok.Getter;
 
 public class ServiceDocumentConversion extends WatsonServiceFactory implements Serializable {
@@ -40,7 +40,9 @@ public class ServiceDocumentConversion extends WatsonServiceFactory implements S
 		
 	}
 	
-	protected JsonArray getDadosDocumentConversion(){
+	protected Collection<SolrInputDocument> getDadosDocumentConversion(){
+		Collection<SolrInputDocument> retorno = Collections.emptyList();
+		
 		String caminho = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
 		caminho = caminho + "/resources/files/document/";
 		
@@ -49,26 +51,20 @@ public class ServiceDocumentConversion extends WatsonServiceFactory implements S
 		arquivos = diretorio.listFiles();
 
 		JsonObject customConfigDC = getCustomConfigDC();
-		JsonArray jsonArray = new JsonArray();
 		
-		Gson gson = new Gson();
 		for(int i = 0; i < arquivos.length; i++){
 			String mediaTypeFromFile = ConversionUtils.getMediaTypeFromFile(arquivos[i]);
 			Answers execute = service.convertDocumentToAnswer(arquivos[i]).execute();
 			
-			SolrResult solrResult = new SolrResult();
-			solrResult.setId(execute.getAnswerUnits().get(0).getId());
-			solrResult.setTitle(execute.getAnswerUnits().get(0).getTitle());
-			solrResult.setBody(execute.getAnswerUnits().get(0).getContent().get(0).getText());
+			SolrInputDocument document = new SolrInputDocument();
+			document.addField("id", execute.getAnswerUnits().get(0).getId());
+			document.addField("title", execute.getAnswerUnits().get(0).getTitle());
+			document.addField("body", execute.getAnswerUnits().get(0).getContent().get(0).getText());
 			
-			
-			JsonParser parser = new JsonParser();
-			JsonElement jsonElement = parser.parse(gson.toJson(solrResult));
-
-			jsonArray.add(jsonElement);
+			retorno.add(document);
 		}
 				
-		return jsonArray;
+		return retorno;
 	}
 	
 	private JsonObject getCustomConfigDC() {

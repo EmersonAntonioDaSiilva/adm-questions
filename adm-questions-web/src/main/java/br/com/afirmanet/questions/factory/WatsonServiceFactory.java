@@ -60,11 +60,11 @@ public abstract class WatsonServiceFactory  {
 			watsonService = new DialogService(credenciais.getUsuario(), credenciais.getSenha());
 			
 		}else if(TypeServicoEnum.DOCUMENT_CONVERSION.equals(typeServico)){
-			watsonService = new RetrieveAndRank(credenciais.getUsuario(), credenciais.getSenha());
-			
-		}else if(TypeServicoEnum.RETRIEVE_AND_RANK.equals(typeServico)){
 			watsonService = new DocumentConversion(DocumentConversion.VERSION_DATE_2015_12_01);
 			watsonService.setUsernameAndPassword(credenciais.getUsuario(), credenciais.getSenha());
+			
+		}else if(TypeServicoEnum.RETRIEVE_AND_RANK.equals(typeServico)){
+			watsonService = new RetrieveAndRank(credenciais.getUsuario(), credenciais.getSenha());
 		}
 		
 		return watsonService;

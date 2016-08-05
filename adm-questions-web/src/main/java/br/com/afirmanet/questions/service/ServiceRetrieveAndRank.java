@@ -2,9 +2,6 @@ package br.com.afirmanet.questions.service;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -14,21 +11,15 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.response.CollectionAdminResponse;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrInputDocument;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
-import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOptions;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster.Status;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOptions;
 
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
-import br.com.afirmanet.questions.manager.vo.SolrResult;
 import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
 import lombok.Getter;
 
@@ -116,42 +107,13 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		HttpSolrClient solrCliente = getSolrClient(idCluster);
 		
 		// Lista de documentos
-		solrCliente.add(nomeCollection, getDocuments());
+		ServiceDocumentConversion serviceDocumentConversion = new ServiceDocumentConversion(getCliente(), entityManager);
+		solrCliente.add(nomeCollection, serviceDocumentConversion.getDadosDocumentConversion());
 	    
 		// Commit da coleção 
 	    solrCliente.commit(nomeCollection);
 	}
 	
-	private Collection<SolrInputDocument> getDocuments(){
-		
-		Collection<SolrInputDocument> colecao = Collections.emptyList();
-		
-		Gson gson = new Gson();
-		
-		ServiceDocumentConversion serviceDocumentConversion = new ServiceDocumentConversion(getCliente(), entityManager);
-		
-		JsonArray jsonArray = serviceDocumentConversion.getDadosDocumentConversion();
-    	
-		if(jsonArray.size() > 0)
-		{
-			colecao = new ArrayList<SolrInputDocument>();
-			
-			for(JsonElement jsonElement :  jsonArray){
-				JsonObject JsonObject =  jsonElement.getAsJsonObject();
-				SolrResult fromJson2 = gson.fromJson(JsonObject, SolrResult.class);
-				
-				SolrInputDocument document = new SolrInputDocument();
-				document.addField("id", fromJson2.getId());
-    			document.addField("title", fromJson2.getTitle());
-    			document.addField("body", fromJson2.getBody());
-    			colecao.add(document);
-				
-			}
-		}
-    	
-		return colecao;
-	}
-
 	public QueryResponse searchAllDocs(String idCluster,String collection,String pergunta) throws Exception {
 		HttpSolrClient solrClient = getSolrClient(idCluster);
 		
