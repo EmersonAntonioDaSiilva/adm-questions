@@ -46,15 +46,10 @@ public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> 
 	@Getter
 	private List<Topico> lstTopico;
 	
-	@Getter
-	private boolean boxPesquisarPergunta;
-	
 	@Override
 	public void init() {
 		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
 		lstCliente = clienteDAO.findAll();
-		
-		boxPesquisarPergunta = false;
 		showInsertButton = false;
 	}	
 	
