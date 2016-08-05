@@ -15,29 +15,15 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.response.CollectionAdminResponse;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
-import com.ibm.watson.developer_cloud.document_conversion.v1.DocumentConversion;
-import com.ibm.watson.developer_cloud.document_conversion.v1.model.Answers;
-import com.ibm.watson.developer_cloud.document_conversion.v1.util.ConversionUtils;
-import com.ibm.watson.developer_cloud.http.ServiceCall;
-import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
-import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
-import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
-import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
-import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster.Status;
-import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOptions;
 
 import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
@@ -48,8 +34,22 @@ import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.manager.vo.SolrResult;
 import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
 import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
-import lombok.Getter;
-import lombok.Setter;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
+import com.ibm.watson.developer_cloud.document_conversion.v1.DocumentConversion;
+import com.ibm.watson.developer_cloud.document_conversion.v1.model.Answers;
+import com.ibm.watson.developer_cloud.document_conversion.v1.util.ConversionUtils;
+import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
+import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster.Status;
+import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOptions;
 
 public abstract class Watson extends AbstractManager implements Serializable {
 	private static final long serialVersionUID = 5946605316434150596L;
@@ -65,8 +65,8 @@ public abstract class Watson extends AbstractManager implements Serializable {
 			.getValueAsDouble("index.manager.confidence.minimo");
 	
 
-	private static final String usernameRR = "80b1d296-9eda-4326-93cc-a36122dfa187";
-	private static final String passwordRR = "XCOtytypqONK";
+	private static final String usernameRR = "0ff46d04-61ec-460f-9eff-7d2e3f9c26e2";
+	private static final String passwordRR = "CnUt6mMlHass";
 
 	@Inject
 	@ApplicationManaged
@@ -205,22 +205,24 @@ public abstract class Watson extends AbstractManager implements Serializable {
 		return cluster.getId();
 	}
 
-	@SuppressWarnings("deprecation")
 	protected void createCollection(String idCluster, String nomeConfig, String nomeColection) throws Exception {
+		// Criação da collection
+		/*final CollectionAdminRequest.Create createCollectionRequest = CollectionAdminRequest.createCollection(nomeColection, nomeConfig, 1, 1);*/
+		
 		final CollectionAdminRequest.Create createCollectionRequest = new CollectionAdminRequest.Create();
 	    createCollectionRequest.setCollectionName(nomeColection);
 	    createCollectionRequest.setConfigName(nomeConfig);
-
+	    
 	    final CollectionAdminResponse response = createCollectionRequest.process(getSolrClient(idCluster));
 	    if (!response.isSuccess()) {
 	    	throw new IllegalStateException("Falha ao criar collection: "+ response.getErrorMessages().toString());
 	    }
 	}
 	
-	@SuppressWarnings("deprecation")
 	protected HttpSolrClient getSolrClient(String idCluster) {
-		return new HttpSolrClient(serviceRR.getSolrUrl(idCluster), 
-									HttpSolrClientUtils.createHttpClient(serviceRR.getSolrUrl(idCluster), usernameRR, passwordRR));
+		HttpSolrClient.Builder builderHttpSolrClient = new HttpSolrClient.Builder(serviceRR.getSolrUrl(idCluster));
+		builderHttpSolrClient.withHttpClient(HttpSolrClientUtils.createHttpClient(serviceRR.getSolrUrl(idCluster), usernameRR, passwordRR));
+		return builderHttpSolrClient.build();
 	}
 
 	protected void indexDocumentAndCommit(String idCluster, String nomeCollection) throws Exception{
