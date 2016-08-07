@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -98,23 +99,17 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
         ChartSeries positivos = new ChartSeries();
         positivos.setLabel("Positivo");
         
-        for (ClassificacaoChart positivo : listaClassificacaoChart) {
-        	positivos.set(positivo.dataCadastroFormatada(), positivo.getPositivos().size());
-		}
+        listaClassificacaoChart.forEach(positivo -> positivos.set(positivo.dataCadastroFormatada(), positivo.getPositivos().size()));
  
         ChartSeries negativos = new ChartSeries();
         negativos.setLabel("Negativo");
         
-        for (ClassificacaoChart negativo : listaClassificacaoChart) {
-        	negativos.set(negativo.dataCadastroFormatada(), negativo.getNegativos().size());
-		}
+        listaClassificacaoChart.forEach(negativo -> negativos.set(negativo.dataCadastroFormatada(), negativo.getNegativos().size()));
         
         ChartSeries naoSeAplicam = new ChartSeries();
         naoSeAplicam.setLabel("Não se Aplica");
         
-        for (ClassificacaoChart naoSeAplica : listaClassificacaoChart) {
-        	naoSeAplicam.set(naoSeAplica.dataCadastroFormatada(), naoSeAplica.getNaoSeAplicam().size());
-		}
+        listaClassificacaoChart.forEach(naoSeAplica -> naoSeAplicam.set(naoSeAplica.dataCadastroFormatada(), naoSeAplica.getNaoSeAplicam().size()));
         
         model.addSeries(positivos);
         model.addSeries(negativos);
@@ -185,9 +180,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	}
 	
 	public void buscarClassificacao() {
-		System.out.println(dataInicioClassificacao);
-		System.out.println(dataFimClassificacao);
-		
+	
 		ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
 		this.lstClassificao = classificacaoDAO.findByRangeOfDataCadastro(
 				this.cliente, this.topico, this.dataInicioClassificacao, this.dataFimClassificacao);
