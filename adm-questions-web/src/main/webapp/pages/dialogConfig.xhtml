@@ -4,7 +4,8 @@
 				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 				xmlns:f="http://xmlns.jcp.org/jsf/core" 
 				xmlns:p="http://primefaces.org/ui"
-				xmlns:afirmanet="http://afirmanet.com.br/componentes" >
+				xmlns:afirmanet="http://afirmanet.com.br/componentes" 
+				xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
 
 	<ui:param name="contentTitle" value="M.Watson" />
@@ -29,14 +30,14 @@
 			<p:panel header="Constants" toggleable="true" collapsed="true" toggleSpeed="500" widgetVar="constantsPanel" style="margin-bottom:10px; text-align:left !important;">
 				
 			</p:panel>
-			<p:panel header="Variables" toggleable="true" collapsed="false" toggleSpeed="500" widgetVar="variablesPanel" style="margin-bottom:10px; text-align:left !important;">
-				<p:panelGrid>
+			<p:panel id="panelVariables" header="Variables" toggleable="true" collapsed="false" toggleSpeed="500" widgetVar="variablesPanel" style="margin-bottom:10px; text-align:left !important;">
+				<p:panelGrid id="panelgridVariables">
 					<p:row>
 						<p:column style="width: 105px;">
 							<h:outputText value="Nome da Variável" />
 						</p:column>
 						<p:column style="width: 250px;">
-							<p:inputText id="txtNomeVariavel" value="#{dialogConfigManager.nomeVariavel}"/>
+							<p:inputText id="txtNomeVariavel" value="#{dialogConfigManager.varType.name}"/>
 						</p:column>
 						<p:column style="width: 105px;">
 							<h:outputText value="Tipo da Variável" />
@@ -45,19 +46,34 @@
 							<p:inputText id="txtTipoVariavel" value="#{dialogConfigManager.tipoVariavel}"/>
 						</p:column>
 						<p:column>
-							<p:commandButton id="btnIncluirVariavel" value="Incluir" actionListener="#{dialogConfigManager.incluirVariavel}" update="txtNomeVariavel, txtTipoVariavel"/>
+							<p:commandButton id="btnIncluirVariavel" value="Incluir" action="#{dialogConfigManager.incluirVariavel}" update="panelgridVariables, txtNomeVariavel, txtTipoVariavel"/>
 						</p:column>
 					</p:row>
 					<p:row>
-						<p:column colspan="5">
-							<p:dataTable id="tbVariaveis" value="#{dialogConfigManager.dialog.variables.get(0).varFolder.get(0).var}" var="variavel">
-								<p:column>
-									<h:outputText value="#{variavel.name}" />
-								</p:column>
-								<p:column>
-									<h:outputText value="#{variavel.type}" />
-								</p:column>
-							</p:dataTable>
+						<p:column>
+							<h:outputText value="Pasta"/>
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="txtLstPastaVariavel" value="#{dialogConfigManager.nomePasta}" effect="fold" editable="true">
+            					<f:selectItem itemLabel="Informe ou selecione uma pasta" itemValue="" />
+        					</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column id="listaVariaveis" colspan="5">
+							<c:forEach items="#{dialogConfigManager.variables.varFolder}" var="varFolders">
+								<p:dataTable value="#{varFolders.var}" var="vars" scrollable="true" scrollHeight="200"  >
+									<f:facet name="header">
+           								#{varFolders.name}
+       								</f:facet>
+									<p:column id="varName" headerText="Nome">
+										<h:outputText value="#{vars.name}" />
+									</p:column>
+									<p:column id="varType" headerText="Tipo">
+										<h:outputText value="#{vars.type.value()}" />
+									</p:column>
+								</p:dataTable>
+							</c:forEach>
 						</p:column>
 					</p:row>
 				</p:panelGrid>
