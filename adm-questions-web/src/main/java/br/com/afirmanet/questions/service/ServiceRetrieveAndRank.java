@@ -2,6 +2,8 @@ package br.com.afirmanet.questions.service;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -11,6 +13,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.response.CollectionAdminResponse;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrInputDocument;
 
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
@@ -112,10 +115,15 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		
 		// Lista de documentos
 		ServiceDocumentConversion serviceDocumentConversion = new ServiceDocumentConversion(getCliente(), entityManager);
-		solrCliente.add(nomeCollection, serviceDocumentConversion.getDadosDocumentConversion());
-	    
-		// Commit da coleção 
-	    solrCliente.commit(nomeCollection);
+		Collection<SolrInputDocument> listDocument = serviceDocumentConversion.getDadosDocumentConversion(); 
+		
+		// Avalia se tem documento a ser indexado
+		if(listDocument.size() > 0){
+			solrCliente.add(nomeCollection,listDocument);
+		    
+			// Commit da coleção 
+		    solrCliente.commit(nomeCollection);
+		}
 	}
 	
 	public QueryResponse searchAllDocs(String idCluster,String collection,String pergunta) throws Exception {

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -52,16 +53,21 @@ public class ServiceDocumentConversion extends WatsonServiceFactory implements S
 
 		JsonObject customConfigDC = getCustomConfigDC();
 		
-		for(int i = 0; i < arquivos.length; i++){
-			String mediaTypeFromFile = ConversionUtils.getMediaTypeFromFile(arquivos[i]);
-			Answers execute = service.convertDocumentToAnswer(arquivos[i]).execute();
+		if(arquivos.length > 0){
 			
-			SolrInputDocument document = new SolrInputDocument();
-			document.addField("id", execute.getAnswerUnits().get(0).getId());
-			document.addField("title", execute.getAnswerUnits().get(0).getTitle());
-			document.addField("body", execute.getAnswerUnits().get(0).getContent().get(0).getText());
+			retorno = new ArrayList<SolrInputDocument>();
 			
-			retorno.add(document);
+			for(int i = 0; i < arquivos.length; i++){
+				String mediaTypeFromFile = ConversionUtils.getMediaTypeFromFile(arquivos[i]);
+				Answers execute = service.convertDocumentToAnswer(arquivos[i]).execute();
+				
+				SolrInputDocument document = new SolrInputDocument();
+				document.addField("id", execute.getAnswerUnits().get(0).getId());
+				document.addField("title", execute.getAnswerUnits().get(0).getTitle());
+				document.addField("body", execute.getAnswerUnits().get(0).getContent().get(0).getText());
+				
+				retorno.add(document);
+			}
 		}
 				
 		return retorno;
