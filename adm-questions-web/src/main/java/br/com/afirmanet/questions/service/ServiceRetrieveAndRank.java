@@ -46,7 +46,11 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		File configZip = new File(caminho);
 		service.uploadSolrClusterConfigurationZip(idCluster, nomeConfig, configZip).execute();
 	}
-
+	
+	public boolean existsSolrCluster() {
+		return (service.getSolrClusters().execute().getSolrClusters().size() > 0);
+	}
+	
 	private SolrCluster getSolrCluster(String idCluster) {
 		return service.getSolrCluster(idCluster).execute();
 	}

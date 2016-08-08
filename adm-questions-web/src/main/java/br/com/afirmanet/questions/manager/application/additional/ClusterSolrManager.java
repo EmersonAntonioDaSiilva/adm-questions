@@ -3,6 +3,8 @@ package br.com.afirmanet.questions.manager.application.additional;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -40,14 +42,32 @@ public class ClusterSolrManager extends AbstractManager implements Serializable 
 	}
 
 	public void btGeraCluster(){
+		
+		FacesContext context = FacesContext.getCurrentInstance();
+		
 		try{
-			String idCluster = service.createCluster(nomeCluster, null);
-			service.uploadConfiguration(idCluster, nomeConfig);
-			service.createCollection(idCluster, nomeConfig, nomeColection);
-			service.indexDocumentAndCommit(idCluster, nomeColection);
+			String idCluster = "";
+			if(!service.existsSolrCluster()){
+				
+				idCluster = service.createCluster(nomeCluster, null);
+				service.uploadConfiguration(idCluster, nomeConfig);
+				service.createCollection(idCluster, nomeConfig, nomeColection);
+				service.indexDocumentAndCommit(idCluster, nomeColection);
+				
+				// Mensagem após cluster criado
+				String mensagem = "Cluster foi criado com sucesso. O identificador do cluster é: "+ idCluster;
+				context.addMessage("clusterMessage", new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, mensagem));
+			}
+			else{
+				// Mensagem de cluster criado
+				context.addMessage("clusterMessage", new FacesMessage(FacesMessage.SEVERITY_INFO, "Cluster já criado.", "Cluster já criado."));
+			}
 		}
 		catch(Exception e){
 			e.printStackTrace();
+			
+			// Exibe mensagem de erro na tela
+			context.addMessage("clusterMessage", new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
 		}
 	}
 	
