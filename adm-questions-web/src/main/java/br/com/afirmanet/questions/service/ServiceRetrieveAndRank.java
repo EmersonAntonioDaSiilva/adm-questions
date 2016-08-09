@@ -1,32 +1,33 @@
 package br.com.afirmanet.questions.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
-import lombok.Getter;
-
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.response.CollectionAdminResponse;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
 
-import br.com.afirmanet.core.exception.ApplicationException;
-import br.com.afirmanet.questions.entity.Cliente;
-import br.com.afirmanet.questions.enums.TypeServicoEnum;
-import br.com.afirmanet.questions.factory.WatsonServiceFactory;
-import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
-
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster.Status;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOptions;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusters;
+
+import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.enums.TypeServicoEnum;
+import br.com.afirmanet.questions.factory.WatsonServiceFactory;
+import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
+import lombok.Getter;
 
 public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Serializable {
 	private static final long serialVersionUID = -452444688310099799L;
@@ -42,7 +43,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	private String idClusterSolr;
 	
 
-	public ServiceRetrieveAndRank(Cliente cliente, EntityManager entityManager){
+	public ServiceRetrieveAndRank(Cliente cliente, EntityManager entityManager) throws ApplicationException {
 		super(entityManager);
 		
 		setTypeServico(TypeServicoEnum.RETRIEVE_AND_RANK);
@@ -166,12 +167,26 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		}
 	}
 	
-	public QueryResponse searchAllDocs(String pergunta) throws Exception {
-		HttpSolrClient solrClient = getSolrClient();
+	public QueryResponse searchAllDocs(String pergunta) throws ApplicationException {
+		QueryResponse response;
 		
-		String pesquisa = "*:".concat(pergunta); // monta String da pesquisa
-		SolrQuery query = new SolrQuery(pesquisa); // cria os critérios da pesquisa
-		return  solrClient.query(nomeColection, query); // retorna pesquisa
+		try {
+			HttpSolrClient solrClient = getSolrClient();
+			
+			String pesquisa = "*:".concat(pergunta); // monta String da pesquisa
+			SolrQuery query = new SolrQuery(pesquisa); // cria os critérios da pesquisa
+			
+			response = solrClient.query(nomeColection, query); // retorna pesquisa
+		
+		} catch (SolrServerException e) {
+			throw new ApplicationException(e.getMessage(), e);
+		} catch (IOException e) {
+			throw new ApplicationException(e.getMessage(), e);
+		}
+		
+		return  response;
+		
+		
 	}
 	
 }

@@ -8,6 +8,7 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLang
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 import com.ibm.watson.developer_cloud.service.WatsonService;
 
+import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.questions.dao.DadosWatsonDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.DadosWatson;
@@ -48,44 +49,49 @@ public abstract class WatsonServiceFactory  {
 	}
 	
 	
-	private WatsonService service(){
+	private WatsonService service() throws ApplicationException {
 		WatsonService watsonService = null;
-		DadosWatsonDAO dadosWatsonDAO = new DadosWatsonDAO(entityManager);
-		credenciais = dadosWatsonDAO.findByClienteAndTypeServico(cliente, typeServico);
-		
-		if(TypeServicoEnum.NATURAL_LANGUAGE_CLASSIFIER.equals(typeServico)){
-			watsonService = new NaturalLanguageClassifier(credenciais.getUsuario(), credenciais.getSenha());
+
+		try {
+			DadosWatsonDAO dadosWatsonDAO = new DadosWatsonDAO(entityManager);
+			credenciais = dadosWatsonDAO.findByClienteAndTypeServico(cliente, typeServico);
 			
-		}else if(TypeServicoEnum.DIALOG.equals(typeServico)){
-			watsonService = new DialogService(credenciais.getUsuario(), credenciais.getSenha());
-			
-		}else if(TypeServicoEnum.DOCUMENT_CONVERSION.equals(typeServico)){
-			watsonService = new DocumentConversion(DocumentConversion.VERSION_DATE_2015_12_01);
-			watsonService.setUsernameAndPassword(credenciais.getUsuario(), credenciais.getSenha());
-			
-		}else if(TypeServicoEnum.RETRIEVE_AND_RANK.equals(typeServico)){
-			watsonService = new RetrieveAndRank(credenciais.getUsuario(), credenciais.getSenha());
+			if(TypeServicoEnum.NATURAL_LANGUAGE_CLASSIFIER.equals(typeServico)){
+				watsonService = new NaturalLanguageClassifier(credenciais.getUsuario(), credenciais.getSenha());
+				
+			}else if(TypeServicoEnum.DIALOG.equals(typeServico)){
+				watsonService = new DialogService(credenciais.getUsuario(), credenciais.getSenha());
+				
+			}else if(TypeServicoEnum.DOCUMENT_CONVERSION.equals(typeServico)){
+				watsonService = new DocumentConversion(DocumentConversion.VERSION_DATE_2015_12_01);
+				watsonService.setUsernameAndPassword(credenciais.getUsuario(), credenciais.getSenha());
+				
+			}else if(TypeServicoEnum.RETRIEVE_AND_RANK.equals(typeServico)){
+				watsonService = new RetrieveAndRank(credenciais.getUsuario(), credenciais.getSenha());
+			}
+		} catch (Exception e) {
+			throw new ApplicationException(e.getMessage(), e); 
 		}
 		
 		return watsonService;
 	}
 
-	protected NaturalLanguageClassifier getServiceNLC() {
+	protected NaturalLanguageClassifier getServiceNLC() throws ApplicationException {
 		serviceNLC = (NaturalLanguageClassifier) service();
 		return serviceNLC;
 	}
 
-	protected DialogService getServiceDialog() {
+	protected DialogService getServiceDialog() throws ApplicationException {
 		serviceDialog = (DialogService) service();
 		return serviceDialog;
 	}
 
-	protected RetrieveAndRank getServiceRR() {
+	protected RetrieveAndRank getServiceRR() throws ApplicationException {
 		serviceRR = (RetrieveAndRank) service();
 		return serviceRR;
 	}
 
-	protected DocumentConversion getServiceDC() {
+	protected DocumentConversion getServiceDC() throws ApplicationException {
 		serviceDC = (DocumentConversion) service();
 		return serviceDC;
 	}

@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
@@ -65,8 +64,6 @@ public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> 
 	}
 	
 	private List<Resposta> recuperarResposta() {
-		List<Resposta> respostas = null;
-		
 		RespostaDAO respostaDAO =  new RespostaDAO(entityManager);
 		return respostaDAO.getDadosGeraArquivo(genericDAO.createPaginationPredicates(searchParam));
 	}

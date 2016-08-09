@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 
+import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
 import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
@@ -22,7 +23,7 @@ public class ServiceNLC extends WatsonServiceFactory implements Serializable {
 	@Getter
 	private NaturalLanguageClassifier service;
 
-	public ServiceNLC(Cliente cliente, EntityManager entityManager){
+	public ServiceNLC(Cliente cliente, EntityManager entityManager) throws ApplicationException {
 		super(entityManager);
 		setTypeServico(TypeServicoEnum.NATURAL_LANGUAGE_CLASSIFIER);
 		setCliente(cliente);

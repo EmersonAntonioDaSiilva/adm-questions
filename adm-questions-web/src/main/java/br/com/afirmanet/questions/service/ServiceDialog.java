@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 
+import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
 import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
@@ -22,7 +23,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 	@Getter
 	private DialogService service;
 
-	public ServiceDialog(Cliente cliente, EntityManager entityManager){
+	public ServiceDialog(Cliente cliente, EntityManager entityManager) throws ApplicationException {
 		super(entityManager);
 		
 		setTypeServico(TypeServicoEnum.DIALOG);
