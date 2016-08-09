@@ -102,7 +102,18 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 		return retornoClassificacao;
 	}
 	
+	public List<Classificacao> findByRangeOfDataCadastro(Cliente cliente, Topico topico, LocalDateTime dataInicio, LocalDateTime dataFim) {
+		return buscaDataCadastroEntreDuasDatas(cliente, topico,  dataInicio, dataFim);
+	}
 	public List<Classificacao> findByRangeOfDataCadastro(Cliente cliente, Topico topico, LocalDate dataInicio, LocalDate dataFim) {
+		
+		LocalDateTime dataHoraInicio = LocalDateTime.of(dataInicio, LocalTime.MIN);
+		LocalDateTime dataHoraFim = LocalDateTime.of(dataFim, LocalTime.MAX);
+		
+		return buscaDataCadastroEntreDuasDatas(cliente, topico,  dataHoraInicio, dataHoraFim);
+	}
+	
+	private List<Classificacao> buscaDataCadastroEntreDuasDatas(Cliente cliente, Topico topico, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {
 		List<Classificacao> retornoClassificacao = null;
 		
 		try {
@@ -112,10 +123,48 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 			
 			predicates.add(cb.equal(root.get("cliente"), cliente));
 			predicates.add(cb.equal(root.get("topico"), topico));
+			predicates.add(cb.between(root.get("dataCadastro"), dataHoraInicio, dataHoraFim));
 			
-			LocalDateTime dataHoraInicio = LocalDateTime.of(dataInicio, LocalTime.MIDNIGHT);
-			LocalDateTime dataHoraFim = LocalDateTime.of(dataFim, LocalTime.of(23, 59, 59));
+			orders.add(cb.asc(root.get("dataCadastro")));
 			
+			if(!predicates.isEmpty()){
+				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {})).orderBy(orders.toArray(new Order[] {}));
+				
+				retornoClassificacao = entityManager.createQuery(criteriaQuery).getResultList();
+			}
+			
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		
+		return retornoClassificacao;
+	}
+
+	public List<Classificacao> findByDataCadastroESentimento(LocalDate dataCadastro, Integer sentimento) {
+		
+		LocalDateTime dataHoraInicio = LocalDateTime.of(dataCadastro, LocalTime.MIN);
+		LocalDateTime dataHoraFim = LocalDateTime.of(dataCadastro, LocalTime.MAX);
+		
+		return buscaDataCadastroSentimento(dataHoraInicio, dataHoraFim, sentimento);
+	}
+	
+	public List<Classificacao> findByDataCadastroESentimento(LocalDateTime dataCadastro, Integer sentimento) {
+		
+		LocalDateTime dataHoraInicio = dataCadastro.of(dataCadastro.toLocalDate(), LocalTime.MIN);
+		LocalDateTime dataHoraFim = dataCadastro.of(dataCadastro.toLocalDate(), LocalTime.MAX);
+		
+		return buscaDataCadastroSentimento(dataHoraInicio, dataHoraFim, sentimento);
+	}
+	
+	private List<Classificacao> buscaDataCadastroSentimento(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, Integer sentimento) {
+		List<Classificacao> retornoClassificacao = null;
+		
+		try {
+			CriteriaQuery<Classificacao> criteriaQuery = createCriteriaQuery();
+			Collection<Predicate> predicates = new ArrayList<>();
+			Collection<Order> orders = new ArrayList<>();
+			
+			predicates.add(cb.equal(root.get("sentimento"), sentimento));
 			predicates.add(cb.between(root.get("dataCadastro"), dataHoraInicio, dataHoraFim));
 			
 			orders.add(cb.asc(root.get("dataCadastro")));

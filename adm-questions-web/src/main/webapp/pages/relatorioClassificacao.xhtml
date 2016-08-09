@@ -12,7 +12,6 @@
 	
 	<ui:define name="content">
 		<h:form id="formQuestuionRH">
-			<p:growl id="growl" showDetail="true" />
 			<p:panel id="searchFilter" header="Gerar Relatório" toggleable="false">
 				<afirmanet:selectOneMenu listener="#{relatorioClassificacaoManager.selecionarCliente}"
 										 value="#{manager.cliente}" 
@@ -48,8 +47,24 @@
 						 model="#{manager.barModel}" 
 						 rendered="#{manager.lstClassificao != null and manager.lstClassificao.size() > 0}"
 						 style="height:300px">
-					<p:ajax event="itemSelect" listener="#{relatorioClassificacaoManager.chartItemSelect}" update="growl" />	 
+					<p:ajax event="itemSelect" listener="#{relatorioClassificacaoManager.chartItemSelect}" update="@form" />	 
 				</p:chart>
+				
+				<p:dataTable rendered="#{manager.lstClassificaoChart.size() > 0}"
+							 value="#{relatorioClassificacaoManager.lstClassificaoChart}"
+							 var="classificacao">
+					<p:column headerText="Pergunta">
+        				<h:outputText value="#{classificacao.pergunta}" />
+				    </p:column>
+				 
+				    <p:column headerText="Resposta">
+				        <h:outputText value="#{classificacao.resposta}" />
+				    </p:column>
+				 
+				    <p:column headerText="Confidence">
+				        <h:outputText value="#{classificacao.confidence}" />
+				    </p:column>
+				</p:dataTable>
 				
 			</p:panel>
 		</h:form>
