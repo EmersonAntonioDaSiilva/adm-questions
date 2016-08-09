@@ -44,7 +44,6 @@ public class DadosWatson implements Serializable {
 	private Topico topico;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "typo_servico")
 	private TypeServicoEnum typeServico;
 	  
 	private String usuario;

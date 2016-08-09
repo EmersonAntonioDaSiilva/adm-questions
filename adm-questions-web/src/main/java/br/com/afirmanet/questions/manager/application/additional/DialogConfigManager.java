@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -39,7 +38,6 @@ public class DialogConfigManager implements Serializable {
 	private String nomeVariavel;
 	private String tipoVariavel;
 	private String nomePasta;
-	private List lstPastas;
 
 	@PostConstruct
 	public void init() {
@@ -164,13 +162,4 @@ public class DialogConfigManager implements Serializable {
 	public void setVariables(VariablesType variables) {
 		this.variables = variables;
 	}
-
-	public List getLstPastas() {
-		return lstPastas;
-	}
-
-	public void setLstPastas(List lstPastas) {
-		this.lstPastas = lstPastas;
-	}
-
 }

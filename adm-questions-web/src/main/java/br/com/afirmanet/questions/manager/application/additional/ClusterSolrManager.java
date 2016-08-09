@@ -24,6 +24,10 @@ public class ClusterSolrManager extends AbstractManager implements Serializable 
 	@ApplicationManaged
 	private EntityManager entityManager;
 	
+	private static String nomeCluster = "MAGNA_RH_TEST",
+						  nomeConfig = "CONF_RH_TEST",
+			 			  nomeColection = "COLLEC_RH_TEST"; 
+	
 	private ServiceRetrieveAndRank service;
 	private Cliente cliente;
 	
@@ -36,8 +40,30 @@ public class ClusterSolrManager extends AbstractManager implements Serializable 
 	}
 
 	public void btGeraCluster(){
-		
-		System.out.println(service.getIdClusterSolr());
+		try{
+			String idCluster = "";
+			if(!service.existsSolrCluster()){
+				
+				idCluster = service.createCluster(nomeCluster, null);
+				service.uploadConfiguration(idCluster, nomeConfig);
+				service.createCollection(idCluster, nomeConfig, nomeColection);
+				service.indexDocumentAndCommit(idCluster, nomeColection);
+				
+				// Mensagem após cluster criado
+				String mensagem = "Cluster foi criado com sucesso. O identificador do cluster é: "+ idCluster;
+				addInfoMessage("clusterMessage", mensagem);
+			}
+			else{
+				// Mensagem de cluster criado
+				addInfoMessage("clusterMessage", "Cluster já criado.");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			
+			// Exibe mensagem de erro na tela
+			addErrorMessage("clusterMessage", e.getMessage());
+		}
 	}
 	
 }
