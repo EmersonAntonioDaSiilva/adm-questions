@@ -3,12 +3,13 @@ package br.com.afirmanet.questions.manager.application.additional;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -22,6 +23,7 @@ import org.primefaces.model.chart.ChartSeries;
 
 import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.questions.constante.RelatorioClassificacaoEnum;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.TopicoDAO;
@@ -54,6 +56,9 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	
 	@Getter
 	private List<Classificacao> lstClassificao;
+	
+	@Getter
+	private List<Classificacao> lstClassificaoChart;
 	
 	@Getter
 	@Setter
@@ -99,23 +104,23 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
         List<ClassificacaoChart> listaClassificacaoChart = listarClassificacaoChart();
 
         ChartSeries positivos = new ChartSeries();
-        positivos.setLabel("Positivo");
+        positivos.setLabel(RelatorioClassificacaoEnum.SENTIMENTO_POSITIVO.getChartLabel());
         
         listaClassificacaoChart.forEach(positivo -> positivos.set(positivo.dataCadastroFormatada(), positivo.getPositivos().size()));
  
         ChartSeries negativos = new ChartSeries();
-        negativos.setLabel("Negativo");
+        negativos.setLabel(RelatorioClassificacaoEnum.SENTIMENTO_NEGATIVO.getChartLabel());
         
         listaClassificacaoChart.forEach(negativo -> negativos.set(negativo.dataCadastroFormatada(), negativo.getNegativos().size()));
         
-        ChartSeries naoSeAplicam = new ChartSeries();
-        naoSeAplicam.setLabel("Não se Aplica");
+        ChartSeries imparciais = new ChartSeries();
+        imparciais.setLabel(RelatorioClassificacaoEnum.SENTIMENTO_IMPARCIAL.getChartLabel());
         
-        listaClassificacaoChart.forEach(naoSeAplica -> naoSeAplicam.set(naoSeAplica.dataCadastroFormatada(), naoSeAplica.getNaoSeAplicam().size()));
+        listaClassificacaoChart.forEach(naoSeAplica -> imparciais.set(naoSeAplica.dataCadastroFormatada(), naoSeAplica.getNaoSeAplicam().size()));
         
         model.addSeries(positivos);
         model.addSeries(negativos);
-        model.addSeries(naoSeAplicam);
+        model.addSeries(imparciais);
          
         return model;
     }
@@ -193,9 +198,31 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	}
 	
 	public void chartItemSelect(ItemSelectEvent event) {
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Item selected",
-                        "Item Index: " + event.getItemIndex() + ", Series Index:" + event.getSeriesIndex());
-         
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+		BarChartModel cModel = (BarChartModel) ((org.primefaces.component.chart.Chart) event.getSource()).getModel();
+		 ChartSeries mySeries = cModel.getSeries().get(event.getSeriesIndex());
+	
+		 Set<Entry<Object, Number>> mapValues = mySeries.getData().entrySet();
+	
+		 Entry<Object,Number>[] test = new Entry[mapValues.size()];
+		 mapValues.toArray(test);
+		 
+		 String dataCadastroTexto = (String) test[event.getItemIndex()].getKey();
+		 DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		 
+		 LocalDate dataCadastro = LocalDate.parse(dataCadastroTexto, pattern);
+		 
+		 Integer sentimento = 0;
+		 
+		 if(RelatorioClassificacaoEnum.SENTIMENTO_POSITIVO.getChartLabel().equals(mySeries.getLabel())) {
+			 sentimento = RelatorioClassificacaoEnum.SENTIMENTO_POSITIVO.getCodigo();
+		 }
+		 
+		 if(RelatorioClassificacaoEnum.SENTIMENTO_NEGATIVO.getChartLabel().equals(mySeries.getLabel())) {
+			 sentimento = RelatorioClassificacaoEnum.SENTIMENTO_NEGATIVO.getCodigo();
+		 }
+		 
+		 ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
+		 
+		 this.lstClassificaoChart = classificacaoDAO.findByDataCadastroESentimento(dataCadastro, sentimento);
     }
 }
