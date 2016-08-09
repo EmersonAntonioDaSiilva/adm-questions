@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
 import org.omnifaces.cdi.ViewScoped;
 
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
@@ -38,55 +39,56 @@ import lombok.Setter;
 @ViewScoped
 public class PerguntaRHManager extends AbstractManager implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
-	
-	private static final String RESPOSTA_PADRAO = ApplicationPropertiesUtils.getValue("index.manager.resposta.padrao"); 
-	private static final String RESPOSTA_SAUDACOES = ApplicationPropertiesUtils.getValue("index.manager.resposta.saudacoes");
+
+	private static final String RESPOSTA_PADRAO = ApplicationPropertiesUtils.getValue("index.manager.resposta.padrao");
+	private static final String RESPOSTA_SAUDACOES = ApplicationPropertiesUtils
+			.getValue("index.manager.resposta.saudacoes");
 
 	@Inject
 	@ApplicationManaged
 	private EntityManager entityManager;
-	
+
 	@Getter
 	@Setter
 	private String pergunta;
-	
+
 	@Getter
 	@Setter
 	private String resposta;
-	
+
 	@Getter
 	@Setter
 	private String definicao;
-	
+
 	@Getter
 	@Setter
 	private boolean likeBox;
-	
+
 	@Getter
 	@Setter
 	private Classification classificacao;
-	
+
 	@Getter
 	private List<Topico> lstTopico;
-	
+
 	private ServiceNLC service;
 	private Cliente cliente;
 	private Topico topico;
-	
+
 	@PostConstruct
 	protected void inicializar() {
 		ClienteDAO clieteDAO = new ClienteDAO(entityManager);
 		cliente = clieteDAO.findByNome("m.watson");
 
 		service = new ServiceNLC(cliente, entityManager);
-		
+
 		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
 		lstTopico = topicoDAO.findbyCliente(cliente);
 		topico = lstTopico.get(0);
-		
+
 		resposta = RESPOSTA_SAUDACOES;
 	}
-	
+
 	@Transactional
 	public void btPergunta(){
 		limparVariaveis();
@@ -96,14 +98,17 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 			
 			if (classificacao.getClasses().get(0).getConfidence().compareTo(service.CONFIDENCE_MINIMO) == -1) {
 				service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_NEGATIVO);
+				this.likeBox = false;
 				
-				if(!searchRetrieve(pergunta)){
+				if(!"Não se aplica!".equals(classificacao.getClasses().get(0).getName())){
+					if(!searchRetrieve(pergunta)){
+						definicao = RESPOSTA_PADRAO;
+						definicao += " No momento tenho conhecimento apenas deste tópico = " + topico.getDescricao();
+					}
+				}else{
 					definicao = RESPOSTA_PADRAO;
 					definicao += " No momento tenho conhecimento apenas deste tópico = " + topico.getDescricao();
-					
-					this.likeBox = false;
-				};
-				
+				}
 			} else {
 				service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_ENCONTRADA_NLC);
 				
@@ -119,60 +124,63 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 		Boolean retorno = Boolean.FALSE;
 		try {
 			ServiceRetrieveAndRank serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
-			
+
 			QueryResponse queryResponse = serviceRetrieveAndRank.searchAllDocs(pergunta);
-			retorno = Boolean.TRUE;
-					
+
 			SolrDocumentList results = queryResponse.getResults();
 			SolrDocument solrDocument = results.get(0);
-			
-			Object score = solrDocument.getFieldValue("score");
 
+			Object fieldValue = solrDocument.getFieldValue("body");
+			definicao = fieldValue.toString();
+			definicao = definicao.substring(1, definicao.length() - 1);
+
+			retorno = Boolean.TRUE;
 		} catch (ApplicationException e) {
+			addErrorMessage(e.getMessage(), e);
+		} catch (Exception e) {
 			addErrorMessage(e.getMessage(), e);
 		}
 
 		return retorno;
 	}
 
-	
 	@Transactional
 	public void sentimentoImparcial() {
 		service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_IMPARCIAL);
 		limparVariaveis();
 		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage("sentimentoMessage", new FacesMessage(
-				FacesMessage.SEVERITY_INFO, "Obrigado pela sua opinião", "Obrigado pela sua opinião"));
+		context.addMessage("sentimentoMessage",
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Obrigado pela sua opinião", "Obrigado pela sua opinião"));
 
 		pergunta = "";
 	}
-	
+
 	@Transactional
 	public void sentimentoPositivo() {
 		service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_POSITIVO);
 		limparVariaveis();
 		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage("sentimentoMessage", new FacesMessage(
-				FacesMessage.SEVERITY_INFO, "Obrigado pela sua opinião", "Obrigado pela sua opinião"));
+		context.addMessage("sentimentoMessage",
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Obrigado pela sua opinião", "Obrigado pela sua opinião"));
 		pergunta = "";
 	}
 
-	private void limparVariaveis(){
+	private void limparVariaveis() {
 		resposta = RESPOSTA_SAUDACOES;
 		definicao = "";
 		classificacao = null;
 		likeBox = false;
 	}
-	
+
 	private String getIdClassificacao() {
 		Classifiers classifiers;
 		try {
 			classifiers = service.getService().getClassifiers().execute();
 			List<Classifier> lstClassifiers = classifiers.getClassifiers();
 			Classifier classifier = lstClassifiers.get(0);
-			
+
 			return classifier.getId();
-		} catch(RuntimeException e) {
+		} catch (RuntimeException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return "";
@@ -181,6 +189,6 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return "";
-		} 
+		}
 	}
 }

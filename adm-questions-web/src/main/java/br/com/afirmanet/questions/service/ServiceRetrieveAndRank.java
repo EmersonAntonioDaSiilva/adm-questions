@@ -173,7 +173,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		try {
 			HttpSolrClient solrClient = getSolrClient();
 			
-			String pesquisa = "*:".concat(pergunta); // monta String da pesquisa
+			String pesquisa = "".concat(pergunta); // monta String da pesquisa
 			SolrQuery query = new SolrQuery(pesquisa); // cria os critérios da pesquisa
 			
 			response = solrClient.query(nomeColection, query); // retorna pesquisa
