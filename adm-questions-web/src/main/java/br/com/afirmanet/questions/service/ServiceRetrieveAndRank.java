@@ -8,8 +8,6 @@ import java.util.Collection;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
-import lombok.Getter;
-
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -18,17 +16,18 @@ import org.apache.solr.client.solrj.response.CollectionAdminResponse;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrInputDocument;
 
-import br.com.afirmanet.core.exception.ApplicationException;
-import br.com.afirmanet.questions.entity.Cliente;
-import br.com.afirmanet.questions.enums.TypeServicoEnum;
-import br.com.afirmanet.questions.factory.WatsonServiceFactory;
-import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
-
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster.Status;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOptions;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusters;
+
+import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.enums.TypeServicoEnum;
+import br.com.afirmanet.questions.factory.WatsonServiceFactory;
+import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
+import lombok.Getter;
 
 public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Serializable {
 	private static final long serialVersionUID = -452444688310099799L;
@@ -116,6 +115,8 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		
 		// Criação do cluster
 		SolrCluster cluster = service.createSolrCluster(optionCluster).execute();
+		
+		idClusterSolr = cluster.getId();
 		while (cluster.getStatus() == Status.NOT_AVAILABLE) {
 		   
 		   try{
