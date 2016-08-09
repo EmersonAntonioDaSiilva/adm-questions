@@ -14,6 +14,7 @@ import org.apache.solr.common.SolrInputDocument;
 import com.ibm.watson.developer_cloud.document_conversion.v1.DocumentConversion;
 import com.ibm.watson.developer_cloud.document_conversion.v1.model.Answers;
 
+import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
@@ -25,7 +26,7 @@ public class ServiceDocumentConversion extends WatsonServiceFactory implements S
 	@Getter
 	private DocumentConversion service;
 
-	public ServiceDocumentConversion(Cliente cliente, EntityManager entityManager){
+	public ServiceDocumentConversion(Cliente cliente, EntityManager entityManager) throws ApplicationException{
 		super(entityManager);
 		
 		setTypeServico(TypeServicoEnum.DOCUMENT_CONVERSION);

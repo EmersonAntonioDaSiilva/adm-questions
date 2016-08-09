@@ -20,6 +20,7 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Class
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifiers;
 
+import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.questions.dao.ClienteDAO;
@@ -127,10 +128,8 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 			
 			Object score = solrDocument.getFieldValue("score");
 
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (ApplicationException e) {
+			addErrorMessage(e.getMessage(), e);
 		}
 
 		return retorno;
