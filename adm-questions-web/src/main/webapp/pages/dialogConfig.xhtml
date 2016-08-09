@@ -46,7 +46,7 @@
 							<p:inputText id="txtTipoVariavel" value="#{dialogConfigManager.tipoVariavel}"/>
 						</p:column>
 						<p:column>
-							<p:commandButton id="btnIncluirVariavel" value="Incluir" action="#{dialogConfigManager.incluirVariavel}" update="panelgridVariables, txtNomeVariavel, txtTipoVariavel"/>
+							<p:commandButton id="btnIncluirVariavel" value="Incluir" action="#{dialogConfigManager.incluirVariavel}" update="panelgridVariables, txtNomeVariavel, txtTipoVariavel, txtLstPastaVariavel"/>
 						</p:column>
 					</p:row>
 					<p:row>
@@ -54,15 +54,16 @@
 							<h:outputText value="Pasta"/>
 						</p:column>
 						<p:column>
-							<p:selectOneMenu id="txtLstPastaVariavel" value="#{dialogConfigManager.nomePasta}" effect="fold" editable="true">
+							<p:selectOneMenu id="txtLstPastaVariavel" value="#{dialogConfigManager.nomePasta}" effect="fold" editable="true" style="margin-top: 5px;">
             					<f:selectItem itemLabel="Informe ou selecione uma pasta" itemValue="" />
+            					<f:selectItems value="#{dialogConfigManager.listaPastas}"/>
         					</p:selectOneMenu>
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column id="listaVariaveis" colspan="5">
 							<c:forEach items="#{dialogConfigManager.variables.varFolder}" var="varFolders">
-								<p:dataTable value="#{varFolders.var}" var="vars" scrollable="true" scrollHeight="200"  >
+								<p:dataTable value="#{varFolders.var}" var="vars" scrollable="true" scrollHeight="200" style="margin-top: 5px;" >
 									<f:facet name="header">
            								#{varFolders.name}
        								</f:facet>

@@ -5,8 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -38,15 +41,13 @@ public class DialogConfigManager implements Serializable {
 	private String nomeVariavel;
 	private String tipoVariavel;
 	private String nomePasta;
+	private List<SelectItem> listaPastas;
 
 	@PostConstruct
 	public void init() {
 		objFactory = new ObjectFactory();
 		dialog = objFactory.createDialogType();
 		varType = objFactory.createVarType();
-		
-		
-		
 	}
 	
 	public void incluirVariavel() {
@@ -54,26 +55,27 @@ public class DialogConfigManager implements Serializable {
 		//varType.setName(nomeVariavel);
 		varType.setType(VarTypeType.TEXT);
 		
-		boolean criaHomeFolder = false;
+		boolean criaFolder = true;
 		
 		if (variables != null && variables.getVarFolder().size() > 0) {
 			for (VarFolderType varFolderIt : variables.getVarFolder()) {
-				if (varFolderIt.getName().equals("Home") && varFolderIt.getType().equals(VarFolderTypeType.VAR)) {
+				if (varFolderIt.getName().equals(nomePasta) && varFolderIt.getType().equals(VarFolderTypeType.VAR)) {
 					varFolder.getVar().add(varType);
+					criaFolder = false;
 				}
-				if (criaHomeFolder) {
-					varFolder = objFactory.createVarFolderType();
-					varFolder.setName("Home");
-					varFolder.setType(VarFolderTypeType.VAR);
-					varFolder.getVar().add(varType);
-					
-					variables.getVarFolder().add(varFolder);
-				}
+			}
+			if (criaFolder) {
+				varFolder = objFactory.createVarFolderType();
+				varFolder.setName(nomePasta);
+				varFolder.setType(VarFolderTypeType.VAR);
+				varFolder.getVar().add(varType);
+				
+				variables.getVarFolder().add(varFolder);
 			}
 		} else {
 			//Cria pasta de variáveis do tipo Variavel
 			varFolder = objFactory.createVarFolderType();
-			varFolder.setName("Home");
+			varFolder.setName(nomePasta);
 			varFolder.setType(VarFolderTypeType.VAR);
 			varFolder.getVar().add(varType);
 			
@@ -83,6 +85,7 @@ public class DialogConfigManager implements Serializable {
 		}
 		varType = objFactory.createVarType();
 		tipoVariavel = "";
+		nomePasta = "";
 	}
 
 	public void gerarArquivoXMLDialog() {
@@ -161,5 +164,20 @@ public class DialogConfigManager implements Serializable {
 
 	public void setVariables(VariablesType variables) {
 		this.variables = variables;
+	}
+
+	public List<SelectItem> getListaPastas() {
+		listaPastas = new ArrayList<SelectItem>();
+		if (variables != null && variables.getVarFolder().size() > 0) {
+			for (VarFolderType varFolderIt : variables.getVarFolder()) {
+				listaPastas.add(new SelectItem(varFolderIt.getName(), varFolderIt.getName()));
+				System.out.println("PASSEI NO GET: " + varFolderIt.getName());
+			}
+		}
+		return listaPastas;
+	}
+
+	public void setListaPastas(List<SelectItem> listaPastas) {
+		this.listaPastas = listaPastas;
 	}
 }
