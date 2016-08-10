@@ -1,4 +1,8 @@
 *.class
+*.classpath
+*.factorypath
+*.project
+*.tern-project
 
 # Package Files #
 *.jar
