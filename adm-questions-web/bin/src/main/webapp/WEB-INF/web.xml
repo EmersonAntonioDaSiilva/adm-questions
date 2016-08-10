@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
 
-	<display-name>SGP - Sistema de Gerenciamento de adm-questions</display-name>
+	<display-name>Magna Sistemas</display-name>
 
 	<!-- Activate the JSF 2.0 servlet and tell the context which URLs to send through JSF -->
 	<servlet>
@@ -18,11 +18,6 @@
 		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
 		<param-value>true</param-value>
 	</context-param>
-
-	<persistence-context-ref>
-	    <persistence-context-ref-name>question-ds</persistence-context-ref-name>
-	    <persistence-unit-name>question-ds</persistence-unit-name>
-	</persistence-context-ref>
 
 	<!-- Parameters used in the context JSF -->
 	<context-param>
@@ -56,7 +51,7 @@
 	</session-config>
 
 	<welcome-file-list>
-		<welcome-file>home.xhtml</welcome-file>
+		<welcome-file>/pages/perguntaRH.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<mime-mapping>
@@ -69,14 +64,4 @@
 		<extension>ecss</extension>
 		<mime-type>text/css</mime-type>
 	</mime-mapping>
-
-	<filter>  
-    	<filter-name>PrimeFaces FileUpload Filter</filter-name>  
-    	<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>  
-  	</filter> 
-
-	<error-page>
-		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
-		<location>/login.xhtml</location>
-	</error-page>
 </web-app>

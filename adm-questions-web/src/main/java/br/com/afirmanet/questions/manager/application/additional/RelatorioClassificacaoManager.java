@@ -95,7 +95,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
         Axis yAxis = barModel.getAxis(AxisType.Y);
         yAxis.setLabel("Quantidade de Sentimentos");
         yAxis.setMin(0);
-        yAxis.setMax(this.valorMaximoEixoY * 2);
+        yAxis.setMax(this.valorMaximoEixoY);
     }
     
     private BarChartModel initBarModel() {

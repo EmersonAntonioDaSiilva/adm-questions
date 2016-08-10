@@ -10,7 +10,9 @@
 	<composite:implementation>
 		<p:panelGrid id="outputContainer" columns="2" styleClass="ux-outputcontainer">
 			<p:outputLabel for="outputText" value="#{cc.attrs.label}:" style="width: #{cc.attrs.width};" />
-			<h:outputText id="outputText" value="#{cc.attrs.value}" converter="CpfCnpjConverter"/>
+			<h:outputText id="outputText" value="#{cc.attrs.value}" >
+				<f:converter converterId="CpfCnpjConverter" />
+			</h:outputText>
 		</p:panelGrid>
 	</composite:implementation>
 

@@ -14,7 +14,7 @@
 	<packaging>war</packaging>
 	
 	<name>adm-questions</name>
-	<description>SGP - Sistema de Gerenciamento de adm-questions</description>
+	<description>Magna Sistemas</description>
 	
 	<properties>
 		<build.date>${maven.build.timestamp}</build.date>
@@ -22,7 +22,19 @@
 	
 	
 	<dependencies>
-	
+		<dependency>
+		    <groupId>org.apache.solr</groupId>
+		    <artifactId>solr-solrj</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.watson.developer_cloud</groupId>
+			<artifactId>java-sdk</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ibm.watson.developer_cloud</groupId>
+			<artifactId>java-wrapper</artifactId>
+		</dependency>		
+
 		<!-- Arquitetura JSF 2.2 -->
        	<!-- JAVAX SERVLET -->
 		<dependency>

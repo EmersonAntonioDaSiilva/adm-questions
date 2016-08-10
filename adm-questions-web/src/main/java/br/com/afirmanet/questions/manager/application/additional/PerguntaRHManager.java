@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
 import org.omnifaces.cdi.ViewScoped;
 
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
@@ -29,6 +28,7 @@ import br.com.afirmanet.questions.dao.RespostaDAO;
 import br.com.afirmanet.questions.dao.TopicoDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Topico;
+import br.com.afirmanet.questions.factory.WatsonServiceFactory;
 import br.com.afirmanet.questions.service.ServiceNLC;
 import br.com.afirmanet.questions.service.ServiceRetrieveAndRank;
 import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
@@ -96,11 +96,11 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 		if(pergunta != null &&  !"".equals(pergunta)){
 			classificacao = service.getService().classify(getIdClassificacao(), pergunta).execute();
 			
-			if (classificacao.getClasses().get(0).getConfidence().compareTo(service.CONFIDENCE_MINIMO) == -1) {
-				service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_NEGATIVO);
+			if (classificacao.getClasses().get(0).getConfidence().compareTo(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC) == -1) {
+				service.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
 				this.likeBox = false;
 				
-				if(!"Não se aplica!".equals(classificacao.getClasses().get(0).getName())){
+				if(!WatsonServiceFactory.NAO_SE_APLICA.equals(classificacao.getClasses().get(0).getName()) && classificacao.getClasses().get(0).getConfidence().compareTo(WatsonServiceFactory.CONFIDENCE_MINIMO_RR) == 1){
 					if(!searchRetrieve(pergunta)){
 						definicao = RESPOSTA_PADRAO;
 						definicao += " No momento tenho conhecimento apenas deste tópico = " + topico.getDescricao();
@@ -110,7 +110,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 					definicao += " No momento tenho conhecimento apenas deste tópico = " + topico.getDescricao();
 				}
 			} else {
-				service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_ENCONTRADA_NLC);
+				service.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_ENCONTRADA_NLC);
 				
 				resposta = classificacao.getTopClass();
 				RespostaDAO respostaDAO = new RespostaDAO(entityManager);
@@ -146,7 +146,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 
 	@Transactional
 	public void sentimentoImparcial() {
-		service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_IMPARCIAL);
+		service.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_IMPARCIAL);
 		limparVariaveis();
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.addMessage("sentimentoMessage",
@@ -157,7 +157,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 
 	@Transactional
 	public void sentimentoPositivo() {
-		service.gravaPerguntaEncontrada(topico, classificacao, service.SENTIMENTO_POSITIVO);
+		service.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_POSITIVO);
 		limparVariaveis();
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.addMessage("sentimentoMessage",

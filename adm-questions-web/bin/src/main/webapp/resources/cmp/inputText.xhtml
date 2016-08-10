@@ -14,7 +14,7 @@
 	<composite:implementation>
 		<p:panelGrid id="inputContainer" columns="3" styleClass="ux-inputcontainer">
 			<p:outputLabel for="inputText" value="#{cc.attrs.label}:" style="width: #{cc.attrs.width};" />
-			<p:inputText id="inputText" value="#{cc.attrs.value}" size="#{cc.attrs.size}" maxlength="#{cc.attrs.maxlength}" required="#{cc.attrs.required}" disabled="#{cc.attrs.disabled}"/>
+			<p:inputText id="inputText" value="#{cc.attrs.value}" size="#{cc.attrs.size}" maxlength="#{cc.attrs.maxlength}" required="#{cc.attrs.required}" disabled="#{cc.attrs.disabled}" />
 			<p:message for="inputText" display="icon" showDetail="false" showSummary="true" />
 		</p:panelGrid>
 	</composite:implementation>

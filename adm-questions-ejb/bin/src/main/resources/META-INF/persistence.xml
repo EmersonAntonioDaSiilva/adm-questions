@@ -9,7 +9,8 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:/question-ds</jta-data-source>
 		
-		<class>br.com.afirmanet.adm-questions.entity.Perguntas</class>
+		<class>br.com.afirmanet.questions.entity.Pergunta</class>
+		<class>br.com.afirmanet.questions.entity.Resposta</class>
 	
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

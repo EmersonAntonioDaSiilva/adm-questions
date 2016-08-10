@@ -22,12 +22,13 @@
 				<!-- Identificação do ambiente logado -->
 				<ui:fragment rendered="#{empty hideIdentification}">
 					<div class="ux-identification">
-
+						<h:outputText value="Usuário: " styleClass="ux-identification-text" style="font-weight: bold;" rendered="#{not empty identificacaoManager.nomeUsuarioLogado}" />
+						<h:outputText value="#{identificacaoManager.nomeUsuarioLogado}" styleClass="ux-identification-text" style="padding-right: 10px" rendered="#{not empty identificacaoManager.nomeUsuarioLogado}" />
 					</div>
 				</ui:fragment>
 
 				<div style="padding: 10px;">
-					<div class="ux-content-title">#{contentTitle}</div>
+					<div class="ux-content-title"></div>
 					<p:messages id="msgs" autoUpdate="true" globalOnly="true" />
 
 					<ui:insert name="content" />
