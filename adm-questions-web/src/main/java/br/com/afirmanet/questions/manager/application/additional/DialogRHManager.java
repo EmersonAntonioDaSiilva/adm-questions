@@ -8,21 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
-import com.ibm.watson.developer_cloud.dialog.v1.model.Conversation;
-import com.ibm.watson.developer_cloud.dialog.v1.model.Dialog;
-import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
+import lombok.Getter;
+import lombok.Setter;
 
-	import br.com.afirmanet.core.exception.ApplicationException;
+import org.omnifaces.cdi.ViewScoped;
+
+import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.core.util.DateUtils;
@@ -37,8 +33,14 @@ import br.com.afirmanet.questions.entity.UsuarioPerfil;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
 import br.com.afirmanet.questions.manager.vo.DialogVO;
 import br.com.afirmanet.questions.service.ServiceDialog;
-import lombok.Getter;
-import lombok.Setter;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.ibm.watson.developer_cloud.dialog.v1.model.Conversation;
+import com.ibm.watson.developer_cloud.dialog.v1.model.Dialog;
+import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 
 @Named
 @ViewScoped
