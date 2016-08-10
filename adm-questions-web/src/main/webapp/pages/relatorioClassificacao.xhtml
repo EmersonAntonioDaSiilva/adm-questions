@@ -64,8 +64,11 @@
         				<h:outputText value="#{classificacao.pergunta}" />
 				    </p:column>
 				 
-				    <p:column headerText="Resposta" sortBy="#{classificacao.resposta}">
-				        <h:outputText value="#{classificacao.resposta}" />
+				    <p:column headerText="Resposta">
+						<p:selectOneMenu value="#{relatorioClassificacaoManager.resposta}" converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Choose item" noSelectionOption="true" />
+							<f:selectItems value="#{relatorioClassificacaoManager.lstResposta}" var="resp" itemLabel="#{resp.titulo}" itemValue="#{resp}" />
+						</p:selectOneMenu>
 				    </p:column>
 				 
 				    <p:column headerText="Confidence" sortBy="#{classificacao.confidence}">
