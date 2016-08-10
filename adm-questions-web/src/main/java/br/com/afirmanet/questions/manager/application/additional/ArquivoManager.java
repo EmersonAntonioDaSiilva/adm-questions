@@ -25,6 +25,7 @@ import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Pergunta;
 import br.com.afirmanet.questions.entity.Resposta;
 import br.com.afirmanet.questions.entity.Topico;
+import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,15 +45,10 @@ public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> 
 	@Getter
 	private List<Topico> lstTopico;
 	
-	@Getter
-	private boolean boxPesquisarPergunta;
-	
 	@Override
 	public void init() {
 		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
 		lstCliente = clienteDAO.findAll();
-		
-		boxPesquisarPergunta = false;
 		showInsertButton = false;
 	}	
 	
@@ -67,19 +63,15 @@ public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> 
 		return lstTopico;
 	}
 	
-	private void recuperarResposta() {
-		List<Resposta> respostas = null;
-		
+	private List<Resposta> recuperarResposta() {
 		RespostaDAO respostaDAO =  new RespostaDAO(entityManager);
-		respostas = respostaDAO.getDadosGeraArquivo(genericDAO.createPaginationPredicates(searchParam));
-		
-		File file = criarDiretorioEArquivoCSV();  
-		gravarRespostasCSV(file, respostas);
+		return respostaDAO.getDadosGeraArquivo(genericDAO.createPaginationPredicates(searchParam));
 	}
 
 	private File criarDiretorioEArquivoCSV() {
 		String caminho = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
-		caminho = caminho + "/resources/files/csv/respostas/";
+		caminho = caminho + ApplicationPropertiesUtils.getValue("path.csv.respostas");
+		
 		File pastas = new File(caminho);
 
 		pastas.mkdirs();
@@ -110,6 +102,7 @@ public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> 
 					primeiraLinha = false;
 				}
 			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -120,6 +113,9 @@ public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> 
 	}
 	
 	public void gerarArquivoCSV() {
-		recuperarResposta();
+		List<Resposta> respostas = recuperarResposta();
+		File file = criarDiretorioEArquivoCSV();  
+		
+		gravarRespostasCSV(file, respostas);
 	}
 }

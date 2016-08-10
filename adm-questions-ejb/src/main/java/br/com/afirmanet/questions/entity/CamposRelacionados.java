@@ -16,16 +16,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import br.com.afirmanet.questions.enums.TypoDocEnum;
+import br.com.afirmanet.questions.enums.TypeDocEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "campos_relacionados")
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = { "cliente", "topico" })
 public class CamposRelacionados implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -44,7 +46,7 @@ public class CamposRelacionados implements Serializable {
 	private Topico topico;	
 	
 	@Enumerated(EnumType.STRING)
-	private TypoDocEnum typoDoc;
+	private TypeDocEnum typeDoc;
 	
 	private String campo;
 	
