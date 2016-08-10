@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
 import org.omnifaces.cdi.ViewScoped;
 
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
