@@ -140,18 +140,18 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 		return retornoClassificacao;
 	}
 
-	public List<Classificacao> findByDataCadastroESentimento(LocalDate dataCadastro, Integer sentimento) {
+	public List<Classificacao> findByDataCadastroESentimento(LocalDate dataHIni, LocalDate dataHFim, Integer sentimento) {
 		
-		LocalDateTime dataHoraInicio = LocalDateTime.of(dataCadastro, LocalTime.MIN);
-		LocalDateTime dataHoraFim = LocalDateTime.of(dataCadastro, LocalTime.MAX);
+		LocalDateTime dataHoraInicio = LocalDateTime.of(dataHIni, LocalTime.MIN);
+		LocalDateTime dataHoraFim = LocalDateTime.of(dataHFim, LocalTime.MAX);
 		
 		return buscaDataCadastroSentimento(dataHoraInicio, dataHoraFim, sentimento);
 	}
 	
-	public List<Classificacao> findByDataCadastroESentimento(LocalDateTime dataCadastro, Integer sentimento) {
+	public List<Classificacao> findByDataCadastroESentimento(LocalDateTime dataHIni, LocalDateTime dataHFim, Integer sentimento) {
 		
-		LocalDateTime dataHoraInicio = dataCadastro.of(dataCadastro.toLocalDate(), LocalTime.MIN);
-		LocalDateTime dataHoraFim = dataCadastro.of(dataCadastro.toLocalDate(), LocalTime.MAX);
+		LocalDateTime dataHoraInicio = LocalDateTime.of(dataHIni.toLocalDate(), LocalTime.MIN);
+		LocalDateTime dataHoraFim = LocalDateTime.of(dataHFim.toLocalDate(), LocalTime.MAX);
 		
 		return buscaDataCadastroSentimento(dataHoraInicio, dataHoraFim, sentimento);
 	}
