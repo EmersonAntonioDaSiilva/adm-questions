@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html" 
+				xmlns:f="http://xmlns.jcp.org/jsf/core"
+				xmlns:p="http://primefaces.org/ui" 
+				xmlns:afirmanet="http://afirmanet.com.br/componentes" 
+				template="/templates/default-page.xhtml">
+	
+	<ui:param name="contentTitle" value="Relatório de Classificação" />
+	<ui:param name="hideMenu" value="true" />
+	<ui:param name="manager" value="#{relatorioClassificacaoManager}" />
+	
+	<ui:define name="content">
+		<h:form id="formQuestuionRH">
+			<p:panel id="searchFilter" header="Gerar Relatório" toggleable="false">
+				<afirmanet:selectOneMenu listener="#{relatorioClassificacaoManager.selecionarCliente}"
+										 value="#{manager.cliente}" 
+										 label="Cliente" required="true"
+										 selectWidth="250px"
+										 width="150px">
+			            <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}"  />
+				</afirmanet:selectOneMenu>
+				
+				<afirmanet:selectOneMenu value="#{manager.topico}" 
+										 label="Tópico" required="true"
+										 style="width: 250px;"
+										 selectWidth="250px"
+										 width="150px">
+			            <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}"  />
+				</afirmanet:selectOneMenu>
+				
+				<afirmanet:calendar label="Data Inicio"
+									value="#{manager.dataInicioClassificacao}" 
+									required="true" />
+									
+				<afirmanet:calendar label="Data Fim"
+									value="#{manager.dataFimClassificacao}" 
+									required="true" />
+						 
+		        <p:commandButton action="#{manager.buscarClassificacao}" 
+								 style="margin: 10px auto;" 
+								 ajax="true"
+								 value="Gerar Gráfico de Classificações"
+								 update="@form" />
+				
+				<p:chart type="bar" 
+						 model="#{manager.barModel}" 
+						 rendered="#{manager.lstClassificao != null and manager.lstClassificao.size() > 0}"
+						 style="height:300px">
+					<p:ajax event="itemSelect" listener="#{relatorioClassificacaoManager.chartItemSelect}" update="@form" />	 
+				</p:chart>
+				
+				<p:dataTable paginator="true"
+							 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							 rendered="#{manager.lstClassificaoChart.size() > 0}"
+							 rowsPerPageTemplate="5,10,15"
+							 value="#{relatorioClassificacaoManager.lstClassificaoChart}"
+							 var="classificacao">
+							 
+					<f:facet name="header">
+				        Sentimentos  
+				    </f:facet>	 
+					<p:column headerText="Pergunta" sortBy="#{classificacao.pergunta}">
+        				<h:outputText value="#{classificacao.pergunta}" />
+				    </p:column>
+				 
+				    <p:column headerText="Resposta">
+						<p:selectOneMenu value="#{relatorioClassificacaoManager.resposta}" converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Choose item" noSelectionOption="true" />
+							<f:selectItems value="#{relatorioClassificacaoManager.lstResposta}" var="resp" itemLabel="#{resp.titulo}" itemValue="#{resp}" />
+						</p:selectOneMenu>
+				    </p:column>
+				 
+				    <p:column headerText="Confidence" sortBy="#{classificacao.confidence}">
+				        <h:outputText value="#{classificacao.confidence * 100}">
+				        	<f:convertNumber type="number" groupingUsed="true" minFractionDigits="1" pattern="#0.0"/>
+				        </h:outputText>
+				        <h:outputLabel value="%" />
+				    </p:column>
+				</p:dataTable>
+				
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

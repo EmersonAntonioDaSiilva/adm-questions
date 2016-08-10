@@ -1,0 +1,61 @@
+<ui:decorate 	template="layout/page.xhtml" 
+				xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html" 
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:of="http://omnifaces.org/functions">
+
+	<ui:define name="top">
+		<div align="left">
+			<ui:include src="/templates/layout/header.xhtml" />
+
+			<div class="ux-menubar">
+				<ui:include src="/templates/layout/horizontalMenu.xhtml" />
+			</div>
+		</div>
+	</ui:define>
+
+	<ui:define name="center">
+		<div class="ux-body" align="left">
+			<div class="ux-body-content">
+
+				<!-- Identificação do ambiente logado -->
+				<ui:fragment rendered="#{empty hideIdentification}">
+					<div class="ux-identification">
+						<h:outputText value="Usuário: " styleClass="ux-identification-text" style="font-weight: bold;" rendered="#{not empty identificacaoManager.nomeUsuarioLogado}" />
+						<h:outputText value="#{identificacaoManager.nomeUsuarioLogado}" styleClass="ux-identification-text" style="padding-right: 10px" rendered="#{not empty identificacaoManager.nomeUsuarioLogado}" />
+					</div>
+				</ui:fragment>
+
+				<div style="padding: 10px;">
+					<div class="ux-content-title">#{contentTitle}</div>
+					<p:messages id="msgs" autoUpdate="true" globalOnly="true" />
+
+					<ui:insert name="content" />
+				</div>
+				<div align="center">
+		            <p style="font-family: Verdana, Arial, sans-serif; font-size: 10px !important; ">Navegadores a serem utilizados:</p>
+		            
+				
+		            <h:outputLink value="https://www.google.com/intl/pt-BR/chrome/browser/?brand=CHMO#eula" target="_blank">
+						<h:graphicImage value="/resources/images/browsers/chrome.png" alt="chrome" width="40" height="38"  />
+					</h:outputLink>
+					<h:outputLink value="http://www.mozilla.org/pt-BR/firefox/new/" target="_blank">
+						<h:graphicImage value="/resources/images/browsers/firefox.png" alt="firefox" width="40" height="37" />
+					</h:outputLink>
+					<h:outputLink value="http://support.apple.com/kb/DL1531?viewlocale=pt_BR" target="_blank">
+						<h:graphicImage value="/resources/images/browsers/safari.png" alt="safari" width="40" height="37" />
+					</h:outputLink>
+		        </div>
+			</div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="bottom">
+		<div align="left">
+			<ui:include src="/templates/layout/footer.xhtml" rendered="#{empty hideFooter}" />
+		</div>
+	</ui:define>
+
+</ui:decorate>

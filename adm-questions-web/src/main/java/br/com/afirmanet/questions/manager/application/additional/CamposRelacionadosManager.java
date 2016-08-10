@@ -20,7 +20,7 @@ import br.com.afirmanet.questions.entity.CamposRelacionados;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Resposta;
 import br.com.afirmanet.questions.entity.Topico;
-import br.com.afirmanet.questions.enums.TypoDocEnum;
+import br.com.afirmanet.questions.enums.TypeDocEnum;
 import lombok.Getter;
 
 @Named
@@ -35,7 +35,7 @@ public class CamposRelacionadosManager extends GenericCRUD<CamposRelacionados, I
 	private List<Topico> lstTopico;
 	
 	@Getter
-	private List<TypoDocEnum> lstTypoDocEnum;
+	private List<TypeDocEnum> lstTypoDocEnum;
 	
 
 	@Override
@@ -46,7 +46,7 @@ public class CamposRelacionadosManager extends GenericCRUD<CamposRelacionados, I
 		lstCliente = clienteDAO.findAll();
 
 		lstTypoDocEnum = new ArrayList<>();
-		lstTypoDocEnum.addAll(Arrays.asList(TypoDocEnum.values()));
+		lstTypoDocEnum.addAll(Arrays.asList(TypeDocEnum.values()));
 	}	
 
 	@Override

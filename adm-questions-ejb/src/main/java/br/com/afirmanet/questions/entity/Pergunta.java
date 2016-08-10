@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Entity
@@ -23,6 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "perguntas")
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = { "resposta" })
 public class Pergunta implements Serializable {
 	private static final long serialVersionUID = 1L;
 

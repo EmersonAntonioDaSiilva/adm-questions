@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html" 
+				xmlns:f="http://xmlns.jcp.org/jsf/core"
+				xmlns:p="http://primefaces.org/ui" 
+				xmlns:afirmanet="http://afirmanet.com.br/componentes" 
+				template="/templates/crud.xhtml">
+	
+	<ui:param name="entityName" value="Dados Watson Service" />
+	<ui:param name="manager" value="#{dadosWatsonManager}" />
+	
+	<ui:define name="searchFilterBlock">
+		<p:panelGrid columns="1">
+			<afirmanet:selectOneMenu label="Cliente" value="#{manager.searchParam.cliente}" listener="#{dadosWatsonManager.carregaTopicos}" required="true">
+			    <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}" />
+			</afirmanet:selectOneMenu>	
+
+			<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.topico}" required="true">
+			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
+			</afirmanet:selectOneMenu>	
+
+			<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.typeServico}" >
+			    <f:selectItems value="#{manager.lstTypeServicoEnum}" var="typeServico" itemValue="#{typeServico}" itemLabel="#{typeServico}" />
+			</afirmanet:selectOneMenu>
+
+		</p:panelGrid>
+	</ui:define>
+
+	<ui:define name="searchResultBlock">
+		<afirmanet:column headerText="Cliente" value="#{entity.cliente.descricao}" />
+		<afirmanet:column headerText="Topico" value="#{entity.topico.descricao}" />
+		<afirmanet:column headerText="Serviço Watson" value="#{entity.typeServico}" />
+		<afirmanet:column headerText="Usuário" value="#{entity.usuario}" />
+		<afirmanet:column headerText="Senha" value="#{entity.senha}" />
+		<afirmanet:column headerText="Data Cadastro" value="#{entity.dataCadastro}" />
+	</ui:define>
+	<!-- ./searchResultBlock -->
+
+	<ui:define name="recordDetailBlock">
+		<p:panelGrid columns="1">
+			<afirmanet:outputText label="Cliente" value="#{manager.entity.cliente.descricao}" />
+			<afirmanet:outputText label="Topico" value="#{manager.entity.topico.descricao}" />
+			<afirmanet:outputText label="Serviço Watson" value="#{manager.entity.typeServico}" />
+			<afirmanet:outputText label="Usuário" value="#{manager.entity.usuario}" />
+			<afirmanet:outputText label="Senha" value="#{manager.entity.senha}" />
+			<afirmanet:outputText label="Data Cadastro" value="#{manager.entity.dataCadastro}" />
+		</p:panelGrid>
+	</ui:define>
+	<!-- ./recordDetailBlock -->
+
+	<ui:define name="recordInsertEditBlock">
+		<p:panelGrid columns="1">
+			<afirmanet:selectOneMenu label="Cliente" value="#{manager.entity.cliente}" listener="#{dadosWatsonManager.carregaTopicos}" required="true">
+			    <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}" />
+			</afirmanet:selectOneMenu>	
+
+			<afirmanet:selectOneMenu label="Topico" value="#{manager.entity.topico}" required="true">
+			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
+			</afirmanet:selectOneMenu>	
+
+			<afirmanet:selectOneMenu label="Topico" value="#{manager.entity.typeServico}" required="true">
+			    <f:selectItems value="#{manager.lstTypeServicoEnum}" var="typeServico" itemValue="#{typeServico}" itemLabel="#{typeServico}" />
+			</afirmanet:selectOneMenu>
+
+			<afirmanet:inputText label="Usuário" value="#{manager.entity.usuario}" maxlength="200" size="100" />
+			<afirmanet:inputText label="Senha" value="#{manager.entity.senha}" maxlength="200" size="100" />
+		 
+		</p:panelGrid>		
+	</ui:define>
+	<!-- ./recordInsertEditBlock -->
+
+</ui:composition>

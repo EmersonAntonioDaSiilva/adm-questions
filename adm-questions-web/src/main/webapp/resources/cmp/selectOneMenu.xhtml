@@ -19,7 +19,7 @@
 	<composite:implementation>
 		<p:panelGrid id="inputContainer" columns="3" styleClass="ux-inputcontainer">
 			<p:outputLabel for="select" value="#{cc.attrs.label}:" style="width: #{cc.attrs.width};" />
-			<p:selectOneMenu disabled="#{cc.attrs.disabled}" id="select" value="#{cc.attrs.value}" required="#{cc.attrs.required}" converter="omnifaces.SelectItemsConverter">
+			<p:selectOneMenu disabled="#{cc.attrs.disabled}" id="select" value="#{cc.attrs.value}" required="#{cc.attrs.required}" style="width: #{cc.attrs.selectWidth};" converter="omnifaces.SelectItemsConverter">
 				<f:selectItem itemLabel="#{cc.attrs.itemLabel}" itemValue="" />
 				<composite:insertChildren />
 				<c:if test="#{not empty cc.getValueExpression('listener')}">

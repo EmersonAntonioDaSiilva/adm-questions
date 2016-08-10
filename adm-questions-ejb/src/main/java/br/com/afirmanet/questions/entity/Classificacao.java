@@ -17,12 +17,14 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "classificacoes")
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = { "cliente", "topico" })
 public class Classificacao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
