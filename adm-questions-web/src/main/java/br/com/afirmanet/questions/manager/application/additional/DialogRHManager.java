@@ -32,6 +32,7 @@ import br.com.afirmanet.questions.dao.UsuarioPerfilDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.entity.UsuarioPerfil;
+import br.com.afirmanet.questions.factory.WatsonServiceFactory;
 import br.com.afirmanet.questions.manager.vo.DialogVO;
 import br.com.afirmanet.questions.service.ServiceDialog;
 import lombok.Getter;
@@ -148,7 +149,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 				classificacao.setTopClass(topClass);
 				classificacao.setId(converse.getDialogId());
 				
-				serviceDialog.gravaPerguntaEncontrada(topico, classificacao, serviceDialog.SENTIMENTO_ENCONTRADA_DIALOG);
+				serviceDialog.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_ENCONTRADA_DIALOG);
 				
 			}
 		} catch (JsonSyntaxException e) {
@@ -207,7 +208,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 		updateUsuarioPerfil(conversation);
 
 		conversation.setDialogId(getIdDialog());
-		conversation.setConfidence(serviceDialog.CONFIDENCE_MINIMO);
+		conversation.setConfidence(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC);
 
 		return conversation;
 	}

@@ -50,19 +50,32 @@
 					<p:ajax event="itemSelect" listener="#{relatorioClassificacaoManager.chartItemSelect}" update="@form" />	 
 				</p:chart>
 				
-				<p:dataTable rendered="#{manager.lstClassificaoChart.size() > 0}"
+				<p:dataTable paginator="true"
+							 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							 rendered="#{manager.lstClassificaoChart.size() > 0}"
+							 rowsPerPageTemplate="5,10,15"
 							 value="#{relatorioClassificacaoManager.lstClassificaoChart}"
 							 var="classificacao">
-					<p:column headerText="Pergunta">
+							 
+					<f:facet name="header">
+				        Sentimentos  
+				    </f:facet>	 
+					<p:column headerText="Pergunta" sortBy="#{classificacao.pergunta}">
         				<h:outputText value="#{classificacao.pergunta}" />
 				    </p:column>
 				 
 				    <p:column headerText="Resposta">
-				        <h:outputText value="#{classificacao.resposta}" />
+						<p:selectOneMenu value="#{relatorioClassificacaoManager.resposta}" converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Choose item" noSelectionOption="true" />
+							<f:selectItems value="#{relatorioClassificacaoManager.lstResposta}" var="resp" itemLabel="#{resp.titulo}" itemValue="#{resp}" />
+						</p:selectOneMenu>
 				    </p:column>
 				 
-				    <p:column headerText="Confidence">
-				        <h:outputText value="#{classificacao.confidence}" />
+				    <p:column headerText="Confidence" sortBy="#{classificacao.confidence}">
+				        <h:outputText value="#{classificacao.confidence * 100}">
+				        	<f:convertNumber type="number" groupingUsed="true" minFractionDigits="1" pattern="#0.0"/>
+				        </h:outputText>
+				        <h:outputLabel value="%" />
 				    </p:column>
 				</p:dataTable>
 				
