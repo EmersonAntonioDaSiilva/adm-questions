@@ -20,12 +20,14 @@ import br.com.afirmanet.questions.enums.TypeDocEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "campos_relacionados")
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = { "cliente", "topico" })
 public class CamposRelacionados implements Serializable {
 	private static final long serialVersionUID = 1L;
 

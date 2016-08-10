@@ -18,12 +18,14 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "respostas")
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = { "perguntas", "topico", "cliente" })
 public class Resposta implements Serializable {
 	private static final long serialVersionUID = -4276991852035559664L;
 

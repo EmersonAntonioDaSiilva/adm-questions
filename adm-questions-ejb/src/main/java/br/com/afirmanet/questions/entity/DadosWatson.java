@@ -20,12 +20,14 @@ import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "dados_watson")
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = { "cliente", "topico" })
 public class DadosWatson implements Serializable {
 	private static final long serialVersionUID = 7669388365460088024L;
 
