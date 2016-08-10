@@ -25,9 +25,11 @@ public abstract class WatsonServiceFactory  {
 	public static final Integer SENTIMENTO_ENCONTRADA_DIALOG = 200;
 	public static final Integer SENTIMENTO_ENCONTRADA_RR = 300;
 
-	public static final double CONFIDENCE_MINIMO = ApplicationPropertiesUtils
-			.getValueAsDouble("index.manager.confidence.minimo");
-
+	public static final double CONFIDENCE_MINIMO_NLC = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo.nlc");
+	public static final double CONFIDENCE_MINIMO_RR = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo.rr");
+	
+	public static final String NAO_SE_APLICA = "Não se aplica!";
+	
 	protected EntityManager entityManager;
 	
 	@Setter
