@@ -68,11 +68,19 @@ white-space: nowrap;
 	width: 100% !important; 
 	margin-top: 2px !important; 
 	color: #999 !important; 
+<<<<<<< HEAD
 	margin-left: 10px !important;  
 	padding: 10px !important;
 }
 
 .txtPerguntaDialod{
+=======
+	/* margin-left: 10px !important; */ 
+	padding: 10px !important;
+}
+
+.txtPerguntaDialog{
+>>>>>>> origin/desenv
 	background-color: #fff; 
 	font-size: 1.4em !important; 
 	border: 0px solid !important; 

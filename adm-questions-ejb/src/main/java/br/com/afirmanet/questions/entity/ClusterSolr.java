@@ -17,12 +17,14 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "solr_cluster")
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = { "cliente" })
 public class ClusterSolr implements Serializable {
 	private static final long serialVersionUID = 1L;
 

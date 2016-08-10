@@ -1,5 +1,6 @@
 package br.com.afirmanet.questions.manager.application.additional;
 
+<<<<<<< HEAD
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -41,6 +42,11 @@ import com.google.gson.JsonSyntaxException;
 import com.ibm.watson.developer_cloud.dialog.v1.model.Conversation;
 import com.ibm.watson.developer_cloud.dialog.v1.model.Dialog;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
+=======
+import src.main.java.br.com.afirmanet.questions.factory.WatsonServiceFactory;
+import src.main.java.br.com.afirmanet.questions.manager.vo.DialogVO;
+import src.main.java.br.com.afirmanet.questions.service.ServiceDialog;
+>>>>>>> origin/desenv
 
 @Named
 @ViewScoped

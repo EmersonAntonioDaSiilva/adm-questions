@@ -26,9 +26,11 @@ import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.questions.constante.RelatorioClassificacaoEnum;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
 import br.com.afirmanet.questions.dao.ClienteDAO;
+import br.com.afirmanet.questions.dao.RespostaDAO;
 import br.com.afirmanet.questions.dao.TopicoDAO;
 import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.Resposta;
 import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.grafico.modelo.ClassificacaoChart;
 import lombok.Getter;
@@ -49,6 +51,10 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	private Topico topico;
 	
 	@Getter
+	@Setter
+	private Resposta resposta;
+	
+	@Getter
 	private List<Cliente> lstCliente;
 	
 	@Getter
@@ -59,6 +65,9 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	
 	@Getter
 	private List<Classificacao> lstClassificaoChart;
+	
+	@Getter
+	private List<Resposta> lstResposta;
 	
 	@Getter
 	@Setter
@@ -192,6 +201,11 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		this.lstClassificao = classificacaoDAO.findByRangeOfDataCadastro(
 				this.cliente, this.topico, this.dataInicioClassificacao, this.dataFimClassificacao);
 		
+		RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+		this.lstResposta = respostaDAO.findByClienteAndTopico(this.cliente, this.topico);
+		
+		resposta = this.lstResposta.get(0);
+		
 		if(this.lstClassificao != null && this.lstClassificao.size() > 0) {
 			createBarModel();
 		}
@@ -222,7 +236,9 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		 }
 		 
 		 ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
-		 
 		 this.lstClassificaoChart = classificacaoDAO.findByDataCadastroESentimento(dataCadastro, sentimento);
+
+		 
+		 System.out.println();
     }
 }
