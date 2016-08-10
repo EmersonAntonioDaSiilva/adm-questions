@@ -3,7 +3,6 @@ package br.com.afirmanet.questions.manager.application.additional;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -144,7 +143,8 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
         for (Classificacao classificacao : this.lstClassificao) {  	
         	
         	if(classificacao.getDataCadastro().getDayOfMonth() != dataCadastro.getDayOfMonth()
-        			|| classificacao.getDataCadastro().getMonthValue() != dataCadastro.getMonthValue()) {
+        			|| classificacao.getDataCadastro().getMonthValue() != dataCadastro.getMonthValue()
+        			|| classificacao.getDataCadastro().getYear() != dataCadastro.getYear()) {
         		
         		dataCadastro = classificacao.getDataCadastro();
         		listaClassificacaoChart.add(classificacaoChart);
@@ -221,9 +221,16 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		 mapValues.toArray(test);
 		 
 		 String dataCadastroTexto = (String) test[event.getItemIndex()].getKey();
-		 DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		 
-		 LocalDate dataCadastro = LocalDate.parse(dataCadastroTexto, pattern);
+		 Integer mes = Integer.parseInt(dataCadastroTexto.split("/")[0]);
+		 Integer ano = Integer.parseInt(dataCadastroTexto.split("/")[1]);
+		 Integer dia = 1;
+			
+		 
+		 LocalDate dtInicio = LocalDate.of(ano, mes, dia);
+		 LocalDate dtFim = LocalDate.of(ano, mes, dia).plusMonths(1);
+		 dtFim = LocalDate.of(dtFim.getYear(), dtFim.getMonth(), 1).minusDays(1); 
+		 
 		 
 		 Integer sentimento = 0;
 		 
@@ -236,9 +243,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		 }
 		 
 		 ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
-		 this.lstClassificaoChart = classificacaoDAO.findByDataCadastroESentimento(dataCadastro, sentimento);
+		 this.lstClassificaoChart = classificacaoDAO.findByDataCadastroESentimento(dtInicio, dtFim, sentimento);
 
-		 
-		 System.out.println();
     }
 }
