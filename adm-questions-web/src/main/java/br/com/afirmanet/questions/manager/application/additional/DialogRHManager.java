@@ -124,7 +124,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 			if (pergunta != null && !"".equals(pergunta)) {
 	
 				conversation = getDialog(conversation);
-				conversation = serviceDialog.getService().converse(conversation, getDialogoUsuario());
+				conversation = serviceDialog.getService().converse(conversation, getDialogoUsuario()).execute();
 	
 				DialogVO dialogVO = new DialogVO();
 				dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
@@ -194,7 +194,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 				}
 
 				conversation = getDialog(conversation);
-				conversation = serviceDialog.getService().converse(conversation, "Oi");
+				conversation = serviceDialog.getService().converse(conversation, "Oi").execute();
 
 				DialogVO dialogVO = new DialogVO();
 				dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
@@ -332,7 +332,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 
 	private String getIdDialog() {
 		// Pega todos os Dialog configurados
-		List<Dialog> dialogs = serviceDialog.getService().getDialogs();
+		List<Dialog> dialogs = serviceDialog.getService().getDialogs().execute();
 
 		// Retorna o id do Dialog encontrado
 		return dialogs.get(0).getId();

@@ -35,9 +35,9 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	@Getter
 	private RetrieveAndRank service;
 	
-	private static String nomeCluster = "MAGNA_RH_TEST",
-			  					nomeConfig = "CONF_RH_TEST",
-			  							nomeColection = "COLLEC_RH_TEST";
+	private static String nomeCluster = "MAGNA_RH_SOLR",
+			  					nomeConfig = "CONF_RH",
+			  							nomeColection = "COLLEC_RH_FERIAS";
 	
 	@Getter
 	private String idClusterSolr;
@@ -62,7 +62,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 			// se o identificador for nulo
 			// é executado a rotina de criação da rotina do cluster
 			if(idClusterSolr == null){
-				createCluster(null); // cria cluster
+				createCluster(1); // cria cluster
 				uploadConfiguration(); // configuração (arquivos xml)
 				createCollection(); // criação da coleção
 				indexDocumentAndCommit(); // indexa os documentos
@@ -84,7 +84,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	
 	private void getClusterSolr() {
 		
-		SolrClusters listaClusterSolr = service.getSolrClusters();
+		SolrClusters listaClusterSolr = service.getSolrClusters().execute();
 		if(listaClusterSolr.getSolrClusters().size() > 0)
 		{
 			idClusterSolr = listaClusterSolr.getSolrClusters().get(0).getId();
@@ -96,7 +96,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	}
 	
 	private SolrCluster getSolrCluster(String idCluster) {
-		return service.getSolrCluster(idCluster);
+		return service.getSolrCluster(idCluster).execute();
 	}
 
 	private void createCluster(Integer unit) {
@@ -114,7 +114,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		}
 		
 		// Criação do cluster
-		SolrCluster cluster = service.createSolrCluster(optionCluster);
+		SolrCluster cluster = service.createSolrCluster(optionCluster).execute();
 		
 		idClusterSolr = cluster.getId();
 		while (cluster.getStatus() == Status.NOT_AVAILABLE) {
