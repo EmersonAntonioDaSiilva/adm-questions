@@ -20,7 +20,6 @@
 		<build.date>${maven.build.timestamp}</build.date>
 	</properties>
 	
-	
 	<dependencies>
 		<dependency>
 		    <groupId>org.apache.solr</groupId>
