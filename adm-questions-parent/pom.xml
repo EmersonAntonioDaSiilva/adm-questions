@@ -4,7 +4,7 @@
   
 	<groupId>br.com.afirmanet.adm-questions</groupId>
 	<artifactId>adm-questions-parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<packaging>pom</packaging>
   
 	<name>adm-questions-parent</name>
@@ -63,7 +63,7 @@
 		<cdi-api.version>1.2</cdi-api.version>
 		<omnifaces.version>1.8.1</omnifaces.version>
 
-		<watson.developer.java-sdk.version>3.0.1</watson.developer.java-sdk.version>
+		<watson.developer.java-sdk.version>2.10.0</watson.developer.java-sdk.version>
 		<watson.developer.java-wrapper.version>1.1.1</watson.developer.java-wrapper.version>
 		<watson.solr-solrj.version>6.1.0</watson.solr-solrj.version>
 		

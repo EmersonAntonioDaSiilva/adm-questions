@@ -96,19 +96,23 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 	@PostConstruct
 	protected void inicializar() {
 
-		ClienteDAO clieteDAO = new ClienteDAO(entityManager);
-		cliente = clieteDAO.findByNome("m.watson");
+		try {
+			ClienteDAO clieteDAO = new ClienteDAO(entityManager);
+			cliente = clieteDAO.findByNome("m.watson");
 
-		serviceDialog = new ServiceDialog(cliente, entityManager);
+			serviceDialog = new ServiceDialog(cliente, entityManager);
 
-		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
-		lstTopico = topicoDAO.findbyCliente(cliente);
-		topico = lstTopico.get(0);
+			TopicoDAO topicoDAO = new TopicoDAO(entityManager);
+			lstTopico = topicoDAO.findbyCliente(cliente);
+			topico = lstTopico.get(0);
 
-		lstDialog = new ArrayList<>();
+			lstDialog = new ArrayList<>();
 
-		actionUsuarioPerfil = Boolean.TRUE;
-		actionDialog = Boolean.FALSE;
+			actionUsuarioPerfil = Boolean.TRUE;
+			actionDialog = Boolean.FALSE;
+		} catch (ApplicationException e) {
+			addErrorMessage(e.getMessage(), e);
+		}
 
 	}
 
@@ -120,7 +124,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 			if (pergunta != null && !"".equals(pergunta)) {
 	
 				conversation = getDialog(conversation);
-				conversation = serviceDialog.getService().converse(conversation, getDialogoUsuario()).execute();
+				conversation = serviceDialog.getService().converse(conversation, getDialogoUsuario());
 	
 				DialogVO dialogVO = new DialogVO();
 				dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
@@ -190,7 +194,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 				}
 
 				conversation = getDialog(conversation);
-				conversation = serviceDialog.getService().converse(conversation, "Oi").execute();
+				conversation = serviceDialog.getService().converse(conversation, "Oi");
 
 				DialogVO dialogVO = new DialogVO();
 				dialogVO.setPessoa(TimeUtils.timeNow() + " - M.Watson: ");
@@ -328,7 +332,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 
 	private String getIdDialog() {
 		// Pega todos os Dialog configurados
-		List<Dialog> dialogs = serviceDialog.getService().getDialogs().execute();
+		List<Dialog> dialogs = serviceDialog.getService().getDialogs();
 
 		// Retorna o id do Dialog encontrado
 		return dialogs.get(0).getId();

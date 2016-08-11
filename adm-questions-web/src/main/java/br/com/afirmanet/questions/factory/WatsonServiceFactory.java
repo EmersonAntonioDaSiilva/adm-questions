@@ -59,18 +59,20 @@ public abstract class WatsonServiceFactory  {
 			credenciais = dadosWatsonDAO.findByClienteAndTypeServico(cliente, typeServico);
 			
 			if(TypeServicoEnum.NATURAL_LANGUAGE_CLASSIFIER.equals(typeServico)){
-				watsonService = new NaturalLanguageClassifier(credenciais.getUsuario(), credenciais.getSenha());
-				
+				watsonService = new NaturalLanguageClassifier();
+
 			}else if(TypeServicoEnum.DIALOG.equals(typeServico)){
-				watsonService = new DialogService(credenciais.getUsuario(), credenciais.getSenha());
+				watsonService = new DialogService();
 				
 			}else if(TypeServicoEnum.DOCUMENT_CONVERSION.equals(typeServico)){
 				watsonService = new DocumentConversion(DocumentConversion.VERSION_DATE_2015_12_01);
-				watsonService.setUsernameAndPassword(credenciais.getUsuario(), credenciais.getSenha());
 				
 			}else if(TypeServicoEnum.RETRIEVE_AND_RANK.equals(typeServico)){
-				watsonService = new RetrieveAndRank(credenciais.getUsuario(), credenciais.getSenha());
+				watsonService = new RetrieveAndRank();
 			}
+
+			watsonService.setUsernameAndPassword(credenciais.getUsuario(), credenciais.getSenha());
+			
 		} catch (Exception e) {
 			throw new ApplicationException(e.getMessage(), e); 
 		}

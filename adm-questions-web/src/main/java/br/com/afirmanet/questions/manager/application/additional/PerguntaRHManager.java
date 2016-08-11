@@ -77,16 +77,20 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 
 	@PostConstruct
 	protected void inicializar() {
-		ClienteDAO clieteDAO = new ClienteDAO(entityManager);
-		cliente = clieteDAO.findByNome("m.watson");
+		try {
+			ClienteDAO clieteDAO = new ClienteDAO(entityManager);
+			cliente = clieteDAO.findByNome("m.watson");
 
-		service = new ServiceNLC(cliente, entityManager);
+			service = new ServiceNLC(cliente, entityManager);
 
-		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
-		lstTopico = topicoDAO.findbyCliente(cliente);
-		topico = lstTopico.get(0);
+			TopicoDAO topicoDAO = new TopicoDAO(entityManager);
+			lstTopico = topicoDAO.findbyCliente(cliente);
+			topico = lstTopico.get(0);
 
-		resposta = RESPOSTA_SAUDACOES;
+			resposta = RESPOSTA_SAUDACOES;
+		} catch (ApplicationException e) {
+			addErrorMessage(e.getMessage(), e);
+		}
 	}
 
 	@Transactional
@@ -94,7 +98,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 		limparVariaveis();
 		
 		if(pergunta != null &&  !"".equals(pergunta)){
-			classificacao = service.getService().classify(getIdClassificacao(), pergunta).execute();
+			classificacao = service.getService().classify(getIdClassificacao(), pergunta);
 			
 			if (classificacao.getClasses().get(0).getConfidence().compareTo(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC) == -1) {
 				service.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
@@ -175,7 +179,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 	private String getIdClassificacao() {
 		Classifiers classifiers;
 		try {
-			classifiers = service.getService().getClassifiers().execute();
+			classifiers = service.getService().getClassifiers();
 			List<Classifier> lstClassifiers = classifiers.getClassifiers();
 			Classifier classifier = lstClassifiers.get(0);
 

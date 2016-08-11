@@ -29,12 +29,8 @@
 			            <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}"  />
 				</afirmanet:selectOneMenu>
 				
-				<afirmanet:calendar label="Data Inicio"
+				<afirmanet:calendarMonthYear label="Mes Selecionado"
 									value="#{manager.dataInicioClassificacao}" 
-									required="true" />
-									
-				<afirmanet:calendar label="Data Fim"
-									value="#{manager.dataFimClassificacao}" 
 									required="true" />
 						 
 		        <p:commandButton action="#{manager.buscarClassificacao}" 
@@ -45,7 +41,7 @@
 				
 				<p:chart type="bar" 
 						 model="#{manager.barModel}" 
-						 rendered="#{manager.lstClassificao != null and manager.lstClassificao.size() > 0}"
+						 rendered="#{manager.barModel != null}"
 						 style="height:300px">
 					<p:ajax event="itemSelect" listener="#{relatorioClassificacaoManager.chartItemSelect}" update="@form" />	 
 				</p:chart>
@@ -53,6 +49,7 @@
 				<p:dataTable paginator="true"
 							 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							 rendered="#{manager.lstClassificaoChart.size() > 0}"
+							 rows="10"
 							 rowsPerPageTemplate="5,10,15"
 							 value="#{relatorioClassificacaoManager.lstClassificaoChart}"
 							 var="classificacao">
@@ -65,17 +62,14 @@
 				    </p:column>
 				 
 				    <p:column headerText="Resposta">
-						<p:selectOneMenu value="#{relatorioClassificacaoManager.resposta}" converter="omnifaces.SelectItemsConverter">
-							<f:selectItem itemLabel="Choose item" noSelectionOption="true" />
-							<f:selectItems value="#{relatorioClassificacaoManager.lstResposta}" var="resp" itemLabel="#{resp.titulo}" itemValue="#{resp}" />
-						</p:selectOneMenu>
+				    	<h:outputText value="#{classificacao.resposta}" />
 				    </p:column>
 				 
 				    <p:column headerText="Confidence" sortBy="#{classificacao.confidence}">
 				        <h:outputText value="#{classificacao.confidence * 100}">
 				        	<f:convertNumber type="number" groupingUsed="true" minFractionDigits="1" pattern="#0.0"/>
 				        </h:outputText>
-				        <h:outputLabel value="%" />
+				        <h:outputLabel value=" %" />
 				    </p:column>
 				</p:dataTable>
 				
