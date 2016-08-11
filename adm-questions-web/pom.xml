@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>br.com.afirmanet.adm-questions</groupId>
 		<artifactId>adm-questions-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.2</version>
 		<relativePath>../adm-questions-parent/pom.xml</relativePath>
 	</parent>
   

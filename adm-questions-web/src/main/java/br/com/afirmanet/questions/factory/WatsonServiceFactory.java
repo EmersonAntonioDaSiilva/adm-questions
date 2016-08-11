@@ -9,7 +9,6 @@ import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 import com.ibm.watson.developer_cloud.service.WatsonService;
 
 import br.com.afirmanet.core.exception.ApplicationException;
-import br.com.afirmanet.core.faces.validator.CnpjValidator;
 import br.com.afirmanet.questions.dao.DadosWatsonDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.DadosWatson;
@@ -17,9 +16,7 @@ import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public abstract class WatsonServiceFactory  {
 	public static final Integer SENTIMENTO_POSITIVO = 1;
 	public static final Integer SENTIMENTO_IMPARCIAL = 0;
