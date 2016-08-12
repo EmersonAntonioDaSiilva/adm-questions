@@ -36,9 +36,15 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	@Getter
 	private RetrieveAndRank service;
 	
+<<<<<<< HEAD
 	private static final String nomeCluster = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.cluster"),
 			  					nomeConfig = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.config"),
 			  							nomeColection = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.colection");
+=======
+	private static String nomeCluster = "MAGNA_RH_SOLR",
+	  					  nomeConfig = "CONF_RH",
+			  			  nomeColection = "COLLEC_RH_FERIAS";
+>>>>>>> 82557f4c48f9c13e02874a37600fc43677a06b69
 	
 	@Getter
 	private String idClusterSolr;
@@ -63,7 +69,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 			// se o identificador for nulo
 			// é executado a rotina de criação da rotina do cluster
 			if(idClusterSolr == null){
-				createCluster(null); // cria cluster
+				createCluster(1); // cria cluster
 				uploadConfiguration(); // configuração (arquivos xml)
 				createCollection(); // criação da coleção
 				indexDocumentAndCommit(); // indexa os documentos
@@ -131,6 +137,8 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		
 	}
 
+	//TODO trocar os metodos deprecation por um em operação
+	@SuppressWarnings("deprecation")
 	private void createCollection() throws Exception {
 		// Criação da collection
 		/*final CollectionAdminRequest.Create createCollectionRequest = CollectionAdminRequest.createCollection(nomeColection, nomeConfig, 1, 1);*/
