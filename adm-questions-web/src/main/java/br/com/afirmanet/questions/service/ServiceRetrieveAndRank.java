@@ -84,7 +84,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	
 	private void getClusterSolr() {
 		
-		SolrClusters listaClusterSolr = service.getSolrClusters().execute();
+		SolrClusters listaClusterSolr = service.getSolrClusters();
 		if(listaClusterSolr.getSolrClusters().size() > 0)
 		{
 			idClusterSolr = listaClusterSolr.getSolrClusters().get(0).getId();
@@ -96,7 +96,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	}
 	
 	private SolrCluster getSolrCluster(String idCluster) {
-		return service.getSolrCluster(idCluster).execute();
+		return service.getSolrCluster(idCluster);
 	}
 
 	private void createCluster(Integer unit) {
@@ -114,7 +114,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		}
 		
 		// Criação do cluster
-		SolrCluster cluster = service.createSolrCluster(optionCluster).execute();
+		SolrCluster cluster = service.createSolrCluster(optionCluster);
 		
 		idClusterSolr = cluster.getId();
 		while (cluster.getStatus() == Status.NOT_AVAILABLE) {
