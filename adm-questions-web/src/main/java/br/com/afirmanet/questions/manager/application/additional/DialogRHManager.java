@@ -21,6 +21,7 @@ import org.omnifaces.cdi.ViewScoped;
 import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.core.util.ApplicationPropertiesUtils;
 import br.com.afirmanet.core.util.DateUtils;
 import br.com.afirmanet.core.util.TimeUtils;
 import br.com.afirmanet.questions.dao.ClienteDAO;
@@ -47,11 +48,11 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Class
 public class DialogRHManager extends AbstractManager implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 
-	private static final String INFORMAR_NOME = "informar o seu nome:";
-	private static final String INFORMAR_DATA_NASCIMENTO = "informar a sua data de nascimento:";
-	private static final String INFORMAR_DATA_ADMISSAO = "informar a sua data de admissão:";
+	private static final String INFORMAR_NOME = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.nome");
+	private static final String INFORMAR_DATA_NASCIMENTO = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.data.nascimento");
+	private static final String INFORMAR_DATA_ADMISSAO = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.data.admissao");
 
-	private static final int PESQUISAR_DB = 1;
+	private static final int PESQUISAR_DB = ApplicationPropertiesUtils.getValueAsInteger("dialogRH.manager.pesquisar.db");
 
 	@Inject
 	@ApplicationManaged

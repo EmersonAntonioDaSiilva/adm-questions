@@ -23,6 +23,7 @@ import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOpti
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusters;
 
 import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.util.ApplicationPropertiesUtils;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
@@ -35,9 +36,9 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	@Getter
 	private RetrieveAndRank service;
 	
-	private static String nomeCluster = "MAGNA_RH_TEST",
-			  					nomeConfig = "CONF_RH_TEST",
-			  							nomeColection = "COLLEC_RH_TEST";
+	private static final String nomeCluster = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.cluster"),
+			  					nomeConfig = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.config"),
+			  							nomeColection = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.colection");
 	
 	@Getter
 	private String idClusterSolr;

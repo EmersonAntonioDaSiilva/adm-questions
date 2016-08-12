@@ -18,17 +18,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 public abstract class WatsonServiceFactory  {
-	public static final Integer SENTIMENTO_POSITIVO = 1;
-	public static final Integer SENTIMENTO_IMPARCIAL = 0;
-	public static final Integer SENTIMENTO_NEGATIVO = -1;
-	public static final Integer SENTIMENTO_ENCONTRADA_NLC = 100;
-	public static final Integer SENTIMENTO_ENCONTRADA_DIALOG = 200;
-	public static final Integer SENTIMENTO_ENCONTRADA_RR = 300;
-
+	
+	public static final Integer SENTIMENTO_POSITIVO = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.positivo");
+	public static final Integer SENTIMENTO_IMPARCIAL = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.imparcial");
+	public static final Integer SENTIMENTO_NEGATIVO = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.negativo");
+	public static final Integer SENTIMENTO_ENCONTRADA_NLC = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.encontrada.nlc");
+	public static final Integer SENTIMENTO_ENCONTRADA_DIALOG = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.encontrada.dialog");
+	public static final Integer SENTIMENTO_ENCONTRADA_RR = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.encontrada.rr");
+	
 	public static final double CONFIDENCE_MINIMO_NLC = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo.nlc");
 	public static final double CONFIDENCE_MINIMO_RR = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo.rr");
-	
-	public static final String NAO_SE_APLICA = "Não se aplica!";
+	public static final String NAO_SE_APLICA = ApplicationPropertiesUtils.getValue("index.manager.nao.se.aplica");
 	
 	protected EntityManager entityManager;
 	

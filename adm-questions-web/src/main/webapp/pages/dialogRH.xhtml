@@ -36,15 +36,13 @@
 							</p:column>
 							<p:column colspan="2" style="width: 100%; vertical-align: top;" >
 								<p:dataTable id="dialogTable" value="#{dialogRHManager.lstDialog}" var="dialog" scrollable="true" scrollHeight="250" styleClass="tree-table-no-header">
-									<p:column>
-								        <h:outputText value="#{dialog.dialogo}" />
-								    </p:column>
+									<afirmanet:column value="#{dialog.dialogo}"/>
 								</p:dataTable>
 							</p:column>
 						</p:row>
 						<p:row style="height: 50px;">
 							<p:column style="width: 200px;">
-								<p:inputText id="txtPergunta" class="txtPerguntaDialog" value="#{dialogRHManager.pergunta}" placeholder="Faça a sua pergunta aqui..."/>					
+								<h:inputText id="txtPergunta" class="txtPerguntaDialog" value="#{dialogRHManager.pergunta}" placeholder="Faça a sua pergunta aqui..."/>					
 							</p:column>
 							<p:column style="width: 50px; text-align:right; vertical-align: bottom; margin-top: 2px !important;">
 								<p:commandLink actionListener="#{dialogRHManager.btPergunta}" update="dialogTable, txtPergunta">
