@@ -166,6 +166,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		createBarModel();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void chartItemSelect(ItemSelectEvent event) {
 		BarChartModel cModel = (BarChartModel) ((org.primefaces.component.chart.Chart) event.getSource()).getModel();
 		ChartSeries mySeries = cModel.getSeries().get(event.getSeriesIndex());

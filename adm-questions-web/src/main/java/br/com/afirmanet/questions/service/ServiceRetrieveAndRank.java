@@ -36,8 +36,8 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	private RetrieveAndRank service;
 	
 	private static String nomeCluster = "MAGNA_RH_SOLR",
-			  					nomeConfig = "CONF_RH",
-			  							nomeColection = "COLLEC_RH_FERIAS";
+	  					  nomeConfig = "CONF_RH",
+			  			  nomeColection = "COLLEC_RH_FERIAS";
 	
 	@Getter
 	private String idClusterSolr;
@@ -130,6 +130,8 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		
 	}
 
+	//TODO trocar os metodos deprecation por um em operação
+	@SuppressWarnings("deprecation")
 	private void createCollection() throws Exception {
 		// Criação da collection
 		/*final CollectionAdminRequest.Create createCollectionRequest = CollectionAdminRequest.createCollection(nomeColection, nomeConfig, 1, 1);*/
