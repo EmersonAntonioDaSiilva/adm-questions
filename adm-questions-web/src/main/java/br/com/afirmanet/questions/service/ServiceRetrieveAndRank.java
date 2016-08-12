@@ -36,15 +36,9 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	@Getter
 	private RetrieveAndRank service;
 	
-<<<<<<< HEAD
-	private static final String nomeCluster = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.cluster"),
-			  					nomeConfig = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.config"),
-			  							nomeColection = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.colection");
-=======
-	private static String nomeCluster = "MAGNA_RH_SOLR",
-	  					  nomeConfig = "CONF_RH",
-			  			  nomeColection = "COLLEC_RH_FERIAS";
->>>>>>> 82557f4c48f9c13e02874a37600fc43677a06b69
+	private static final String NOME_CLUSTER = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.cluster"),
+			  					NOME_CONFIG = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.config"),
+			  					NOME_COLECTION = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.colection");
 	
 	@Getter
 	private String idClusterSolr;
@@ -86,7 +80,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		caminho = caminho.concat("/resources/files/zip/solrconfig.zip");
 		
 		File configZip = new File(caminho);
-		service.uploadSolrClusterConfigurationZip(idClusterSolr, nomeConfig, configZip);
+		service.uploadSolrClusterConfigurationZip(idClusterSolr, NOME_CONFIG, configZip);
 	}
 	
 	private void getClusterSolr() {
@@ -113,11 +107,11 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		/// Com isso o cluster fica limitado a 500mb para testes
 		if(unit == null)
 		{
-			optionCluster = new SolrClusterOptions(nomeCluster);
+			optionCluster = new SolrClusterOptions(NOME_CLUSTER);
 		}
 		else
 		{
-			optionCluster = new SolrClusterOptions(nomeCluster,unit);
+			optionCluster = new SolrClusterOptions(NOME_CLUSTER,unit);
 		}
 		
 		// Criação do cluster
@@ -144,8 +138,8 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		/*final CollectionAdminRequest.Create createCollectionRequest = CollectionAdminRequest.createCollection(nomeColection, nomeConfig, 1, 1);*/
 		
 		final CollectionAdminRequest.Create createCollectionRequest = new CollectionAdminRequest.Create();
-	    createCollectionRequest.setCollectionName(nomeColection);
-	    createCollectionRequest.setConfigName(nomeConfig);
+	    createCollectionRequest.setCollectionName(NOME_COLECTION);
+	    createCollectionRequest.setConfigName(NOME_CONFIG);
 	    
 	    final CollectionAdminResponse response = createCollectionRequest.process(getSolrClient()); // Executa a processo de criação da coleção
 	    if (!response.isSuccess()) {
@@ -169,10 +163,10 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		
 		// Avalia se tem documento a ser indexado
 		if(listDocument.size() > 0){
-			solrCliente.add(nomeColection,listDocument);
+			solrCliente.add(NOME_COLECTION,listDocument);
 		    
 			// Commit da coleção 
-		    solrCliente.commit(nomeColection);
+		    solrCliente.commit(NOME_COLECTION);
 		}
 	}
 	
@@ -185,7 +179,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 			String pesquisa = "".concat(pergunta); // monta String da pesquisa
 			SolrQuery query = new SolrQuery(pesquisa); // cria os critérios da pesquisa
 			
-			response = solrClient.query(nomeColection, query); // retorna pesquisa
+			response = solrClient.query(NOME_COLECTION, query); // retorna pesquisa
 		
 		} catch (SolrServerException e) {
 			throw new ApplicationException(e.getMessage(), e);
