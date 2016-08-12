@@ -16,10 +16,10 @@
     			<p:panelGrid>
 					<p:row>
 						<p:column>
-							<afirmanet:inputMail label="e-mail" class="txtPergunta" value="#{dialogRHManager.email}"  maxlength="200" size="100"/>					
+							<afirmanet:inputMail label="e-mail" class="txtPergunta" value="#{dialogRHManager.email}"  maxlength="200" size="100" required="true"/>					
 						</p:column>
 						<p:column style="width: 30px; text-align:left; vertical-align: bottom;">
-							<p:commandLink actionListener="#{dialogRHManager.btEmail}" update="dialogTable" oncomplete="PF('dlgEmail').hide();">
+							<p:commandLink actionListener="#{dialogRHManager.btEmail}" update="@form" onsuccess="PF('dlgEmail').hide();">
 								<h:graphicImage value="/resources/images/icon-buscar.gif" style="width: 50px; height: 50px;" />
 							</p:commandLink>					
 						</p:column>			
