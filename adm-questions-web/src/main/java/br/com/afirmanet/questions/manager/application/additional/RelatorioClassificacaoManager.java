@@ -127,7 +127,12 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		Axis yAxis = barModel.getAxis(AxisType.Y);
 		yAxis.setLabel("Quantidade de Sentimentos");
 		yAxis.setMin(0);
-		yAxis.setMax(this.valorMaximoEixoY + this.valorMaximoEixoY / 2);
+
+		Integer max = this.valorMaximoEixoY;
+		if(this.valorMaximoEixoY > 0)
+			max =  (int) (this.valorMaximoEixoY + (this.valorMaximoEixoY * 0.10));
+		
+		yAxis.setMax(max);
 	}
 
 	private BarChartModel initBarModel() {
@@ -196,6 +201,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		createBarModel();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void chartItemSelect(ItemSelectEvent event) {
 		BarChartModel cModel = (BarChartModel) ((org.primefaces.component.chart.Chart) event.getSource()).getModel();
 		ChartSeries mySeries = cModel.getSeries().get(event.getSeriesIndex());

@@ -37,11 +37,13 @@
 									 maxlength="100" 
 									 required="true" />
 				
-		        <p:commandButton action="#{manager.buscarClassificacao}" 
-								 style="margin: 10px auto;" 
-								 ajax="true"
-								 value="Gerar Gráfico de Classificações"
-								 update="@form" />
+
+						 
+		        <afirmanet:commandButtonConfirm action="#{manager.buscarClassificacao}" 
+												style="margin: 10px auto;" 
+												ajax="true"
+												value="Gerar Gráfico de Classificações"
+												update="@form" />
 				
 				<p:chart type="bar" 
 						 model="#{manager.barModel}" 

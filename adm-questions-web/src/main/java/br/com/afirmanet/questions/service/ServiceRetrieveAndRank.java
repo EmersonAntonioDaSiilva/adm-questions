@@ -23,6 +23,7 @@ import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOpti
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusters;
 
 import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.util.ApplicationPropertiesUtils;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
@@ -35,9 +36,9 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	@Getter
 	private RetrieveAndRank service;
 	
-	private static String nomeCluster = "MAGNA_RH_TEST",
-			  					nomeConfig = "CONF_RH_TEST",
-			  							nomeColection = "COLLEC_RH_TEST";
+	private static final String NOME_CLUSTER = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.cluster"),
+			  					NOME_CONFIG = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.config"),
+			  					NOME_COLECTION = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.colection");
 	
 	@Getter
 	private String idClusterSolr;
@@ -62,7 +63,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 			// se o identificador for nulo
 			// é executado a rotina de criação da rotina do cluster
 			if(idClusterSolr == null){
-				createCluster(null); // cria cluster
+				createCluster(1); // cria cluster
 				uploadConfiguration(); // configuração (arquivos xml)
 				createCollection(); // criação da coleção
 				indexDocumentAndCommit(); // indexa os documentos
@@ -79,7 +80,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		caminho = caminho.concat("/resources/files/zip/solrconfig.zip");
 		
 		File configZip = new File(caminho);
-		service.uploadSolrClusterConfigurationZip(idClusterSolr, nomeConfig, configZip);
+		service.uploadSolrClusterConfigurationZip(idClusterSolr, NOME_CONFIG, configZip);
 	}
 	
 	private void getClusterSolr() {
@@ -106,11 +107,11 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		/// Com isso o cluster fica limitado a 500mb para testes
 		if(unit == null)
 		{
-			optionCluster = new SolrClusterOptions(nomeCluster);
+			optionCluster = new SolrClusterOptions(NOME_CLUSTER);
 		}
 		else
 		{
-			optionCluster = new SolrClusterOptions(nomeCluster,unit);
+			optionCluster = new SolrClusterOptions(NOME_CLUSTER,unit);
 		}
 		
 		// Criação do cluster
@@ -130,13 +131,15 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		
 	}
 
+	//TODO trocar os metodos deprecation por um em operação
+	@SuppressWarnings("deprecation")
 	private void createCollection() throws Exception {
 		// Criação da collection
 		/*final CollectionAdminRequest.Create createCollectionRequest = CollectionAdminRequest.createCollection(nomeColection, nomeConfig, 1, 1);*/
 		
 		final CollectionAdminRequest.Create createCollectionRequest = new CollectionAdminRequest.Create();
-	    createCollectionRequest.setCollectionName(nomeColection);
-	    createCollectionRequest.setConfigName(nomeConfig);
+	    createCollectionRequest.setCollectionName(NOME_COLECTION);
+	    createCollectionRequest.setConfigName(NOME_CONFIG);
 	    
 	    final CollectionAdminResponse response = createCollectionRequest.process(getSolrClient()); // Executa a processo de criação da coleção
 	    if (!response.isSuccess()) {
@@ -160,10 +163,10 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		
 		// Avalia se tem documento a ser indexado
 		if(listDocument.size() > 0){
-			solrCliente.add(nomeColection,listDocument);
+			solrCliente.add(NOME_COLECTION,listDocument);
 		    
 			// Commit da coleção 
-		    solrCliente.commit(nomeColection);
+		    solrCliente.commit(NOME_COLECTION);
 		}
 	}
 	
@@ -176,7 +179,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 			String pesquisa = "".concat(pergunta); // monta String da pesquisa
 			SolrQuery query = new SolrQuery(pesquisa); // cria os critérios da pesquisa
 			
-			response = solrClient.query(nomeColection, query); // retorna pesquisa
+			response = solrClient.query(NOME_COLECTION, query); // retorna pesquisa
 		
 		} catch (SolrServerException e) {
 			throw new ApplicationException(e.getMessage(), e);
