@@ -20,44 +20,40 @@
 
 <currencyConfig version="1.0">
   <rates>
-    <!-- Updated from http://www.exchangerate.com/ at 2011-09-27 -->
+    <!-- Updated from https://br.financas.yahoo.com/moedas/conversor at 2016-08-15 -->
 	
 	<!-- Real Brasileiro -->
-    <rate from="BRL" to="ARS" rate="4.333871" comment="ARGENTINA Peso" />
-    <rate from="BRL" to="EUR" rate="0.743676" comment="European Euro" />
-    <rate from="BRL" to="CLP" rate="519.0996" comment="CHILE Peso" />
-    <rate from="BRL" to="CNY" rate="6.387310" comment="CHINA Yuan" />
-    <rate from="BRL" to="JPY" rate="76.32419" comment="JAPAN Yen" />
-    <rate from="BRL" to="KWD" rate="0.275142" comment="KUWAIT Dinar" />
-    <rate from="BRL" to="MXN" rate="13.85895" comment="MEXICO Peso" />
-    <rate from="BRL" to="PEN" rate="2.730683" comment="PERU Sol" />
-    <rate from="BRL" to="GBP" rate="0.647910" comment="UNITED KINGDOM Pound" />
-    <rate from="BRL" to="USD" rate="1.881093" comment="UNITED STATES OF AMERICA Dollar" />
+    <rate from="BRL" to="ARS" rate="4.634500" comment="ARGENTINA Peso" />
+    <rate from="BRL" to="EUR" rate="0.282300" comment="European Euro" />
+    <rate from="BRL" to="CLP" rate="205.044200" comment="CHILE Peso" />
+    <rate from="BRL" to="CNY" rate="2.099100" comment="CHINA Yuan" />
+    <rate from="BRL" to="JPY" rate="31.944500" comment="JAPAN Yen" />
+    <rate from="BRL" to="MXN" rate="5.703500" comment="MEXICO Peso" />
+    <rate from="BRL" to="PEN" rate="1.046400" comment="PERU Sol" />
+    <rate from="BRL" to="GBP" rate="0.245600" comment="UNITED KINGDOM Pound" />
+    <rate from="BRL" to="USD" rate="0.316300" comment="UNITED STATES OF AMERICA Dollar" />
 
 	<!-- Dólar Americano -->
-    <rate from="USD" to="ARS" rate="4.333871" comment="ARGENTINA Peso" />
-    <rate from="USD" to="EUR" rate="0.743676" comment="European Euro" />
-    <rate from="USD" to="BRL" rate="1.881093" comment="BRAZIL Real" />
-    <rate from="USD" to="CLP" rate="519.0996" comment="CHILE Peso" />
-    <rate from="USD" to="CNY" rate="6.387310" comment="CHINA Yuan" />
-    <rate from="USD" to="JPY" rate="76.32419" comment="JAPAN Yen" />
-    <rate from="USD" to="KWD" rate="0.275142" comment="KUWAIT Dinar" />
-    <rate from="USD" to="MXN" rate="13.85895" comment="MEXICO Peso" />
-    <rate from="USD" to="PEN" rate="2.730683" comment="PERU Sol" />
-    <rate from="USD" to="GBP" rate="0.647910" comment="UNITED KINGDOM Pound" />
+    <rate from="USD" to="ARS" rate="14.648500" comment="ARGENTINA Peso" />
+    <rate from="USD" to="EUR" rate="0.892400" comment="European Euro" />
+    <rate from="USD" to="BRL" rate="3.169200" comment="BRAZIL Real" />
+    <rate from="USD" to="CLP" rate="648.030000" comment="CHILE Peso" />
+    <rate from="USD" to="CNY" rate="6.636200" comment="CHINA Yuan" />
+    <rate from="USD" to="JPY" rate="101.112000" comment="JAPAN Yen" />
+    <rate from="USD" to="MXN" rate="18.053600" comment="MEXICO Peso" />
+    <rate from="USD" to="PEN" rate="3.308000" comment="PERU Sol" />
+    <rate from="USD" to="GBP" rate="0.776600" comment="UNITED KINGDOM Pound" />
 	
 	<!-- Euro Zona EU -->
-    <rate from="EUR" to="ARS" rate="4.333871" comment="ARGENTINA Peso" />
-    <rate from="EUR" to="BRL" rate="1.881093" comment="BRAZIL Real" />
-    <rate from="EUR" to="CLP" rate="519.0996" comment="CHILE Peso" />
-    <rate from="EUR" to="CNY" rate="6.387310" comment="CHINA Yuan" />
-    <rate from="EUR" to="JPY" rate="76.32419" comment="JAPAN Yen" />
-    <rate from="EUR" to="KWD" rate="0.275142" comment="KUWAIT Dinar" />
-    <rate from="EUR" to="MXN" rate="13.85895" comment="MEXICO Peso" />
-    <rate from="EUR" to="PEN" rate="2.730683" comment="PERU Sol" />
-    <rate from="EUR" to="GBP" rate="0.647910" comment="UNITED KINGDOM Pound" />
-    <rate from="EUR" to="USD" rate="1.881093" comment="UNITED STATES OF AMERICA Dollar" />
-	
+    <rate from="EUR" to="ARS" rate="16.407000" comment="ARGENTINA Peso" />
+    <rate from="EUR" to="BRL" rate="3.549300" comment="BRAZIL Real" />
+    <rate from="EUR" to="CLP" rate="725.750100" comment="CHILE Peso" />
+    <rate from="EUR" to="CNY" rate="7.432100" comment="CHINA Yuan" />
+    <rate from="EUR" to="JPY" rate="113.238600" comment="JAPAN Yen" />
+    <rate from="EUR" to="MXN" rate="20.218800" comment="MEXICO Peso" />
+    <rate from="EUR" to="PEN" rate="3.704700" comment="PERU Sol" />
+    <rate from="EUR" to="GBP" rate="0.869700" comment="UNITED KINGDOM Pound" />
+    <rate from="EUR" to="USD" rate="1.119900" comment="UNITED STATES OF AMERICA Dollar" />
 		
   </rates>
 </currencyConfig>
