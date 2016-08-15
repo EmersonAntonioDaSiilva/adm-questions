@@ -26,6 +26,7 @@ Relevância,relevâncias,significado,significados
 Língua,Línguas,Idiomas,Idiomas
 Féria,Férias,Repouso,Gozo
 Acordo Pecuniário,1/3 Férias
+Abono,Garantia,Fiança
 #notice we use "gib" instead of "GiB" so any WordDelimiterFilter coming
 #after us won't split it into two words.
 
