@@ -20,37 +20,27 @@
 				<p:panel header="Library" toggleable="true" toggleSpeed="500" collapsed="false" widgetVar="libraryPanel" style="margin-bottom:5px">
 					<p:panelGrid id="panelGridLibrary">
 						<p:row>
-							<p:column style="width: 140px;">
-								<h:outputText value="Identificação do bloco"/>
-							</p:column>
+							<afirmanet:column style="width:140px;" value="Identificação do bloco"/>
 							<p:column>
 								<p:inputText value="#{dialogConfigManager.idNo}"/>
 							</p:column>
-							<p:column>
-								<h:outputText value="Entrada"/>
-							</p:column>
+							<afirmanet:column value="Entrada"/>
 							<p:column>
 								<p:inputText value="#{dialogConfigManager.entrada}"/>
 							</p:column>
-							<p:column>
-								<h:outputText value="Saída"/>
-							</p:column>
+							<afirmanet:column value="Saída"/>
 							<p:column>
 								<p:inputText value="#{dialogConfigManager.saida}"/>
 							</p:column>
 						</p:row>
 						<p:row>
-							<p:column>
-								<h:outputText value="Nome da Pasta"/>
-							</p:column>
+							<afirmanet:column value="Nome da Pasta"/>
 							<p:column>
 								<p:selectOneMenu id="txtLstNomePastaLibrary" value="#{dialogConfigManager.nomePastaLibrary}" effect="fold" editable="true" style="margin-top: 5px;">
 									<f:selectItem itemLabel="Informe ou selecione a pasta" itemValue="" itemDisabled="true"/>
 								</p:selectOneMenu>
 							</p:column>
-							<p:column>
-								<h:outputText value="Pular para"/>
-							</p:column>
+							<afirmanet:column value="Pular para"/>
 							<p:column>
 								<p:selectOneMenu id="lstNosLibrary" value="#{dialogConfigManager.goTo}" effect="fold">
 									<f:selectItem itemLabel="Selecione o nó a ser executado em seguida" itemValue="" itemDisabled="true"/>
@@ -83,15 +73,11 @@
 			<p:panel id="panelVariables" header="Variables" toggleable="true" collapsed="false" toggleSpeed="500" widgetVar="variablesPanel" style="margin-bottom:10px; text-align:left !important;">
 				<p:panelGrid id="panelgridVariables">
 					<p:row>
-						<p:column style="width: 105px;">
-							<h:outputText value="Nome da Variável" />
-						</p:column>
+						<afirmanet:column style="width:105px;" value="Nome da Variável"/>
 						<p:column style="width: 250px;">
 							<p:inputText id="txtNomeVariavel" value="#{dialogConfigManager.varType.name}"/>
 						</p:column>
-						<p:column style="width: 105px;">
-							<h:outputText value="Tipo da Variável" />
-						</p:column>
+						<afirmanet:column style="width:105px;" value="Tipo da Variável"/>
 						<p:column style="width: 150px;">
 							<p:inputText id="txtTipoVariavel" value="#{dialogConfigManager.tipoVariavel}"/>
 						</p:column>
@@ -99,9 +85,7 @@
 						</p:column>
 					</p:row>
 					<p:row>
-						<p:column>
-							<h:outputText value="Nome da Pasta"/>
-						</p:column>
+						<afirmanet:column value="Nome da Pasta"/>
 						<p:column>
 							<p:selectOneMenu id="txtLstPastaVariavel" value="#{dialogConfigManager.nomePasta}" effect="fold" editable="true" style="margin-top: 5px;">
             					<f:selectItem itemLabel="Informe ou selecione uma pasta" itemDisabled="true" />

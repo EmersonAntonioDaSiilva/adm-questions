@@ -52,9 +52,10 @@
 		<p:commandButton id="btCadastrar" value="Cadastrar" icon="ui-icon-circle-check" action="#{manager.insertPergunta}" update="@form" />
 		
 		<p:dataTable id="recordDetailCompositTable" widgetVar="recordDetailCompositTable" value="#{manager.perguntas}" var="pergunta" >
-			<p:column headerText="Pergunta">
+			<afirmanet:column headerText="Pergunta" value="#{pergunta.descricao}"/>
+			<!-- <p:column headerText="Pergunta">
 		        <h:outputText value="#{pergunta.descricao}" />
-		    </p:column>
+		    </p:column> -->
 			<p:column style="width: 30px;">
 				<p:commandButton id="btDeletar" title="Deletar" icon="ui-icon-trash" action="#{manager.deletePergunta(pergunta)}" immediate="true" update="@form"  />
 			</p:column>
