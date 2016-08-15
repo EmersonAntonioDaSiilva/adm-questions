@@ -202,7 +202,8 @@
       <analyzer type="index">
           <tokenizer class="solr.StandardTokenizerFactory"/>
           <filter class="solr.LowerCaseFilterFactory"/>
-          <filter class="solr.EnglishPossessiveFilterFactory"/>
+          <!--<filter class="solr.EnglishPossessiveFilterFactory"/>-->
+		  <filter class="solr.BrazilianStemFilterFactory"/>
           <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
           <filter class="solr.PorterStemFilterFactory"/>
       </analyzer>
@@ -213,7 +214,8 @@
           words="lang/stopwords_pt_br_v1.txt"
           />
           <filter class="solr.LowerCaseFilterFactory"/>
-          <filter class="solr.EnglishPossessiveFilterFactory"/>
+          <!--<filter class="solr.EnglishPossessiveFilterFactory"/>-->
+		  <filter class="solr.BrazilianStemFilterFactory"/>
           <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
           <filter class="solr.PorterStemFilterFactory"/>
       </analyzer>
@@ -381,7 +383,8 @@
                 words="lang/stopwords_pt_br_v1.txt"
                 />
         <filter class="solr.LowerCaseFilterFactory"/>
-	<filter class="solr.EnglishPossessiveFilterFactory"/>
+		<!--<filter class="solr.EnglishPossessiveFilterFactory"/>-->
+		<filter class="solr.BrazilianStemFilterFactory"/>
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
 	<!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
         <filter class="solr.EnglishMinimalStemFilterFactory"/>
@@ -396,7 +399,8 @@
                 words="lang/stopwords_pt_br_v1.txt"
                 />
         <filter class="solr.LowerCaseFilterFactory"/>
-	<filter class="solr.EnglishPossessiveFilterFactory"/>
+		<!--<filter class="solr.EnglishPossessiveFilterFactory"/>-->
+		<filter class="solr.BrazilianStemFilterFactory"/>
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
 	<!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
         <filter class="solr.EnglishMinimalStemFilterFactory"/>
@@ -455,7 +459,8 @@
         <filter class="solr.WordDelimiterFilterFactory" generateWordParts="0" generateNumberParts="0" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-        <filter class="solr.EnglishMinimalStemFilterFactory"/>
+        <!--<filter class="solr.EnglishMinimalStemFilterFactory"/>-->
+		<filter class="solr.BrazilianStemFilterFactory"/>
         <!-- this filter can remove any duplicate tokens that appear at the same position - sometimes
              possible with WordDelimiterFilter in conjuncton with stemming. -->
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
