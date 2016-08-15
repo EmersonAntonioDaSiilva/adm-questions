@@ -13,12 +13,62 @@
 
 	<ui:define name="content">
 		<h:form id="formDialogRH">
-			<p:panel header="Flow" toggleable="true" collapsed="true" toggleSpeed="500" widgetVar="flowPanel" style="margin-bottom:10px; text-align:left !important;">
+			<p:panel header="Flow" toggleable="true" toggleSpeed="500" collapsed="false" widgetVar="flowPanel" style="margin-bottom:10px; text-align:left !important;">
 				<p:panel header="Main" toggleable="true" toggleSpeed="500" widgetVar="mainPanel" style="margin-bottom:5px">
 				
 				</p:panel>
-				<p:panel header="Library" toggleable="true" toggleSpeed="500" widgetVar="libraryPanel" style="margin-bottom:5px">
-				
+				<p:panel header="Library" toggleable="true" toggleSpeed="500" collapsed="false" widgetVar="libraryPanel" style="margin-bottom:5px">
+					<p:panelGrid id="panelGridLibrary">
+						<p:row>
+							<p:column style="width: 140px;">
+								<h:outputText value="Identificação do bloco"/>
+							</p:column>
+							<p:column>
+								<p:inputText value="#{dialogConfigManager.idNo}"/>
+							</p:column>
+							<p:column>
+								<h:outputText value="Entrada"/>
+							</p:column>
+							<p:column>
+								<p:inputText value="#{dialogConfigManager.entrada}"/>
+							</p:column>
+							<p:column>
+								<h:outputText value="Saída"/>
+							</p:column>
+							<p:column>
+								<p:inputText value="#{dialogConfigManager.saida}"/>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="Nome da Pasta"/>
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="txtLstNomePastaLibrary" value="#{dialogConfigManager.nomePastaLibrary}" effect="fold" editable="true" style="margin-top: 5px;">
+									<f:selectItem itemLabel="Informe ou selecione a pasta" itemValue="" itemDisabled="true"/>
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<h:outputText value="Pular para"/>
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="lstNosLibrary" value="#{dialogConfigManager.goTo}" effect="fold">
+									<f:selectItem itemLabel="Selecione o nó a ser executado em seguida" itemValue="" itemDisabled="true"/>
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column/>
+							<p:column>
+								<p:commandButton id="btnIncluirNoLibrary" value="Adicionar à biblioteca" action="#{dialogConfigManager.incluirNoLibrary}" update=""/>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="6">
+								
+							</p:column>
+						</p:row>
+					</p:panelGrid>
 				</p:panel>
 				<p:panel header="Global" toggleable="true" toggleSpeed="500" widgetVar="globalPanel" style="margin-bottom:5px">
 				
@@ -46,24 +96,29 @@
 							<p:inputText id="txtTipoVariavel" value="#{dialogConfigManager.tipoVariavel}"/>
 						</p:column>
 						<p:column>
-							<p:commandButton id="btnIncluirVariavel" value="Incluir" action="#{dialogConfigManager.incluirVariavel}" update="panelgridVariables, txtNomeVariavel, txtTipoVariavel, txtLstPastaVariavel"/>
 						</p:column>
 					</p:row>
 					<p:row>
 						<p:column>
-							<h:outputText value="Pasta"/>
+							<h:outputText value="Nome da Pasta"/>
 						</p:column>
 						<p:column>
 							<p:selectOneMenu id="txtLstPastaVariavel" value="#{dialogConfigManager.nomePasta}" effect="fold" editable="true" style="margin-top: 5px;">
-            					<f:selectItem itemLabel="Informe ou selecione uma pasta" itemValue="" />
+            					<f:selectItem itemLabel="Informe ou selecione uma pasta" itemDisabled="true" />
             					<f:selectItems value="#{dialogConfigManager.listaPastas}"/>
         					</p:selectOneMenu>
 						</p:column>
 					</p:row>
 					<p:row>
+						<p:column/>
+						<p:column>
+							<p:commandButton id="btnIncluirVariavel" value="Incluir" action="#{dialogConfigManager.incluirVariavel}" update="panelgridVariables, txtNomeVariavel, txtTipoVariavel, txtLstPastaVariavel" style="margin-top: 5px; margin-left: 0px !important"/>
+						</p:column>
+					</p:row>
+					<p:row>
 						<p:column id="listaVariaveis" colspan="5">
 							<c:forEach items="#{dialogConfigManager.variables.varFolder}" var="varFolders">
-								<p:dataTable value="#{varFolders.var}" var="vars" scrollable="true" scrollHeight="200" style="margin-top: 5px;" >
+								<p:dataTable value="#{varFolders.var}" var="vars" scrollable="true" liveResize="true" style="margin-top: 5px;" >
 									<f:facet name="header">
            								#{varFolders.name}
        								</f:facet>
