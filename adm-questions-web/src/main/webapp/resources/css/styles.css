@@ -65,12 +65,25 @@ white-space: nowrap;
 	font-size: 1.4em !important; 
 	border: 0px solid !important; 
 	height: 30px !important; 
+	width: 100% !important; 
+	margin-top: 2px !important; 
+	color: #999 !important; 
+	margin-left: 10px !important;  
+	padding: 10px !important;
+}
+
+.txtPerguntaDialog {
+	background-color: #fff; 
+	font-size: 1.4em !important; 
+	border: 0px solid !important; 
+	height: 30px !important; 
 	width: 115.5% !important; 
 	margin-top: 2px !important; 
 	color: #999 !important; 
-	/* margin-left: 10px !important; */ 
 	padding: 10px !important;
 }
+
+
 
 .txtResposta{
 	background-color: #fff !important; 

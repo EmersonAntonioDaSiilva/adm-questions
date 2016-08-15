@@ -38,16 +38,17 @@
 package br.com.afirmanet.core.useragentutils;
 
 /**
- * Container for general version information.
- * All version information is stored as String as sometimes version information includes alphabetical characters.
+ * Container for general version information. All version information is stored
+ * as String as sometimes version information includes alphabetical characters.
+ * 
  * @author harald
  */
 public class Version implements Comparable<Version> {
-	
+
 	String version;
 	String majorVersion;
 	String minorVersion;
-	
+
 	public Version(String version, String majorVersion, String minorVersion) {
 		super();
 		this.version = version;
@@ -76,10 +77,8 @@ public class Version implements Comparable<Version> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((majorVersion == null) ? 0 : majorVersion.hashCode());
-		result = prime * result
-				+ ((minorVersion == null) ? 0 : minorVersion.hashCode());
+		result = prime * result + ((majorVersion == null) ? 0 : majorVersion.hashCode());
+		result = prime * result + ((minorVersion == null) ? 0 : minorVersion.hashCode());
 		result = prime * result + ((version == null) ? 0 : version.hashCode());
 		return result;
 	}
@@ -111,33 +110,33 @@ public class Version implements Comparable<Version> {
 		return true;
 	}
 
-        public int compareTo(Version other) {
-                if (other == null) {
-	            return 1;
-	        }
+	public int compareTo(Version other) {
+		if (other == null) {
+			return 1;
+		}
 
-	        String[] versionParts = version.split("\\.");
-	        String[] otherVersionParts = other.version.split("\\.");
+		String[] versionParts = version.split("\\.");
+		String[] otherVersionParts = other.version.split("\\.");
 
-	        for (int i = 0; i < Math.min(versionParts.length, otherVersionParts.length); i++) {
-	            if (versionParts[i].length() == otherVersionParts[i].length()) {
-	        	int comparisonResult = versionParts[i].compareTo(otherVersionParts[i]);
-	        	if (comparisonResult == 0) {
-	        	    continue;
-	        	} else {
-	        	    return comparisonResult;
-	        	}
-	            } else {
-	        	return versionParts[i].length() > otherVersionParts[i].length() ? 1 : -1;
-	            }
-	        }
+		for (int i = 0; i < Math.min(versionParts.length, otherVersionParts.length); i++) {
+			if (versionParts[i].length() == otherVersionParts[i].length()) {
+				int comparisonResult = versionParts[i].compareTo(otherVersionParts[i]);
+				if (comparisonResult == 0) {
+					continue;
+				} else {
+					return comparisonResult;
+				}
+			} else {
+				return versionParts[i].length() > otherVersionParts[i].length() ? 1 : -1;
+			}
+		}
 
-	        if (versionParts.length > otherVersionParts.length) {
-	            return 1;
-	        } else if (versionParts.length < otherVersionParts.length) {
-	            return -1;
-	        } else {
-	            return 0;
-	        }
-        }	
+		if (versionParts.length > otherVersionParts.length) {
+			return 1;
+		} else if (versionParts.length < otherVersionParts.length) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
 }

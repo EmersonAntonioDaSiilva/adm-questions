@@ -1,0 +1,257 @@
+﻿CREATE TABLE stop_words (
+	id_stop_words		integer	not null,
+	id_cliente		integer	not null,
+	descricao		varchar(50) not null
+	
+);
+
+ALTER TABLE public.stop_words OWNER TO question_magna;
+
+ALTER TABLE stop_words ADD PRIMARY KEY (id_stop_words);
+ALTER TABLE stop_words ADD CONSTRAINT stop_words_cliente FOREIGN KEY (id_cliente) REFERENCES clientes (id_cliente) MATCH FULL;
+
+CREATE SEQUENCE sq_stop_words
+    START WITH 0
+    INCREMENT BY 1
+    NO MAXVALUE
+    MINVALUE 0
+    CACHE 1;
+
+
+ALTER TABLE public.sq_stop_words OWNER TO question_magna;
+ALTER SEQUENCE sq_stop_words OWNED BY stop_words.id_stop_words;
+
+SELECT pg_catalog.setval('sq_stop_words', 0, true);
+
+
+ALTER TABLE stop_words ALTER COLUMN id_stop_words SET DEFAULT nextval('sq_stop_words'::regclass);
+
+REVOKE ALL ON SEQUENCE sq_stop_words FROM PUBLIC;
+REVOKE ALL ON SEQUENCE sq_stop_words FROM question_magna;
+GRANT ALL ON SEQUENCE sq_stop_words TO question_magna;
+GRANT SELECT,UPDATE ON SEQUENCE sq_stop_words TO PUBLIC;
+
+
+
+
+
+insert into stop_words(descricao, id_cliente) values('de', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('a', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('o', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('que', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('e', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('do', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('da', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('em', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('um', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('para', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('é', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('com', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('não', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('uma', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('os', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('no', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('se', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('na', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('por', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('mais', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('as', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('dos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('como', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('mas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('foi', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('ao', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('ele', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('das', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('à', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('seu', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('sua', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('ou', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('ser', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('quando', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('muito', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('há', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('nos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('já', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('está', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('eu', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('também', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('só', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('pelo', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('pela', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('até', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('isso', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('ela', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('entre', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('era', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('depois', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('sem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('mesmo', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('aos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('ter', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('seus', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('quem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('nas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('me', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('esse', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('eles', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estão', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('você', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tinha', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('foram', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('essa', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('num', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('nem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('suas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('meu', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('às', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('minha', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('têm', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('numa', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('pelos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('elas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('havia', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('seja', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('qual', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('será', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('nós', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tenho', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('lhe', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('deles', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('essas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('esses', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('pelas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('este', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('fosse', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('dele', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tu', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('te', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('vocês', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('vos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('lhes', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('meus', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('minhas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('teu', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tua', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('teus', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tuas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('nosso', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('nossa', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('nossos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('nossas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('dela', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('delas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('esta', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estes', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('aquele', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('aquela', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('aqueles', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('aquelas', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('isto', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('aquilo', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estou', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('está', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estão', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estive', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('esteve', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estivemos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estiveram', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estava', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estávamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estavam', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estivera', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estivéramos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('esteja', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estejamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estejam', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estivesse', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estivéssemos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estivessem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estiver', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estivermos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('estiverem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('hei', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('há', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('havemos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('hão', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houve', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houvemos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houveram', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houvera', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houvéramos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('haja', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('hajamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('hajam', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houvesse', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houvéssemos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houvessem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houver', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houvermos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houverem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houverei', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houverá', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houveremos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houverão', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houveria', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houveríamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('houveriam', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('sou', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('somos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('são', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('era', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('éramos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('eram', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('fui', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('foi', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('fomos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('foram', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('fora', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('fôramos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('seja', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('sejamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('sejam', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('fosse', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('fôssemos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('fossem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('for', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('formos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('forem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('serei', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('será', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('seremos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('serão', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('seria', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('seríamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('seriam', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tenho', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('temos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tém', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tinha', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tínhamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tinham', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tive', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('teve', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tivemos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tiveram', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tivera', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tivéramos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tenha', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tenhamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tenham', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tivesse', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tivéssemos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tivessem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tiver', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tivermos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('tiverem', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('terei', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('terá', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('teremos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('terão', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('teria', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('teríamos', (Select id_cliente from clientes where descricao = 'm.watson'));
+insert into stop_words(descricao, id_cliente) values('teriam', (Select id_cliente from clientes where descricao = 'm.watson'));

@@ -140,23 +140,23 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 		return retornoClassificacao;
 	}
 
-	public List<Classificacao> findByDataCadastroESentimento(LocalDate dataCadastro, Integer sentimento) {
+	public List<Classificacao> findByDataCadastroESentimento(Cliente cliente, Topico topico, LocalDate dataHIni, LocalDate dataHFim, Integer sentimento) {
 		
-		LocalDateTime dataHoraInicio = LocalDateTime.of(dataCadastro, LocalTime.MIN);
-		LocalDateTime dataHoraFim = LocalDateTime.of(dataCadastro, LocalTime.MAX);
+		LocalDateTime dataHoraInicio = LocalDateTime.of(dataHIni, LocalTime.MIN);
+		LocalDateTime dataHoraFim = LocalDateTime.of(dataHFim, LocalTime.MAX);
 		
-		return buscaDataCadastroSentimento(dataHoraInicio, dataHoraFim, sentimento);
+		return buscaDataCadastroSentimento(cliente, topico, dataHoraInicio, dataHoraFim, sentimento);
 	}
 	
-	public List<Classificacao> findByDataCadastroESentimento(LocalDateTime dataCadastro, Integer sentimento) {
+	public List<Classificacao> findByDataCadastroESentimento(Cliente cliente, Topico topico, LocalDateTime dataHIni, LocalDateTime dataHFim, Integer sentimento) {
 		
-		LocalDateTime dataHoraInicio = dataCadastro.of(dataCadastro.toLocalDate(), LocalTime.MIN);
-		LocalDateTime dataHoraFim = dataCadastro.of(dataCadastro.toLocalDate(), LocalTime.MAX);
+		LocalDateTime dataHoraInicio = LocalDateTime.of(dataHIni.toLocalDate(), LocalTime.MIN);
+		LocalDateTime dataHoraFim = LocalDateTime.of(dataHFim.toLocalDate(), LocalTime.MAX);
 		
-		return buscaDataCadastroSentimento(dataHoraInicio, dataHoraFim, sentimento);
+		return buscaDataCadastroSentimento(cliente, topico, dataHoraInicio, dataHoraFim, sentimento);
 	}
 	
-	private List<Classificacao> buscaDataCadastroSentimento(LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, Integer sentimento) {
+	private List<Classificacao> buscaDataCadastroSentimento(Cliente cliente, Topico topico, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, Integer sentimento) {
 		List<Classificacao> retornoClassificacao = null;
 		
 		try {
@@ -164,6 +164,8 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 			Collection<Predicate> predicates = new ArrayList<>();
 			Collection<Order> orders = new ArrayList<>();
 			
+			predicates.add(cb.equal(root.get("cliente"), cliente));
+			predicates.add(cb.equal(root.get("topico"), topico));
 			predicates.add(cb.equal(root.get("sentimento"), sentimento));
 			predicates.add(cb.between(root.get("dataCadastro"), dataHoraInicio, dataHoraFim));
 			

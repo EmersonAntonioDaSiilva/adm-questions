@@ -1,13 +1,8 @@
+*.class
 *.classpath
 *.factorypath
 *.project
 *.tern-project
-*.class
-*.DS_Store
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
 
 # Package Files #
 *.jar
@@ -15,11 +10,14 @@
 *.ear
 
 # Eclipse files
-.metadata/
-/RemoteSystemsTempFiles/
+*.settings/
+
 /target/
-.settings/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+<<<<<<< HEAD
 /.apt_generated/
+=======
+/bin/
+>>>>>>> f9e6d10398a4c3f234cb97fb9e5753b8f1bb0cc8

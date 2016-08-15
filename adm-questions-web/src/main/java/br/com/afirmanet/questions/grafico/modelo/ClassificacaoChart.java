@@ -28,7 +28,7 @@ public class ClassificacaoChart {
 	
 	
 	public String dataCadastroFormatada() {
-		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("MM/yyyy");
 		
 		return this.dataCadastro.format(pattern);
 	}

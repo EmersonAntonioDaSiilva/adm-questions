@@ -1,7 +1,7 @@
 ﻿CREATE TABLE classes (
 	id_classe		integer	not null,
 	id_cliente		integer	not null,
-	descricao		text not null
+	descricao		varchar(50) not null
 	
 );
 

@@ -18,16 +18,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 public abstract class WatsonServiceFactory  {
-	public static final Integer SENTIMENTO_POSITIVO = 1;
-	public static final Integer SENTIMENTO_IMPARCIAL = 0;
-	public static final Integer SENTIMENTO_NEGATIVO = -1;
-	public static final Integer SENTIMENTO_ENCONTRADA_NLC = 100;
-	public static final Integer SENTIMENTO_ENCONTRADA_DIALOG = 200;
-	public static final Integer SENTIMENTO_ENCONTRADA_RR = 300;
-
-	public static final double CONFIDENCE_MINIMO = ApplicationPropertiesUtils
-			.getValueAsDouble("index.manager.confidence.minimo");
-
+	
+	public static final Integer SENTIMENTO_POSITIVO = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.positivo");
+	public static final Integer SENTIMENTO_IMPARCIAL = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.imparcial");
+	public static final Integer SENTIMENTO_NEGATIVO = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.negativo");
+	public static final Integer SENTIMENTO_ENCONTRADA_NLC = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.encontrada.nlc");
+	public static final Integer SENTIMENTO_ENCONTRADA_DIALOG = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.encontrada.dialog");
+	public static final Integer SENTIMENTO_ENCONTRADA_RR = ApplicationPropertiesUtils.getValueAsInteger("watson.service.factory.sentimento.encontrada.rr");
+	
+	public static final double CONFIDENCE_MINIMO_NLC = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo.nlc");
+	public static final double CONFIDENCE_MINIMO_RR = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo.rr");
+	public static final String NAO_SE_APLICA = ApplicationPropertiesUtils.getValue("index.manager.nao.se.aplica");
+	
 	protected EntityManager entityManager;
 	
 	@Setter
@@ -57,18 +59,20 @@ public abstract class WatsonServiceFactory  {
 			credenciais = dadosWatsonDAO.findByClienteAndTypeServico(cliente, typeServico);
 			
 			if(TypeServicoEnum.NATURAL_LANGUAGE_CLASSIFIER.equals(typeServico)){
-				watsonService = new NaturalLanguageClassifier(credenciais.getUsuario(), credenciais.getSenha());
-				
+				watsonService = new NaturalLanguageClassifier();
+
 			}else if(TypeServicoEnum.DIALOG.equals(typeServico)){
-				watsonService = new DialogService(credenciais.getUsuario(), credenciais.getSenha());
+				watsonService = new DialogService();
 				
 			}else if(TypeServicoEnum.DOCUMENT_CONVERSION.equals(typeServico)){
 				watsonService = new DocumentConversion(DocumentConversion.VERSION_DATE_2015_12_01);
-				watsonService.setUsernameAndPassword(credenciais.getUsuario(), credenciais.getSenha());
 				
 			}else if(TypeServicoEnum.RETRIEVE_AND_RANK.equals(typeServico)){
-				watsonService = new RetrieveAndRank(credenciais.getUsuario(), credenciais.getSenha());
+				watsonService = new RetrieveAndRank();
 			}
+
+			watsonService.setUsernameAndPassword(credenciais.getUsuario(), credenciais.getSenha());
+			
 		} catch (Exception e) {
 			throw new ApplicationException(e.getMessage(), e); 
 		}
