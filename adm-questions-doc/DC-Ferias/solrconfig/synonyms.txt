@@ -12,10 +12,6 @@
 
 #-----------------------------------------------------------------------
 #some test synonym mappings unlikely to appear in real input text
-aaafoo => aaabar
-bbbfoo => bbbfoo bbbbar
-cccfoo => cccbar cccbaz
-fooaaa,baraaa,bazaaa
 
 # Some synonym groups specific to this example
 GB,gib,gigabyte,gigabytes
@@ -25,11 +21,18 @@ Termo,Termos,Frase,Frases,Texto,Textos
 Relevância,relevâncias,significado,significados
 Língua,Línguas,Idiomas,Idiomas
 Féria,Férias,Repouso,Gozo
-Acordo Pecuniário,1/3 Férias
+Acordo,Convenção,Permissão
+Pecuniário,Em dinheiro
 Abono,Garantia,Fiança
+Vender,Transferir,Negociar
+Pedir,Solicitar,Demandar,Requerer
+Acumular,Juntar
+Fracionar,Dividir
+Abonada,Justificada
 #notice we use "gib" instead of "GiB" so any WordDelimiterFilter coming
 #after us won't split it into two words.
 
 # Synonym mappings can be used for spelling correction too
-pixima => pixma
+idéia => ideia
+feria => féria
 
