@@ -12,7 +12,8 @@
 	
 	<ui:define name="content">
 		<h:form id="formQuestuionRH">
-			<p:panel id="searchFilter" header="Gerar Relatório" toggleable="false">
+			<p:panel id="searchFilter" header="Gerar Relatório de Classificação por Sentimento" toggleable="false">
+				
 				<afirmanet:selectOneMenu listener="#{relatorioClassificacaoManager.selecionarCliente}"
 										 value="#{manager.cliente}" 
 										 label="Cliente" required="true"
@@ -28,11 +29,14 @@
 										 width="150px">
 			            <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}"  />
 				</afirmanet:selectOneMenu>
+
+				<afirmanet:inputText label="Mês/Ano" 
+									 id="monthYear" 
+									 value="#{manager.monthYear}" 
+									 styleClass="monthYearPicker" 
+									 maxlength="100" 
+									 required="true" />
 				
-				<afirmanet:calendarMonthYear label="Mes Selecionado"
-									value="#{manager.dataInicioClassificacao}" 
-									required="true" />
-						 
 		        <p:commandButton action="#{manager.buscarClassificacao}" 
 								 style="margin: 10px auto;" 
 								 ajax="true"
@@ -56,7 +60,12 @@
 							 
 					<f:facet name="header">
 				        Sentimentos  
-				    </f:facet>	 
+				    </f:facet>	
+				    <p:column headerText="alterar">
+					    <p:inputSwitch value="#{classificacao.classificado}">
+				            <p:ajax listener="#{manager.adicionarAtualizacao(classificacao)}" update="@form" />
+				        </p:inputSwitch> 
+				    </p:column>
 					<p:column headerText="Pergunta" sortBy="#{classificacao.pergunta}">
         				<h:outputText value="#{classificacao.pergunta}" />
 				    </p:column>
@@ -72,8 +81,32 @@
 				        <h:outputLabel value=" %" />
 				    </p:column>
 				</p:dataTable>
-				
 			</p:panel>
+			
+			<script>
+				$(function() {
+					$('.monthYearPicker').datepicker({
+						changeMonth: true,
+						changeYear: true,
+						showButtonPanel: true,
+						dateFormat: 'MM yy',
+						monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+						monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],currentText: "Hoje", 
+						closeText: "confirmar"
+					}).focus(function() {
+						var thisCalendar = $(this);
+						$('.ui-datepicker-calendar').detach();
+						$('.ui-datepicker-close').click(function() {
+							var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+							var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+
+							thisCalendar.datepicker('setDate', new Date(year, month, 1));
+						});
+					});
+				});
+	  		</script>
 		</h:form>
+		
+		
 	</ui:define>
 </ui:composition>

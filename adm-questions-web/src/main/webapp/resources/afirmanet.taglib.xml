@@ -1,710 +1,711 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<facelet-taglib version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd">
- <namespace>http://afirmanet.com.br/componentes</namespace>
- <composite-library-name>cmp</composite-library-name>
- <tag>
-  <tag-name>inputMask</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/inputMask.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-  </attribute>
-  <attribute>
-   <description>Máscara a ser aplicada no conteúdo inserido no componente</description>
-   <name>mask</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
-  <attribute>
-   <description>Tamanho do componente em carcteres, altera o comprimento do componente, default é 20</description>
-   <name>size</name>
-  </attribute>
-  <attribute>
-   <description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente, default é 20</description>
-   <name>maxlength</name>
-  </attribute>
-  <attribute>
-   <description>Habilita ou não o ajax, default é true</description>
-   <name>disableAjax</name>
-  </attribute>
-  <attribute>
-   <description>Evento que irá disparar o request. O valor padrão é definido pelo componente que está envolvendo o componente ajax.</description>
-   <name>event</name>
-  </attribute>
-  <attribute>
-   <description>Componentes a atualizar com o ajax</description>
-   <name>update</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>inputText</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/inputText.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
-  <attribute>
-   <description>Tamanho do componente em carcteres, altera o comprimento do componente, default é 20</description>
-   <name>size</name>
-  </attribute>
-  <attribute>
-   <description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente, default é 20</description>
-   <name>maxlength</name>
-  </attribute>
-  <attribute>
-   <description>Para desabilitar o componente, default é (false)</description>
-   <name>disabled</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>inputNumber</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/inputText.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
-  <attribute>
-   <description>Tamanho do componente em carcteres, altera o comprimento do componente, default é 20</description>
-   <name>size</name>
-  </attribute>
-  <attribute>
-   <description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente, default é 20</description>
-   <name>maxlength</name>
-  </attribute>
-  <attribute>
-   <description>Para desabilitar o componente, default é (false)</description>
-   <name>disabled</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>inputTextarea</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/inputTextarea.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente outputText, default é 100px</description>
-   <name>width</name>
-  </attribute>
-  <attribute>
-   <description>Altura do componente inputTextarea, default é 80px</description>
-   <name>height</name>
-  </attribute>
-  <attribute>
-   <description>Especifíca o comprimento do componente, default é 100</description>
-   <name>cols</name>
-  </attribute>
-  <attribute>
-   <description>Especifíca a altura do componente, default é 20</description>
-   <name>rows</name>
-  </attribute>
-  <attribute>
-   <description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente</description>
-   <name>maxlength</name>
-   <type>java.lang.Integer</type>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>inputContainer</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/inputContainer.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>outputContainer</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/outputContainer.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>outputText</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/outputText.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>outputCpfCnpj</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/outputText.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>outputCurrency</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/outputCurrency.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>calendar</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/calendar.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>calendarMonthYear</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/calendarMonthYear.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>calendarYear</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/calendarYear.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>commandButtonConfirm</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/commandButtonConfirm.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Ação a ser executada pelo componente, pode conter uma String para redirecionamento de página ou ser ligada a um método de um managed bean</description>
-   <name>action</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Texto a ser exibido no cabeçalho da caixa de diálogo, default é (Atenção)</description>
-   <name>header</name>
-  </attribute>
-  <attribute>
-   <description>Texto a ser exibido no corpo da caixa de diálogo, default é (Confirma?)</description>
-   <name>message</name>
-  </attribute>
-  <attribute>
-   <description>Se (true) desabilita o botão, default é (false)</description>
-   <name>disabled</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>confirmDialog</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/confirmDialog.xhtml</resource-id>
-   <handler-class/>
-  </component>
- </tag>
- <tag>
-  <tag-name>dataTable</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/dataTable.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Texto a ser exibido no cabeçalho da tabela</description>
-   <name>header</name>
-  </attribute>
-  <attribute>
-   <description>Texto a ser exibido no rodapé da tabela</description>
-   <name>footer</name>
-  </attribute>
-  <attribute>
-   <description>Datasource do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Número de linha a ser exibido por página, default é (10), campo recebe valores inteiros</description>
-   <name>rows</name>
-   <type>java.lang.Integer</type>
-  </attribute>
-  <attribute>
-   <description>Texto a ser exibido quando não houver dados a exibir, default é (Nenhum resultado encontrado)</description>
-   <name>emptyMessage</name>
-   <type>java.lang.String</type>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>noResult</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/noResult.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Texto a ser exibido quando não houver dados a exibir, default é (Nenhum resultado encontrado)</description>
-   <name>emptyMessage</name>
-   <type>java.lang.String</type>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>radioBoolean</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/radioBoolean.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>selectOneMenu</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/selectOneMenu.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Método a ser processado em request parcial</description>
-   <name>listener</name>
-   <method-signature>void listener()</method-signature>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
-  <attribute>
-   <description>Item Label do componente, default é Selecione aqui...</description>
-   <name>itemLabel</name>
-  </attribute>
-  <attribute>
-   <description>Propriedade para informar se o componente esta desabilitado ou não, default é false</description>
-   <name>disabled</name>
-  </attribute>
- </tag>
- <!--Definição dos componentes internos utilizados em DataTable's -->
- <tag>
-  <tag-name>column</tag-name>
-  <source>cmp/column.xhtml</source>
-  <attribute>
-   <description>Column header</description>
-   <name>headerText</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Column value</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>CSS class</description>
-   <name>styleClass</name>
-  </attribute>
-  <attribute>
-   <description>Rendered</description>
-   <name>rendered</name>
-  </attribute>
-  <attribute>
-   <description>Style</description>
-   <name>style</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>columnCpfCnpj</tag-name>
-  <source>cmp/columnCpfCnpj.xhtml</source>
-  <attribute>
-   <description>Column header</description>
-   <name>headerText</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Column value</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>CSS class</description>
-   <name>styleClass</name>
-  </attribute>
-  <attribute>
-   <description>Rendered</description>
-   <name>rendered</name>
-  </attribute>
-  <attribute>
-   <description>Style</description>
-   <name>style</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>columnNumber</tag-name>
-  <source>cmp/columnNumber.xhtml</source>
-  <attribute>
-   <description>Column header</description>
-   <name>headerText</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Column value</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Rendered</description>
-   <name>rendered</name>
-  </attribute>
-  <attribute>
-   <description>Style</description>
-   <name>style</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>columnCurrency</tag-name>
-  <source>cmp/columnCurrency.xhtml</source>
-  <attribute>
-   <description>Column header</description>
-   <name>headerText</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Column value</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Rendered</description>
-   <name>rendered</name>
-  </attribute>
-  <attribute>
-   <description>Style</description>
-   <name>style</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>columnDate</tag-name>
-  <source>cmp/columnDate.xhtml</source>
-  <attribute>
-   <description>Column header</description>
-   <name>headerText</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Column value</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Rendered</description>
-   <name>rendered</name>
-  </attribute>
-  <attribute>
-   <description>Style</description>
-   <name>style</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>columnDateTime</tag-name>
-  <source>cmp/columnDateTime.xhtml</source>
-  <attribute>
-   <description>Column header</description>
-   <name>headerText</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Column value</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Rendered</description>
-   <name>rendered</name>
-  </attribute>
-  <attribute>
-   <description>Style</description>
-   <name>style</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>outputPhone</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/outputPhone.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
- </tag>
- <tag>
-  <tag-name>inputMail</tag-name>
-  <component>
-   <component-type/>
-   <resource-id>cmp/inputMail.xhtml</resource-id>
-   <handler-class/>
-  </component>
-  <attribute>
-   <description>Label que referencia o componente</description>
-   <name>label</name>
-   <required>true</required>
-  </attribute>
-  <attribute>
-   <description>Valor do componente</description>
-   <name>value</name>
-  </attribute>
-  <attribute>
-   <description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
-   <name>required</name>
-  </attribute>
-  <attribute>
-   <description>Comprimento do componente, default é 100px</description>
-   <name>width</name>
-  </attribute>
-  <attribute>
-   <description>Tamanho do componente em carcteres, altera o comprimento do componente, default é 30</description>
-   <name>size</name>
-  </attribute>
-  <attribute>
-   <description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente, default é 50</description>
-   <name>maxlength</name>
-  </attribute>
-  <attribute>
-   <description>Para desabilitar o componente, default é (false)</description>
-   <name>disabled</name>
-  </attribute>
- </tag>
+<facelet-taglib version="2.2"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facelettaglibrary_2_2.xsd">
+	<namespace>http://afirmanet.com.br/componentes</namespace>
+	<composite-library-name>cmp</composite-library-name>
+	<tag>
+		<tag-name>inputMask</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/inputMask.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+		</attribute>
+		<attribute>
+			<description>Máscara a ser aplicada no conteúdo inserido no componente</description>
+			<name>mask</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+		<attribute>
+			<description>Tamanho do componente em carcteres, altera o comprimento do componente, default é 20</description>
+			<name>size</name>
+		</attribute>
+		<attribute>
+			<description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente, default é 20</description>
+			<name>maxlength</name>
+		</attribute>
+		<attribute>
+			<description>Habilita ou não o ajax, default é true</description>
+			<name>disableAjax</name>
+		</attribute>
+		<attribute>
+			<description>Evento que irá disparar o request. O valor padrão é definido pelo componente que está envolvendo o componente ajax.</description>
+			<name>event</name>
+		</attribute>
+		<attribute>
+			<description>Componentes a atualizar com o ajax</description>
+			<name>update</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>inputText</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/inputText.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+		<attribute>
+			<description>Tamanho do componente em carcteres, altera o comprimento do componente, default é 20</description>
+			<name>size</name>
+		</attribute>
+		<attribute>
+			<description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente, default é 20</description>
+			<name>maxlength</name>
+		</attribute>
+		<attribute>
+			<description>Para desabilitar o componente, default é (false)</description>
+			<name>disabled</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>inputNumber</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/inputText.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+		<attribute>
+			<description>Tamanho do componente em carcteres, altera o comprimento do componente, default é 20</description>
+			<name>size</name>
+		</attribute>
+		<attribute>
+			<description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente, default é 20</description>
+			<name>maxlength</name>
+		</attribute>
+		<attribute>
+			<description>Para desabilitar o componente, default é (false)</description>
+			<name>disabled</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>inputTextarea</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/inputTextarea.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente outputText, default é 100px</description>
+			<name>width</name>
+		</attribute>
+		<attribute>
+			<description>Altura do componente inputTextarea, default é 80px</description>
+			<name>height</name>
+		</attribute>
+		<attribute>
+			<description>Especifíca o comprimento do componente, default é 100</description>
+			<name>cols</name>
+		</attribute>
+		<attribute>
+			<description>Especifíca a altura do componente, default é 20</description>
+			<name>rows</name>
+		</attribute>
+		<attribute>
+			<description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente</description>
+			<name>maxlength</name>
+			<type>java.lang.Integer</type>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>inputContainer</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/inputContainer.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>outputContainer</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/outputContainer.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>outputText</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/outputText.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>outputCpfCnpj</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/outputText.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>outputCurrency</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/outputCurrency.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>calendar</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/calendar.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>calendarMonthYear</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/calendarMonthYear.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>calendarYear</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/calendarYear.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>commandButtonConfirm</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/commandButtonConfirm.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Ação a ser executada pelo componente, pode conter uma String para redirecionamento de página ou ser ligada a um método de um managed bean</description>
+			<name>action</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Texto a ser exibido no cabeçalho da caixa de diálogo, default é (Atenção)</description>
+			<name>header</name>
+		</attribute>
+		<attribute>
+			<description>Texto a ser exibido no corpo da caixa de diálogo, default é (Confirma?)</description>
+			<name>message</name>
+		</attribute>
+		<attribute>
+			<description>Se (true) desabilita o botão, default é (false)</description>
+			<name>disabled</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>confirmDialog</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/confirmDialog.xhtml</resource-id>
+			<handler-class />
+		</component>
+	</tag>
+	<tag>
+		<tag-name>dataTable</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/dataTable.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Texto a ser exibido no cabeçalho da tabela</description>
+			<name>header</name>
+		</attribute>
+		<attribute>
+			<description>Texto a ser exibido no rodapé da tabela</description>
+			<name>footer</name>
+		</attribute>
+		<attribute>
+			<description>Datasource do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Número de linha a ser exibido por página, default é (10), campo recebe valores inteiros</description>
+			<name>rows</name>
+			<type>java.lang.Integer</type>
+		</attribute>
+		<attribute>
+			<description>Texto a ser exibido quando não houver dados a exibir, default é (Nenhum resultado encontrado)</description>
+			<name>emptyMessage</name>
+			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>noResult</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/noResult.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Texto a ser exibido quando não houver dados a exibir, default é (Nenhum resultado encontrado)</description>
+			<name>emptyMessage</name>
+			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>radioBoolean</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/radioBoolean.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>selectOneMenu</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/selectOneMenu.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Método a ser processado em request parcial</description>
+			<name>listener</name>
+			<method-signature>void listener()</method-signature>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+		<attribute>
+			<description>Item Label do componente, default é Selecione aqui...</description>
+			<name>itemLabel</name>
+		</attribute>
+		<attribute>
+			<description>Propriedade para informar se o componente esta desabilitado ou não, default é false</description>
+			<name>disabled</name>
+		</attribute>
+	</tag>
+	<!--Definição dos componentes internos utilizados em DataTable's -->
+	<tag>
+		<tag-name>column</tag-name>
+		<source>cmp/column.xhtml</source>
+		<attribute>
+			<description>Column header</description>
+			<name>headerText</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Column value</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>CSS class</description>
+			<name>styleClass</name>
+		</attribute>
+		<attribute>
+			<description>Rendered</description>
+			<name>rendered</name>
+		</attribute>
+		<attribute>
+			<description>Style</description>
+			<name>style</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>columnCpfCnpj</tag-name>
+		<source>cmp/columnCpfCnpj.xhtml</source>
+		<attribute>
+			<description>Column header</description>
+			<name>headerText</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Column value</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>CSS class</description>
+			<name>styleClass</name>
+		</attribute>
+		<attribute>
+			<description>Rendered</description>
+			<name>rendered</name>
+		</attribute>
+		<attribute>
+			<description>Style</description>
+			<name>style</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>columnNumber</tag-name>
+		<source>cmp/columnNumber.xhtml</source>
+		<attribute>
+			<description>Column header</description>
+			<name>headerText</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Column value</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Rendered</description>
+			<name>rendered</name>
+		</attribute>
+		<attribute>
+			<description>Style</description>
+			<name>style</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>columnCurrency</tag-name>
+		<source>cmp/columnCurrency.xhtml</source>
+		<attribute>
+			<description>Column header</description>
+			<name>headerText</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Column value</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Rendered</description>
+			<name>rendered</name>
+		</attribute>
+		<attribute>
+			<description>Style</description>
+			<name>style</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>columnDate</tag-name>
+		<source>cmp/columnDate.xhtml</source>
+		<attribute>
+			<description>Column header</description>
+			<name>headerText</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Column value</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Rendered</description>
+			<name>rendered</name>
+		</attribute>
+		<attribute>
+			<description>Style</description>
+			<name>style</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>columnDateTime</tag-name>
+		<source>cmp/columnDateTime.xhtml</source>
+		<attribute>
+			<description>Column header</description>
+			<name>headerText</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Column value</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Rendered</description>
+			<name>rendered</name>
+		</attribute>
+		<attribute>
+			<description>Style</description>
+			<name>style</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>outputPhone</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/outputPhone.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+	</tag>
+	<tag>
+		<tag-name>inputMail</tag-name>
+		<component>
+			<component-type />
+			<resource-id>cmp/inputMail.xhtml</resource-id>
+			<handler-class />
+		</component>
+		<attribute>
+			<description>Label que referencia o componente</description>
+			<name>label</name>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<description>Valor do componente</description>
+			<name>value</name>
+		</attribute>
+		<attribute>
+			<description>Obrigatoriedade de preenchimento do componente, default é (false)</description>
+			<name>required</name>
+		</attribute>
+		<attribute>
+			<description>Comprimento do componente, default é 100px</description>
+			<name>width</name>
+		</attribute>
+		<attribute>
+			<description>Tamanho do componente em carcteres, altera o comprimento do componente, default é 30</description>
+			<name>size</name>
+		</attribute>
+		<attribute>
+			<description>Quantidade máxima de caracteres do componente, não altera o comprimento do componente, default é 50</description>
+			<name>maxlength</name>
+		</attribute>
+		<attribute>
+			<description>Para desabilitar o componente, default é (false)</description>
+			<name>disabled</name>
+		</attribute>
+	</tag>
 </facelet-taglib>

@@ -1,13 +1,20 @@
 package br.com.afirmanet.questions.manager.application.additional;
 
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -23,6 +30,7 @@ import org.primefaces.model.chart.ChartSeries;
 
 import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.questions.constante.MesEnum;
 import br.com.afirmanet.questions.constante.RelatorioClassificacaoEnum;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
 import br.com.afirmanet.questions.dao.ClienteDAO;
@@ -66,10 +74,6 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	private List<Resposta> lstResposta;
 
 	@Getter
-	@Setter
-	private LocalDate dataInicioClassificacao;
-
-	@Getter
 	private BarChartModel barModel;
 
 	private int valorMaximoEixoY;
@@ -77,11 +81,37 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	@Inject
 	@ApplicationManaged
 	private EntityManager entityManager;
+	
+	
+	@Getter
+	private List<MesEnum> lstMes;
+	
+	@Getter
+	private List<Year> lstAno;
+	
+	private List<Classificacao> lstClassificacaoUpdate;
+	
+	@Getter
+	@Setter
+	private String monthYear;
 
 	@PostConstruct
 	public void inicializar() {
 		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
-		lstCliente = clienteDAO.findAll();
+		this.lstCliente = clienteDAO.findAll();
+		this.lstMes = MesEnum.getMeses();
+		obterListaAnos();
+	}
+
+	private void obterListaAnos() {
+		int year = Year.now().getValue();
+		
+		lstAno = new ArrayList<>();
+		int cinquentaAnosAtras = year - 50;
+		
+		for (int i = year; i > cinquentaAnosAtras; i--) {
+			lstAno.add(Year.of(i));
+		}
 	}
 
 	private void createBarModel() {
@@ -97,21 +127,26 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		Axis yAxis = barModel.getAxis(AxisType.Y);
 		yAxis.setLabel("Quantidade de Sentimentos");
 		yAxis.setMin(0);
-		yAxis.setMax(this.valorMaximoEixoY);
+		yAxis.setMax(this.valorMaximoEixoY + this.valorMaximoEixoY / 2);
 	}
 
 	private BarChartModel initBarModel() {
 		BarChartModel model = new BarChartModel();
-
-		LocalDate dtFim = LocalDate.of(dataInicioClassificacao.getYear(), dataInicioClassificacao.getMonth(), dataInicioClassificacao.getDayOfMonth()).plusMonths(1);
-		dtFim = LocalDate.of(dtFim.getYear(), dtFim.getMonth(), 1).minusDays(1);
-
 		
-		ChartSeries positivos = countPorData(dataInicioClassificacao, dtFim,
+		String[] monthYearTexto = monthYear.split(" ");
+		String month = monthYearTexto[0];
+		
+		MesEnum mesEnum = lstMes.stream().filter(m -> m.getDescricao().equals(month)).findFirst().get();
+		Integer year = Integer.parseInt(monthYearTexto[1]);
+		
+		LocalDate dtIni = LocalDate.of(year, mesEnum.getCodigo(), 1);
+		LocalDate dtFim = LocalDate.of(year, mesEnum.getCodigo(), 1).plusMonths(1).minusDays(1);
+		
+		ChartSeries positivos = countPorData(dtIni, dtFim,
 				RelatorioClassificacaoEnum.SENTIMENTO_POSITIVO);
-		ChartSeries negativos = countPorData(dataInicioClassificacao, dtFim,
+		ChartSeries negativos = countPorData(dtIni, dtFim,
 				RelatorioClassificacaoEnum.SENTIMENTO_NEGATIVO);
-		ChartSeries imparciais = countPorData(dataInicioClassificacao, dtFim,
+		ChartSeries imparciais = countPorData(dtIni, dtFim,
 				RelatorioClassificacaoEnum.SENTIMENTO_IMPARCIAL);
 
 		model.addSeries(positivos);
@@ -135,7 +170,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 			Map<String, Integer> collect = classificacao.stream().collect(Collectors.groupingBy(
 					Classificacao::getDataCadastroFormatMesAno, Collectors.summingInt(Classificacao::getRegistro)));
 			
-			collect.forEach((Data, size) -> retorno.set(Data, size));
+			collect.forEach((data, size) -> retorno.set(data, size));
 
 			if(classificacao.size() > this.valorMaximoEixoY) {
 				this.valorMaximoEixoY = classificacao.size();
@@ -193,6 +228,22 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
 		this.lstClassificaoChart = classificacaoDAO.findByDataCadastroESentimento(cliente, topico, dtInicio, dtFim,
 				sentimento);
-
+	}
+	
+	public void adicionarAtualizacao(Classificacao classificacao) {	
+		if(classificacao.isClassificado()) {
+			classificacao.setDataClassificacao(LocalDateTime.now());
+			
+			if(this.lstClassificacaoUpdate == null) {
+				this.lstClassificacaoUpdate = new ArrayList<>();
+			}
+			this.lstClassificacaoUpdate.add(classificacao);
+		}
+	}
+	
+	public void adicionarModificacoes() {
+		ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
+		
+		classificacaoDAO.update(this.lstClassificacaoUpdate);
 	}
 }

@@ -56,6 +56,9 @@ public class Classificacao implements Serializable {
 	private Topico topico;	
 	
 	@Transient
+	private boolean classificado;
+	
+	@Transient
 	public String getDataCadastroFormatMesAno(){
 		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("MM/yyyy");
 		
