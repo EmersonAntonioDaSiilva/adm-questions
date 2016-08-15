@@ -38,7 +38,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		Classificacao classificacaoEntity = new Classificacao();
 
 		classificacaoEntity.setDataCadastro(LocalDateTime.now());
-		classificacaoEntity.setConfidence(CONFIDENCE_MINIMO_NLC);
+		classificacaoEntity.setConfidence(classificacao.getTopConfidence());
 		classificacaoEntity.setPergunta(classificacao.getText());
 		classificacaoEntity.setResposta(classificacao.getTopClass());
 		classificacaoEntity.setSentimento(sentimento);

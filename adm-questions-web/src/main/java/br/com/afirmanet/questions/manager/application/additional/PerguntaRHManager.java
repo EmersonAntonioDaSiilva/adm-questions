@@ -71,6 +71,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 	@Getter
 	private List<Topico> lstTopico;
 
+	private ServiceRetrieveAndRank serviceRetrieveAndRank;
 	private ServiceNLC service;
 	private Cliente cliente;
 	private Topico topico;
@@ -82,6 +83,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 			cliente = clieteDAO.findByNome("m.watson");
 
 			service = new ServiceNLC(cliente, entityManager);
+			serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
 
 			TopicoDAO topicoDAO = new TopicoDAO(entityManager);
 			lstTopico = topicoDAO.findbyCliente(cliente);
@@ -127,8 +129,6 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 	private boolean searchRetrieve(String pergunta) {
 		Boolean retorno = Boolean.FALSE;
 		try {
-			ServiceRetrieveAndRank serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
-
 			QueryResponse queryResponse = serviceRetrieveAndRank.searchAllDocs(pergunta);
 
 			SolrDocumentList results = queryResponse.getResults();
