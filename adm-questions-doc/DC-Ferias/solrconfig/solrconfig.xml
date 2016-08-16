@@ -466,7 +466,7 @@
 
 
 <queryParser name="fcQueryParser" class="com.ibm.watson.hector.plugins.qparser.WatsonFCQParser">
-    <str name="textFieldTypes">watson_text_en</str>
+    <str name="textFieldTypes">watson_text_pt_br</str>
 </queryParser>
 <searchComponent name="fcFeatureGenerator" class="com.ibm.watson.hector.plugins.ss.FCFeatureGeneratorComponent" />
 

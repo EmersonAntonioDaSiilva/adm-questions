@@ -60,6 +60,7 @@ import com.google.common.base.Splitter;
 import br.com.afirmanet.core.enumeration.OrderEnum;
 import br.com.afirmanet.core.enumeration.SearchRestrictionEnum;
 import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.util.DateUtils;
 import br.com.afirmanet.core.util.PropertiesUtils;
 import br.com.afirmanet.core.util.ReflectionUtils;
@@ -165,13 +166,13 @@ public class GenericDAO<T, ID extends Serializable> {
 	 * EVENT SAVE
 	 *-----------------------------------------------------------------------*/
 
-	public T save(T entity) {
+	public T save(T entity) throws DaoException {
 		try {
 			entityManager.persist(entity);
 			return entity;
 		} catch (Exception e) {
 			String message = PropertiesUtils.getValue(properties,"br.com.afirmanet.faces.message.INTERNAL_ERROR_SAVE");
-			throw new ApplicationException(message, e);
+			throw new DaoException(message, e);
 		}
 	}
 
@@ -244,7 +245,7 @@ public class GenericDAO<T, ID extends Serializable> {
 	 * EVENT DELETE
 	 *-----------------------------------------------------------------------*/
 
-	public int deleteById(ID id) {
+	public int deleteById(ID id) throws DaoException {
 		try {
 			Query query = entityManager.createQuery("DELETE FROM " + entityClass.getSimpleName() + " WHERE id = :id");
 			query.setParameter("id", id);
@@ -252,7 +253,7 @@ public class GenericDAO<T, ID extends Serializable> {
 			return query.executeUpdate();
 		} catch (Exception e) {
 			String message = PropertiesUtils.getValue(properties,"br.com.afirmanet.faces.message.INTERNAL_ERROR_DELETE");
-			throw new ApplicationException(message, e);
+			throw new DaoException(message, e);
 
 		}
 	}
@@ -536,7 +537,7 @@ public class GenericDAO<T, ID extends Serializable> {
 	 * EVENT PAGINATION
 	 *-----------------------------------------------------------------------*/
 
-	public Collection<Predicate> createPaginationPredicates(T searchParam) {
+	public Collection<Predicate> createPaginationPredicates(T searchParam) throws PersistenceException  {
 		Collection<Predicate> predicates = new ArrayList<>();
 
 		try {
