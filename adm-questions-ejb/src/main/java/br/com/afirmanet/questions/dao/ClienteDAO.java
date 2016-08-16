@@ -15,6 +15,7 @@ import javax.persistence.criteria.Predicate;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 
@@ -51,8 +52,8 @@ public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implemen
 	}
 
 
-	public Cliente findByNome(String descricao) {
-		Cliente retornoInsumo = null;
+	public Cliente findByNome(String descricao) throws DaoException {
+		Cliente retornoCliente = null;
 		
 		try {
 			CriteriaQuery<Cliente> criteriaQuery = createCriteriaQuery();
@@ -65,12 +66,12 @@ public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implemen
 			if(!predicates.isEmpty()){
 				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
 
-				retornoInsumo = entityManager.createQuery(criteriaQuery).getSingleResult();
+				retornoCliente = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(), e);
 		}
-		return retornoInsumo;
+		return retornoCliente;
 
 	}
 }

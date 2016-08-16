@@ -183,7 +183,6 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 					
 					RespostaDAO respostaDAO = new RespostaDAO(entityManager);
 					resposta = respostaDAO.findByDescricao(topClass);
-
 				}
 			}
 		} catch (JsonSyntaxException e) {

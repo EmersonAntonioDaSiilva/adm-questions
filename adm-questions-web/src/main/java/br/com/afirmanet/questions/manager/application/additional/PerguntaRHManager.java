@@ -21,6 +21,7 @@ import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Class
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classifiers;
 
 import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.questions.dao.ClienteDAO;
@@ -72,7 +73,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 	private List<Topico> lstTopico;
 
 	private ServiceRetrieveAndRank serviceRetrieveAndRank;
-	private ServiceNLC service;
+	private ServiceNLC serviceNLC;
 	private Cliente cliente;
 	private Topico topico;
 
@@ -82,7 +83,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 			ClienteDAO clieteDAO = new ClienteDAO(entityManager);
 			cliente = clieteDAO.findByNome("m.watson");
 
-			service = new ServiceNLC(cliente, entityManager);
+			serviceNLC = new ServiceNLC(cliente, entityManager);
 			serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
 
 			TopicoDAO topicoDAO = new TopicoDAO(entityManager);
@@ -99,30 +100,34 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 	public void btPergunta(){
 		limparVariaveis();
 		
-		if(pergunta != null &&  !"".equals(pergunta)){
-			classificacao = service.getService().classify(getIdClassificacao(), pergunta);
-			
-			if (classificacao.getClasses().get(0).getConfidence().compareTo(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC) == -1) {
-				service.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
-				this.likeBox = false;
+		try {
+			if(pergunta != null &&  !"".equals(pergunta)){
+				classificacao = serviceNLC.getService().classify(getIdClassificacao(), pergunta);
 				
-				if(!WatsonServiceFactory.NAO_SE_APLICA.equals(classificacao.getClasses().get(0).getName()) && classificacao.getClasses().get(0).getConfidence().compareTo(WatsonServiceFactory.CONFIDENCE_MINIMO_RR) == 1){
-					if(!searchRetrieve(pergunta)){
+				if (classificacao.getClasses().get(0).getConfidence().compareTo(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC) == -1) {
+					serviceNLC.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
+					this.likeBox = false;
+					
+					if(!WatsonServiceFactory.NAO_SE_APLICA.equals(classificacao.getClasses().get(0).getName()) && classificacao.getClasses().get(0).getConfidence().compareTo(WatsonServiceFactory.CONFIDENCE_MINIMO_RR) == 1){
+						if(!searchRetrieve(pergunta)){
+							definicao = RESPOSTA_PADRAO;
+							definicao += " No momento tenho conhecimento apenas deste tópico = " + topico.getDescricao();
+						}
+					}else{
 						definicao = RESPOSTA_PADRAO;
 						definicao += " No momento tenho conhecimento apenas deste tópico = " + topico.getDescricao();
 					}
-				}else{
-					definicao = RESPOSTA_PADRAO;
-					definicao += " No momento tenho conhecimento apenas deste tópico = " + topico.getDescricao();
+				} else {
+					serviceNLC.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_ENCONTRADA_NLC);
+					
+					resposta = classificacao.getTopClass();
+					RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+					definicao = respostaDAO.findByDescricao(resposta);
+					this.likeBox = true;
 				}
-			} else {
-				service.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_ENCONTRADA_NLC);
-				
-				resposta = classificacao.getTopClass();
-				RespostaDAO respostaDAO = new RespostaDAO(entityManager);
-				definicao = respostaDAO.findByDescricao(resposta);
-				this.likeBox = true;
 			}
+		} catch (DaoException e) {
+			addErrorMessage(e.getMessage(), e);
 		}
 	}
 
@@ -150,7 +155,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 
 	@Transactional
 	public void sentimentoImparcial() {
-		service.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_IMPARCIAL);
+		serviceNLC.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_IMPARCIAL);
 		limparVariaveis();
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.addMessage("sentimentoMessage",
@@ -161,7 +166,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 
 	@Transactional
 	public void sentimentoPositivo() {
-		service.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_POSITIVO);
+		serviceNLC.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_POSITIVO);
 		limparVariaveis();
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.addMessage("sentimentoMessage",
@@ -179,7 +184,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 	private String getIdClassificacao() {
 		Classifiers classifiers;
 		try {
-			classifiers = service.getService().getClassifiers();
+			classifiers = serviceNLC.getService().getClassifiers();
 			List<Classifier> lstClassifiers = classifiers.getClassifiers();
 			Classifier classifier = lstClassifiers.get(0);
 
