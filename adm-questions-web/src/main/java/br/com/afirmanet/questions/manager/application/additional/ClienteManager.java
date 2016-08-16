@@ -7,7 +7,6 @@ import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
 
 import br.com.afirmanet.core.exception.ApplicationException;
-import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.manager.GenericCRUD;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.entity.Cliente;
@@ -31,19 +30,13 @@ public class ClienteManager extends GenericCRUD<Cliente, Integer, ClienteDAO> im
 	protected void beforeUpdate() {
 		validarDados();
 	}
-	
 
-	
 	private void validarDados() {
-		try {
-			ClienteDAO clienteDAO = new ClienteDAO(entityManager);
-			Cliente byDescricao = clienteDAO.findByNome(entity.getDescricao());
-			
-			if(byDescricao != null && !entity.equals(byDescricao)){
-				throw new ApplicationException("Já existe um registro em Cliente com esta Descição: " + entity.getDescricao());
-			}
-		} catch (Exception e) {
-			addErrorMessage(e.getMessage(), e);
+		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
+		Cliente byDescricao = clienteDAO.findByNome(entity.getDescricao());
+		
+		if(byDescricao != null && !entity.equals(byDescricao)){
+			throw new ApplicationException("Já existe um registro em Cliente com esta Descição: " + entity.getDescricao());
 		}
 	}
 }
