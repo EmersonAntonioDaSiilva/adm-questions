@@ -615,3 +615,7 @@ button.ui-state-disabled,.ui-widget-content button.ui-state-disabled,.ui-widget-
 	font-weight: bold;
 	color: black;
 }
+
+.ui-datepicker-calendar {
+    display: none;
+}

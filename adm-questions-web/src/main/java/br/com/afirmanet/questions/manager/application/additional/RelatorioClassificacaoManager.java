@@ -2,7 +2,9 @@ package br.com.afirmanet.questions.manager.application.additional;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,9 +12,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import org.omnifaces.cdi.ViewScoped;
 import org.primefaces.event.ItemSelectEvent;
@@ -23,13 +28,16 @@ import org.primefaces.model.chart.ChartSeries;
 
 import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
+import br.com.afirmanet.questions.constante.MesEnum;
 import br.com.afirmanet.questions.constante.RelatorioClassificacaoEnum;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
 import br.com.afirmanet.questions.dao.ClienteDAO;
+import br.com.afirmanet.questions.dao.PerguntaDAO;
 import br.com.afirmanet.questions.dao.RespostaDAO;
 import br.com.afirmanet.questions.dao.TopicoDAO;
 import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.Pergunta;
 import br.com.afirmanet.questions.entity.Resposta;
 import br.com.afirmanet.questions.entity.Topico;
 import lombok.Getter;
@@ -60,14 +68,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	private List<Topico> lstTopico;
 
 	@Getter
-	private List<Classificacao> lstClassificaoChart;
-
-	@Getter
 	private List<Resposta> lstResposta;
-
-	@Getter
-	@Setter
-	private LocalDate dataInicioClassificacao;
 
 	@Getter
 	private BarChartModel barModel;
@@ -77,11 +78,28 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	@Inject
 	@ApplicationManaged
 	private EntityManager entityManager;
+	
+	
+	@Getter
+	private List<MesEnum> lstMes;
+	
+	@Getter
+	@Setter
+	private List<Classificacao> lstClassificaoChart;
+	
+	@Getter
+	@Setter
+	private List<Classificacao> lstClassificacaoUpdate;
+	
+	@Getter
+	@Setter
+	private String monthYear;
 
 	@PostConstruct
 	public void inicializar() {
 		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
-		lstCliente = clienteDAO.findAll();
+		this.lstCliente = clienteDAO.findAll();
+		this.lstMes = MesEnum.getMeses();
 	}
 
 	private void createBarModel() {
@@ -97,7 +115,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		Axis yAxis = barModel.getAxis(AxisType.Y);
 		yAxis.setLabel("Quantidade de Sentimentos");
 		yAxis.setMin(0);
-		
+
 		Integer max = this.valorMaximoEixoY;
 		if(this.valorMaximoEixoY > 0)
 			max =  (int) (this.valorMaximoEixoY + (this.valorMaximoEixoY * 0.10));
@@ -107,16 +125,21 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 
 	private BarChartModel initBarModel() {
 		BarChartModel model = new BarChartModel();
-
-		LocalDate dtFim = LocalDate.of(dataInicioClassificacao.getYear(), dataInicioClassificacao.getMonth(), dataInicioClassificacao.getDayOfMonth()).plusMonths(1);
-		dtFim = LocalDate.of(dtFim.getYear(), dtFim.getMonth(), 1).minusDays(1);
-
 		
-		ChartSeries positivos = countPorData(dataInicioClassificacao, dtFim,
+		String[] monthYearTexto = monthYear.split(" ");
+		String month = monthYearTexto[0];
+		
+		MesEnum mesEnum = lstMes.stream().filter(m -> m.getDescricao().equals(month)).findFirst().get();
+		Integer year = Integer.parseInt(monthYearTexto[1]);
+		
+		LocalDate dtIni = LocalDate.of(year, mesEnum.getCodigo(), 1);
+		LocalDate dtFim = LocalDate.of(year, mesEnum.getCodigo(), 1).plusMonths(1).minusDays(1);
+		
+		ChartSeries positivos = countPorData(dtIni, dtFim,
 				RelatorioClassificacaoEnum.SENTIMENTO_POSITIVO);
-		ChartSeries negativos = countPorData(dataInicioClassificacao, dtFim,
+		ChartSeries negativos = countPorData(dtIni, dtFim,
 				RelatorioClassificacaoEnum.SENTIMENTO_NEGATIVO);
-		ChartSeries imparciais = countPorData(dataInicioClassificacao, dtFim,
+		ChartSeries imparciais = countPorData(dtIni, dtFim,
 				RelatorioClassificacaoEnum.SENTIMENTO_IMPARCIAL);
 
 		model.addSeries(positivos);
@@ -140,7 +163,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 			Map<String, Integer> collect = classificacao.stream().collect(Collectors.groupingBy(
 					Classificacao::getDataCadastroFormatMesAno, Collectors.summingInt(Classificacao::getRegistro)));
 			
-			collect.forEach((Data, size) -> retorno.set(Data, size));
+			collect.forEach((data, size) -> retorno.set(data, size));
 
 			if(classificacao.size() > this.valorMaximoEixoY) {
 				this.valorMaximoEixoY = classificacao.size();
@@ -199,6 +222,59 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
 		this.lstClassificaoChart = classificacaoDAO.findByDataCadastroESentimento(cliente, topico, dtInicio, dtFim,
 				sentimento);
+	}
 
+	
+	@Transactional
+	public void adicionarModificacoes() {
+		
+		if(validaAtualizacao()) {
+			List<Pergunta> perguntas = new ArrayList<>();
+			this.topico.setCliente(this.cliente);
+			
+			this.lstClassificacaoUpdate.forEach(
+					c -> {
+						c.setDataClassificacao(LocalDateTime.now());
+						c.setResposta(this.resposta.getTitulo());
+						c.setTopico(this.topico);
+						c.setCliente(this.cliente);
+						
+						Pergunta pergunta = new Pergunta();
+						pergunta.setDescricao(c.getPergunta());
+						pergunta.setResposta(this.resposta);
+						
+						perguntas.add(pergunta);
+					}
+			);
+			
+			
+			ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
+			PerguntaDAO perguntaDAO = new PerguntaDAO(entityManager);
+			
+			classificacaoDAO.update(this.lstClassificacaoUpdate);
+			perguntaDAO.save(perguntas);
+			this.lstClassificacaoUpdate =  new ArrayList<>();
+		}
+	}
+	
+	private boolean validaAtualizacao() {
+		
+		FacesContext context = FacesContext.getCurrentInstance();
+		if(this.lstClassificacaoUpdate == null || this.lstClassificacaoUpdate.size() == 0) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível alterar", "Selecione alguma classificação"));
+			return false;
+		}
+		
+		if(this.resposta == null) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível alterar", "Selecione alguma resposta"));
+			return false;
+		}
+		
+		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Alteração feita com sucesso",  "Classificação Modificado"));
+		return true;
+	}
+
+	public void limparSelecionados() {
+		this.lstClassificacaoUpdate =  new ArrayList<>();
 	}
 }

@@ -165,6 +165,7 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 			Collection<Predicate> predicates = new ArrayList<>();
 			Collection<Order> orders = new ArrayList<>();
 			
+			predicates.add(cb.isNull(root.get("dataClassificacao")));
 			predicates.add(cb.equal(root.get("cliente"), cliente));
 			predicates.add(cb.equal(root.get("topico"), topico));
 			predicates.add(cb.equal(root.get("sentimento"), sentimento));

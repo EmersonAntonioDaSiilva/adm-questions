@@ -3,6 +3,7 @@
 				xmlns:h="http://xmlns.jcp.org/jsf/html" 
 				xmlns:f="http://xmlns.jcp.org/jsf/core"
 				xmlns:p="http://primefaces.org/ui" 
+				xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
 				xmlns:afirmanet="http://afirmanet.com.br/componentes" 
 				template="/templates/default-page.xhtml">
 	
@@ -12,7 +13,8 @@
 	
 	<ui:define name="content">
 		<h:form id="formQuestuionRH">
-			<p:panel id="searchFilter" header="Gerar Relatório" toggleable="false">
+			<p:growl id="updateMessage" showDetail="true" sticky="true" /> 
+			<p:panel id="searchFilter" header="Gerar Relatório de Classificação por Sentimento" toggleable="false">
 				<afirmanet:selectOneMenu listener="#{relatorioClassificacaoManager.selecionarCliente}"
 										 value="#{manager.cliente}" 
 										 label="Cliente" required="true"
@@ -28,16 +30,20 @@
 										 width="150px">
 			            <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}"  />
 				</afirmanet:selectOneMenu>
+
+				<afirmanet:inputText label="Mês/Ano" 
+									 id="monthYear" 
+									 value="#{manager.monthYear}" 
+									 styleClass="monthYearPicker" 
+									 maxlength="100" 
+									 required="true" />
 				
-				<afirmanet:calendarMonthYear label="Mes Selecionado"
-									value="#{manager.dataInicioClassificacao}" 
-									required="true" />
-						 
-		        <p:commandButton action="#{manager.buscarClassificacao}" 
+				<p:commandButton action="#{manager.buscarClassificacao}" 
 								 style="margin: 10px auto;" 
 								 ajax="true"
 								 value="Gerar Gráfico de Classificações"
-								 update="@form" />
+								 update="@form" />	
+		        
 				
 				<p:chart type="bar" 
 						 model="#{manager.barModel}" 
@@ -46,34 +52,90 @@
 					<p:ajax event="itemSelect" listener="#{relatorioClassificacaoManager.chartItemSelect}" update="@form" />	 
 				</p:chart>
 				
-				<p:dataTable paginator="true"
-							 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-							 rendered="#{manager.lstClassificaoChart.size() > 0}"
-							 rows="10"
-							 rowsPerPageTemplate="5,10,15"
-							 value="#{relatorioClassificacaoManager.lstClassificaoChart}"
-							 var="classificacao">
-							 
-					<f:facet name="header">
-				        Sentimentos  
-				    </f:facet>	 
-					<p:column headerText="Pergunta" sortBy="#{classificacao.pergunta}">
-        				<h:outputText value="#{classificacao.pergunta}" />
-				    </p:column>
-				 
-				    <p:column headerText="Resposta">
-				    	<h:outputText value="#{classificacao.resposta}" />
-				    </p:column>
-				 
-				    <p:column headerText="Confidence" sortBy="#{classificacao.confidence}">
-				        <h:outputText value="#{classificacao.confidence * 100}">
-				        	<f:convertNumber type="number" groupingUsed="true" minFractionDigits="1" pattern="#0.0"/>
-				        </h:outputText>
-				        <h:outputLabel value=" %" />
-				    </p:column>
-				</p:dataTable>
-				
+				<p:panel rendered="#{manager.lstClassificaoChart != null and manager.lstClassificaoChart.size() > 0}">
+					<p:dataTable paginator="true"
+								 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								 rows="10"
+								 rowsPerPageTemplate="5,10,15"
+								 value="#{manager.lstClassificaoChart}"
+								 var="classificacao"
+								 selection="#{manager.lstClassificacaoUpdate}" 
+					 			 rowKey="#{classificacao.id}">
+							
+						<p:ajax event="rowSelect" update="@form" />	 
+						<f:facet name="header">
+					        Selecione aqui as classificações que devem ter suas respostas alteradas  
+					    </f:facet>
+					    <p:column selectionMode="multiple" style="width:16px; text-align:center" />
+						
+						<p:column headerText="ID" sortBy="#{classificacao.id}">
+	        				<h:outputText value="#{classificacao.id}" />
+					    </p:column>
+						
+						<p:column headerText="Pergunta" sortBy="#{classificacao.pergunta}">
+	        				<h:outputText value="#{classificacao.pergunta}" />
+					    </p:column>
+					 
+					    <p:column headerText="Resposta">
+					    	<h:outputText value="#{classificacao.resposta}" />
+					    </p:column>
+					 
+					    <p:column headerText="Confidence" sortBy="#{classificacao.confidence}">
+					        <h:outputText value="#{classificacao.confidence * 100}">
+					        	<f:convertNumber type="number" groupingUsed="true" minFractionDigits="1" pattern="#0.0"/>
+					        </h:outputText>
+					        <h:outputLabel value=" %" />
+					    </p:column>
+					</p:dataTable>
+					
+					<afirmanet:selectOneMenu id="selectResposta"
+											 value="#{manager.resposta}" 
+											 label="Mudar resposta" 
+											 selectWidth="250px"
+											 width="150px">
+			            <f:selectItems value="#{manager.lstResposta}" var="resposta" itemValue="#{resposta}" itemLabel="#{resposta.titulo}"  />
+						
+					</afirmanet:selectOneMenu>
+					 
+					
+					<p:commandButton action="#{manager.adicionarModificacoes}" 
+									 style="margin: 10px auto;" 
+									 ajax="true"
+									 value="atualizar respostas"
+									 update="@form" />	
+									 
+					<p:commandButton action="#{manager.limparSelecionados}" 
+									 style="margin: 10px;" 
+									 ajax="true"
+									 value="Limpar selecionados"
+									 update="@form" />
+				</p:panel>	
 			</p:panel>
+			
+			<script>
+				$(function() {
+					$('.monthYearPicker').datepicker({
+						changeMonth: true,
+						changeYear: true,
+						showButtonPanel: true,
+						dateFormat: 'MM yy',
+						monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+						monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],currentText: "Hoje", 
+						closeText: "confirmar"
+					}).focus(function() {
+						var thisCalendar = $(this);
+						$('.ui-datepicker-calendar').detach();
+						$('.ui-datepicker-close').click(function() {
+							var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+							var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+
+							thisCalendar.datepicker('setDate', new Date(year, month, 1));
+						});
+					});
+				});
+	  		</script>
 		</h:form>
+		
+		
 	</ui:define>
 </ui:composition>
