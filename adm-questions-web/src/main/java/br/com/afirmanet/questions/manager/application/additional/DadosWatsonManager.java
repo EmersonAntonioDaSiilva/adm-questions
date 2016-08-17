@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import org.omnifaces.cdi.ViewScoped;
 
 import br.com.afirmanet.core.enumeration.CrudActionEnum;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.manager.GenericCRUD;
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.questions.dao.ClienteDAO;
@@ -54,12 +55,16 @@ public class DadosWatsonManager extends GenericCRUD<DadosWatson, Integer, DadosW
 	}
 	
 	public void carregaTopicos(){
-		TopicoDAO classeDAO = new TopicoDAO(entityManager);
+		try {
+			TopicoDAO classeDAO = new TopicoDAO(entityManager);
 
-		if(currentAction.equals(CrudActionEnum.SEARCH)){
-			lstTopico = classeDAO.findbyCliente(searchParam.getCliente());
-		}else{
-			lstTopico = classeDAO.findbyCliente(entity.getCliente());
+			if(currentAction.equals(CrudActionEnum.SEARCH)){
+				lstTopico = classeDAO.findbyCliente(searchParam.getCliente());
+			}else{
+				lstTopico = classeDAO.findbyCliente(entity.getCliente());
+			}
+		} catch (DaoException e) {
+			addErrorMessage(e.getMessage(),e);
 		}
 	}	
 	

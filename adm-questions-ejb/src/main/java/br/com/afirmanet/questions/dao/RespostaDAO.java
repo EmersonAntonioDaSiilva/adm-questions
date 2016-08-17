@@ -11,15 +11,17 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Resposta;
 import br.com.afirmanet.questions.entity.Topico;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -54,7 +56,7 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 	}
 
 
-	public Resposta findByNome(String descricao) {
+	public Resposta findByNome(String descricao) throws DaoException {
 		Resposta retornoInsumo = null;
 		
 		try {
@@ -70,14 +72,17 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 
 				retornoInsumo = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
+		} catch (NoResultException e){
+			retornoInsumo=null;
+			
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		return retornoInsumo;
 
 	}
 
-	public String findByDescricao(String resposta) {
+	public String findByDescricao(String resposta)throws DaoException {
 		Resposta retornoInsumo = null;
 		
 		try {
@@ -95,13 +100,13 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 				return retornoInsumo.getDefinicao();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 
 		return "";
 	}
 
-	public List<Resposta> findByClienteAndTopico(Cliente cliente, Topico topico) {
+	public List<Resposta> findByClienteAndTopico(Cliente cliente, Topico topico) throws DaoException {
 		List<Resposta> retornoResposta = null;
 		
 		try {
@@ -117,12 +122,12 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 				retornoResposta = entityManager.createQuery(criteriaQuery).getResultList();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		return retornoResposta;
 	}
 	
-	public List<Resposta> getDadosGeraArquivo(Collection<Predicate> predicates) {
+	public List<Resposta> getDadosGeraArquivo(Collection<Predicate> predicates) throws DaoException {
 		List<Resposta> retornoResposta = null;
 
 		try {
@@ -134,7 +139,7 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 				retornoResposta = entityManager.createQuery(criteriaQuery).getResultList();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		return retornoResposta;
 	}

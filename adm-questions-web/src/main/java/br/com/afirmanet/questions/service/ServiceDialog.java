@@ -32,6 +32,7 @@ import com.ibm.watson.developer_cloud.dialog.v1.model.Dialog;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 
 import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.util.ApplicationPropertiesUtils;
 import br.com.afirmanet.core.util.DateUtils;
 import br.com.afirmanet.core.util.TimeUtils;
@@ -55,29 +56,29 @@ import lombok.extern.slf4j.Slf4j;
 @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class ServiceDialog extends WatsonServiceFactory implements Serializable {
 	private static final long serialVersionUID = -452444688310099799L;
-	
-	private static final String INFORMAR_NOME = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.nome");
-	private static final String INFORMAR_DATA_NASCIMENTO = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.data.nascimento");
-	private static final String INFORMAR_DATA_ADMISSAO = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.data.admissao");
-	private static final int PESQUISAR_DB = ApplicationPropertiesUtils.getValueAsInteger("dialogRH.manager.pesquisar.db");
-	
-	private EntityManager entityManager;
-	
-	@PersistenceUnit(unitName = "question-ds")
-    private EntityManagerFactory entityManagerFactory;
 
-	
-	
+	private static final String INFORMAR_NOME = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.nome");
+	private static final String INFORMAR_DATA_NASCIMENTO = ApplicationPropertiesUtils
+			.getValue("dialogRH.manager.informar.data.nascimento");
+	private static final String INFORMAR_DATA_ADMISSAO = ApplicationPropertiesUtils
+			.getValue("dialogRH.manager.informar.data.admissao");
+	private static final int PESQUISAR_DB = ApplicationPropertiesUtils
+			.getValueAsInteger("dialogRH.manager.pesquisar.db");
+
+	private EntityManager entityManager;
+
+	@PersistenceUnit(unitName = "question-ds")
+	private EntityManagerFactory entityManagerFactory;
+
 	private DialogService service;
-	
+
 	private ServiceRetrieveAndRank serviceRetrieveAndRank;
 	private Conversation conversation;
 	private UsuarioPerfil usuarioPerfil;
-	
+
 	private Topico topico;
 	private Cliente cliente;
-	
-	
+
 	private void initDados() throws ApplicationException {
 		entityManager = entityManagerFactory.createEntityManager();
 		setEntityManager(entityManager);
@@ -88,29 +89,34 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
 		topico = topicoDAO.findbyCliente(cliente).get(0);
 
-		
 		setTypeServico(TypeServicoEnum.DIALOG);
 		setCliente(cliente);
-		
+
 		service = getServiceDialog();
 		serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
-		
+
 	}
-	
-	private void gravaPerguntaEncontrada(Topico topico, Classification classificacao, Integer sentimento) {
-		ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
-		Classificacao classificacaoEntity = new Classificacao();
 
-		classificacaoEntity.setDataCadastro(LocalDateTime.now());
-		classificacaoEntity.setConfidence(classificacao.getTopConfidence());
-		classificacaoEntity.setPergunta(classificacao.getText());
-		classificacaoEntity.setResposta(classificacao.getTopClass());
-		classificacaoEntity.setSentimento(sentimento);
-		classificacaoEntity.setCliente(getCliente());
-		classificacaoEntity.setTopico(topico);
-		classificacaoEntity.setClassifier(classificacao.getId());
+	private void gravaPerguntaEncontrada(Topico topico, Classification classificacao, Integer sentimento)
+			throws DaoException {
+		try {
+			ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
+			Classificacao classificacaoEntity = new Classificacao();
 
-		classificacaoDAO.save(classificacaoEntity);
+			classificacaoEntity.setDataCadastro(LocalDateTime.now());
+			classificacaoEntity.setConfidence(classificacao.getTopConfidence());
+			classificacaoEntity.setPergunta(classificacao.getText());
+			classificacaoEntity.setResposta(classificacao.getTopClass());
+			classificacaoEntity.setSentimento(sentimento);
+			classificacaoEntity.setCliente(getCliente());
+			classificacaoEntity.setTopico(topico);
+			classificacaoEntity.setClassifier(classificacao.getId());
+
+			classificacaoDAO.save(classificacaoEntity);
+		} catch (Exception e) {
+			throw new DaoException(
+					"Não foi possível gravar a classificação, " + classificacao.getId() + " do Serviço Dialog", e);
+		}
 	}
 
 	private String tratarRespostas(Conversation converse) {
@@ -136,19 +142,20 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 				classificacao.setTopConfidence(confidente);
 				classificacao.setId(converse.getDialogId());
 
-				if(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC > confidente && WatsonServiceFactory.CONFIDENCE_MINIMO_RR < confidente){
+				if (WatsonServiceFactory.CONFIDENCE_MINIMO_NLC > confidente
+						&& WatsonServiceFactory.CONFIDENCE_MINIMO_RR < confidente) {
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
 					resposta = searchRetrieve(converse.getInput());
 
-				}else if(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC <= confidente) {
+				} else if (WatsonServiceFactory.CONFIDENCE_MINIMO_NLC <= confidente) {
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_POSITIVO);
-					
+
 					RespostaDAO respostaDAO = new RespostaDAO(entityManager);
 					resposta = respostaDAO.findByDescricao(topClass);
-					
-				}else {
+
+				} else {
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
-					
+
 					RespostaDAO respostaDAO = new RespostaDAO(entityManager);
 					resposta = respostaDAO.findByDescricao(topClass);
 				}
@@ -164,7 +171,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		QueryResponse queryResponse = serviceRetrieveAndRank.searchAllDocs(pergunta);
 
 		SolrDocumentList results = queryResponse.getResults();
-		
+
 		SolrDocument solrDocument = results.get(0);
 		Object fieldValue = solrDocument.getFieldValue("body");
 		String resposta = fieldValue.toString();
@@ -224,7 +231,8 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 					date = LocalDate.parse(pergunta, formatter);
 				} catch (Exception e) {
 					isUpdate = Boolean.FALSE;
-					throw new ApplicationException("Data de nascimento inválida. Favor digitar novamente no formato: dd/mm/aaaa", e);
+					throw new ApplicationException(
+							"Data de nascimento inválida. Favor digitar novamente no formato: dd/mm/aaaa", e);
 				}
 
 				if ((date.isBefore(minDateNasc)) || date.isAfter(maxDateNasc)) {
@@ -242,7 +250,8 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 
 				} catch (Exception e) {
 					isUpdate = Boolean.FALSE;
-					throw new ApplicationException("Data de admissão inválida. Favor digitar novamente no formato dd/mm/aaaa", e);
+					throw new ApplicationException(
+							"Data de admissão inválida. Favor digitar novamente no formato dd/mm/aaaa", e);
 				}
 
 				if (date.isAfter(dateAtual) || date.isBefore(dateAdmissao)) {
@@ -263,7 +272,6 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 			usuarioPerfil.setClientId(conversation.getClientId().toString());
 			usuarioPerfil.setConversationId(conversation.getId());
 			usuarioPerfil.setDialogId(conversation.getDialogId());
-			
 
 			UsuarioPerfilDAO usuarioPerfilDAO = new UsuarioPerfilDAO(entityManager);
 
@@ -286,10 +294,10 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 
 	private void getProfileUser() {
 		UsuarioPerfilDAO usuarioPerfilDAO = new UsuarioPerfilDAO(entityManager);
-		
-		if(usuarioPerfil.getEmail() != null && !usuarioPerfil.getEmail().isEmpty()){
+
+		if (usuarioPerfil.getEmail() != null && !usuarioPerfil.getEmail().isEmpty()) {
 			usuarioPerfil = usuarioPerfilDAO.findByEmail(usuarioPerfil.getEmail());
-		}else if(usuarioPerfil.getClientId() != null ){
+		} else if (usuarioPerfil.getClientId() != null) {
 			usuarioPerfil = usuarioPerfilDAO.findByIdCliente(usuarioPerfil.getClientId());
 		}
 
@@ -299,45 +307,45 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		profileValues.put("DATA_NASC", DateUtils.format(usuarioPerfil.getDataNascimento()));
 		service.updateProfile(usuarioPerfil.getDialogId(), Integer.parseInt(usuarioPerfil.getClientId()),
 				profileValues);
-	}	
-	
+	}
+
 	@POST
 	@Path("/dialog")
-	@Consumes({"application/json"})
-	@Produces({"application/json"})
+	@Consumes({ "application/json" })
+	@Produces({ "application/json" })
 	public DialogVO dialog(final DialogVO pergunta) {
 		initDados();
-		
+
 		usuarioPerfil = new UsuarioPerfil();
 		usuarioPerfil.setClientId(pergunta.getIdCliente());
-		
+
 		getProfileUser();
-		
+
 		conversation = getDialog();
 		conversation = service.converse(conversation, pergunta.getDialogo());
 		updateUsuarioPerfil(conversation);
-		
+
 		DialogVO dialogVO = new DialogVO();
 		dialogVO.setHorario(TimeUtils.timeNow());
 		dialogVO.setPessoa("M.Watson");
 		dialogVO.setDialogo(tratarRespostas(conversation));
-		
+
 		return dialogVO;
-	}	
-	
+	}
+
 	@GET
 	@Path("/dialogForeHand/{email}")
 	public DialogVO dialogForeHand(@PathParam("email") String email) {
 		initDados();
-		
+
 		usuarioPerfil = new UsuarioPerfil();
 		usuarioPerfil.setEmail(email);
-		
+
 		getProfileUser();
 
 		conversation = getDialog();
 		conversation = service.converse(conversation, "Oi");
-		
+
 		updateUsuarioPerfil(conversation);
 
 		DialogVO dialogVO = new DialogVO();

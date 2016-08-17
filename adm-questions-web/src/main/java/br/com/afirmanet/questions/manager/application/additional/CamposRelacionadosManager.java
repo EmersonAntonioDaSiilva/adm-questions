@@ -64,22 +64,30 @@ public class CamposRelacionadosManager extends GenericCRUD<CamposRelacionados, I
 		beforeDetail();
 	}
 	
-	public void carregaDescricaoClasse(){
-		TopicoDAO classeDAO = new TopicoDAO(entityManager);
-		
-		if(currentAction.equals(CrudActionEnum.SEARCH)){
-			lstTopico = classeDAO.findbyCliente(searchParam.getCliente());
-		}else{
-			lstTopico = classeDAO.findbyCliente(entity.getCliente());
+	public void carregaDescricaoClasse()throws ApplicationException{
+		try {
+			TopicoDAO classeDAO = new TopicoDAO(entityManager);
+			
+			if(currentAction.equals(CrudActionEnum.SEARCH)){
+				lstTopico = classeDAO.findbyCliente(searchParam.getCliente());
+			}else{
+				lstTopico = classeDAO.findbyCliente(entity.getCliente());
+			}
+		} catch (Exception e) {
+			throw new ApplicationException(e.getMessage(),e);
 		}
 	}
 	
-	private void validarDados() {
-		RespostaDAO respostaDAO = new RespostaDAO(entityManager);
-		Resposta byDescricao = respostaDAO.findByNome(entity.getCampo());
-		
-		if(byDescricao != null && !entity.equals(byDescricao)){
-			throw new ApplicationException("Já existe um registro em Resposta com esta Descição: " + entity.getCampo());
+	private void validarDados() throws ApplicationException {
+		try {
+			RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+			Resposta byDescricao = respostaDAO.findByNome(entity.getCampo());
+			
+			if(byDescricao != null && !entity.equals(byDescricao)){
+				throw new ApplicationException("Já existe um registro em Resposta com esta Descrição: " + entity.getCampo());
+			}
+		} catch (Exception e) {
+			throw new ApplicationException(e.getMessage(),e);
 		}
 	}
 }

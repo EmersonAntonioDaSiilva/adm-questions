@@ -46,7 +46,7 @@ public class CamposRelacionados implements Serializable {
 	private Topico topico;	
 	
 	@Enumerated(EnumType.STRING)
-	private TypeDocEnum typoDoc;
+	private TypeDocEnum typeDoc;
 	
 	private String campo;
 	

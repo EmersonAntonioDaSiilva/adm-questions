@@ -34,7 +34,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 	private static final long serialVersionUID = 7201661374971816987L;
 
 	private Client client = ClientBuilder.newClient().register(JacksonFeature.class);
-	
+
 	@Inject
 	@ApplicationManaged
 	private EntityManager entityManager;
@@ -105,8 +105,6 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 		}
 	}
 
-
-	
 	@Transactional
 	public void btEmail() throws ApplicationException {
 		try {

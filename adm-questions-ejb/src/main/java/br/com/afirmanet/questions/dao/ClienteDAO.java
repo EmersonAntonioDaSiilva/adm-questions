@@ -31,10 +31,9 @@ public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implemen
 	private Collection<Predicate> createPredicates() {
 		Collection<Predicate> predicates = new ArrayList<>();
 
-		
 		return predicates;
 	}
-	
+
 	@Override
 	@SuppressWarnings("unused")
 	public Collection<Predicate> createPaginationPredicates(Cliente entity) {
@@ -46,9 +45,8 @@ public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implemen
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void delete(Cliente entity) {
-			super.delete(entity);
+		super.delete(entity);
 	}
-
 
 	public Cliente findByNome(String descricao) throws DaoException {
 		Cliente retornoCliente = null;
@@ -60,15 +58,16 @@ public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implemen
 				predicates.add(cb.equal(cb.lower(root.get("descricao")), descricao.toLowerCase()));
 			}
 
-			if(!predicates.isEmpty()){
+			if (!predicates.isEmpty()) {
 				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
 
 				retornoCliente = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
-		} catch (NoResultException  e) {
+		} catch (NoResultException e) {
 			retornoCliente = null;
-			
-		} catch (Exception  e) {
+
+		} catch (Exception e) {
+
 			throw new DaoException(e.getMessage(), e);
 
 		}

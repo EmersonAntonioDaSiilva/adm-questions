@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.persistence.PersistenceException;
 
 import org.omnifaces.cdi.ViewScoped;
 
@@ -64,8 +65,8 @@ public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> 
 	}
 	
 	private List<Resposta> recuperarResposta() {
-		RespostaDAO respostaDAO =  new RespostaDAO(entityManager);
-		return respostaDAO.getDadosGeraArquivo(genericDAO.createPaginationPredicates(searchParam));
+			RespostaDAO respostaDAO =  new RespostaDAO(entityManager);
+			return respostaDAO.getDadosGeraArquivo(genericDAO.createPaginationPredicates(searchParam));
 	}
 
 	private File criarDiretorioEArquivoCSV() {

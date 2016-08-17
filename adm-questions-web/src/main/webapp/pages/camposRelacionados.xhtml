@@ -19,8 +19,8 @@
 			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
 			</afirmanet:selectOneMenu>	
 		
-			<afirmanet:selectOneMenu label="Tipo Doc" value="#{manager.searchParam.typoDoc}">
-			    <f:selectItems value="#{manager.lstTypoDocEnum}" var="typoDoc" itemValue="#{typoDoc}" itemLabel="#{typoDoc}" />
+			<afirmanet:selectOneMenu label="Tipo Doc" value="#{manager.searchParam.typeDoc}">
+			    <f:selectItems value="#{manager.lstTypoDocEnum}" var="typeDoc" itemValue="#{typeDoc}" itemLabel="#{typeDoc}" />
 			</afirmanet:selectOneMenu>	
 	
 			<afirmanet:inputText label="Campos" value="#{manager.searchParam.campo}" />
@@ -30,7 +30,7 @@
 	<ui:define name="searchResultBlock">
 		<afirmanet:column headerText="Cliente" value="#{entity.cliente.descricao}" />
 		<afirmanet:column headerText="Topico" value="#{entity.topico.descricao}" />
-		<afirmanet:column headerText="Tipo Doc" value="#{entity.typoDoc}" />
+		<afirmanet:column headerText="Tipo Doc" value="#{entity.typeDoc}" />
 		<afirmanet:column headerText="Campo" value="#{entity.campo}" />
 	</ui:define>
 	<!-- ./searchResultBlock -->
@@ -39,7 +39,7 @@
 		<p:panelGrid columns="1">
 			<afirmanet:outputText label="Cliente" value="#{manager.entity.cliente.descricao}" />
 			<afirmanet:outputText label="Topico" value="#{manager.entity.topico.descricao}" />
-			<afirmanet:outputText label="Tipo Doc" value="#{manager.entity.typoDoc}" />
+			<afirmanet:outputText label="Tipo Doc" value="#{manager.entity.typeDoc}" />
 			<afirmanet:outputText label="Campo" value="#{manager.entity.campo}" />
 		</p:panelGrid>
 	</ui:define>
@@ -55,8 +55,8 @@
 			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" required="true" />
 			</afirmanet:selectOneMenu>	
 	
-			<afirmanet:selectOneMenu label="Tipo Doc" value="#{manager.entity.typoDoc}" required="true">
-			    <f:selectItems value="#{manager.lstTypoDocEnum}" var="typoDoc" itemValue="#{typoDoc}" itemLabel="#{typoDoc}" />
+			<afirmanet:selectOneMenu label="Tipo Doc" value="#{manager.entity.typeDoc}" required="true">
+			    <f:selectItems value="#{manager.lstTypoDocEnum}" var="typeDoc" itemValue="#{typeDoc}" itemLabel="#{typeDoc}" />
 			</afirmanet:selectOneMenu>	
 
 			<afirmanet:inputText label="Campo" id="insertDescricao" value="#{manager.entity.campo}" />		 

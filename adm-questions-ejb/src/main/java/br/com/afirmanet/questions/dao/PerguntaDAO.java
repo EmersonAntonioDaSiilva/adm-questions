@@ -11,11 +11,13 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Pergunta;
 import br.com.afirmanet.questions.entity.Resposta;
@@ -53,7 +55,7 @@ public @Stateless class PerguntaDAO extends GenericDAO<Pergunta, Integer> implem
 			super.delete(entity);
 	}
 
-	public Pergunta findByNome(String descricao) {
+	public Pergunta findByNome(String descricao) throws DaoException {
 		Pergunta retornoInsumo = null;
 		
 		try {
@@ -70,14 +72,14 @@ public @Stateless class PerguntaDAO extends GenericDAO<Pergunta, Integer> implem
 				retornoInsumo = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		return retornoInsumo;
 
 	}
 
 
-	public Pergunta findPerguntaByDescricaoAndResposta(Pergunta byPergunta) {
+	public Pergunta findPerguntaByDescricaoAndResposta(Pergunta byPergunta) throws DaoException {
 		Pergunta retornoInsumo = null;
 		
 		try {
@@ -92,14 +94,16 @@ public @Stateless class PerguntaDAO extends GenericDAO<Pergunta, Integer> implem
 
 				retornoInsumo = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
+		}catch (NoResultException e){
+			retornoInsumo = null;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		return retornoInsumo;
 	}
 	
 	
-	public List<Pergunta> findAllByResposta(Resposta byResposta) {
+	public List<Pergunta> findAllByResposta(Resposta byResposta) throws DaoException {
 		List<Pergunta> retornoInsumo = null;
 		
 		try {
@@ -114,7 +118,7 @@ public @Stateless class PerguntaDAO extends GenericDAO<Pergunta, Integer> implem
 				retornoInsumo = entityManager.createQuery(criteriaQuery).getResultList();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		return retornoInsumo;
 	}
