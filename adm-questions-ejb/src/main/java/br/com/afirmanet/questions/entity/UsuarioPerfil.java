@@ -30,7 +30,7 @@ public class UsuarioPerfil implements Serializable {
 	private Integer id;
 	
 	
-	private Integer clientId;
+	private String clientId;
 	private Integer conversationId;
 	private String dialogId;
 	private String nome;

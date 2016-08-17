@@ -27,7 +27,7 @@ public class ServiceDocumentConversion extends WatsonServiceFactory implements S
 	private DocumentConversion service;
 
 	public ServiceDocumentConversion(Cliente cliente, EntityManager entityManager) throws ApplicationException{
-		super(entityManager);
+		setEntityManager(entityManager); 
 		
 		setTypeServico(TypeServicoEnum.DOCUMENT_CONVERSION);
 		setCliente(cliente);

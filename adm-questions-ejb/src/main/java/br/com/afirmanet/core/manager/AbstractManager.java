@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,7 @@ public abstract class AbstractManager {
 	@Inject
 	@Getter
 	private FacesContext facesContext;
-
+	
 	protected void addInfoMessage(String message, Object... params) {
 		addMessage(FacesMessage.SEVERITY_INFO, message, params);
 	}
@@ -116,4 +118,7 @@ public abstract class AbstractManager {
 		return facesContext.getApplication();
 	}
 
+	public String getRestServiceDialog() {
+		return raizContextPath() + "/rh/serviceDialog/";
+	}
 }

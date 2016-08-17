@@ -36,6 +36,8 @@
 							</p:column>
 							<p:column colspan="2" style="width: 100%; vertical-align: top;" >
 								<p:dataTable id="dialogTable" value="#{dialogRHManager.lstDialog}" var="dialog" scrollable="true" scrollHeight="250" styleClass="tree-table-no-header">
+									<afirmanet:column value="#{dialog.horario}"/>
+									<afirmanet:column value="#{dialog.pessoa}"/>
 									<afirmanet:column value="#{dialog.dialogo}"/>
 								</p:dataTable>
 							</p:column>

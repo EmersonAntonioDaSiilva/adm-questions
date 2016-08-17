@@ -74,4 +74,26 @@ public @Stateless class UsuarioPerfilDAO extends GenericDAO<UsuarioPerfil, Integ
 
 	}
 
+	public UsuarioPerfil findByIdCliente(String idCliente) {
+		UsuarioPerfil retornoUsuarioPerfil = null;
+		
+		try {
+			CriteriaQuery<UsuarioPerfil> criteriaQuery = createCriteriaQuery();
+			Collection<Predicate> predicates = new ArrayList<>();
+
+			if (idCliente != null && !idCliente.isEmpty()) {
+				predicates.add(cb.equal(root.get("clientId"), idCliente));
+			}
+
+			if(!predicates.isEmpty()){
+				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
+
+				retornoUsuarioPerfil = entityManager.createQuery(criteriaQuery).getSingleResult();
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return retornoUsuarioPerfil;
+	}
+
 }

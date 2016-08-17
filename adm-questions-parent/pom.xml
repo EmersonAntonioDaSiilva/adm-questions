@@ -4,7 +4,7 @@
   
 	<groupId>br.com.afirmanet.adm-questions</groupId>
 	<artifactId>adm-questions-parent</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-snapshot</version>
 	<packaging>pom</packaging>
   
 	<name>adm-questions-parent</name>
@@ -67,10 +67,12 @@
 		<watson.developer.java-wrapper.version>1.1.1</watson.developer.java-wrapper.version>
 		<watson.solr-solrj.version>6.1.0</watson.solr-solrj.version>
 		
+		<javax.ws.rs.version>2.0.1</javax.ws.rs.version>
+		<glassfish.jersey.version>2.23.2</glassfish.jersey.version>
+		
 		<guava.version>18.0</guava.version>		
 		<afirmanet-core.version>1.0.0-SNAPSHOT</afirmanet-core.version>
 
-		
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-ejb-plugin.version>2.3</maven-ejb-plugin.version>
 		<maven-war-plugin.version>2.4</maven-war-plugin.version>
@@ -78,6 +80,39 @@
 	
 	<dependencyManagement>
 		<dependencies>
+		
+			<dependency>
+			    <groupId>javax.ws.rs</groupId>
+			    <artifactId>javax.ws.rs-api</artifactId>
+			    <version>${javax.ws.rs.version}</version>
+			</dependency>
+			
+			<dependency>
+	            <groupId>org.glassfish.jersey.core</groupId>
+	            <artifactId>jersey-server</artifactId>
+	            <version>${glassfish.jersey.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.glassfish.jersey.core</groupId>
+	            <artifactId>jersey-common</artifactId>
+	            <version>${glassfish.jersey.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.glassfish.jersey.core</groupId>
+	            <artifactId>jersey-client</artifactId>
+	            <version>${glassfish.jersey.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.glassfish.jersey.containers</groupId>
+	            <artifactId>jersey-container-servlet</artifactId>
+	            <version>${glassfish.jersey.version}</version>
+	        </dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.media</groupId>
+				<artifactId>jersey-media-json-jackson</artifactId>
+				<version>${glassfish.jersey.version}</version>
+			</dependency>
+			        
 			<dependency>
 			    <groupId>org.apache.solr</groupId>
 			    <artifactId>solr-solrj</artifactId>

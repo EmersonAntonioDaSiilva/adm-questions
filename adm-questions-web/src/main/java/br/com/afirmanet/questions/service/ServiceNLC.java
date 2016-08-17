@@ -21,11 +21,16 @@ import lombok.Getter;
 public class ServiceNLC extends WatsonServiceFactory implements Serializable {
 	private static final long serialVersionUID = -452444688310099799L;
 
+	private EntityManager entityManager;
+	
 	@Getter
 	private NaturalLanguageClassifier service;
 
 	public ServiceNLC(Cliente cliente, EntityManager entityManager) throws ApplicationException {
-		super(entityManager);
+		this.entityManager = entityManager;
+		
+		setEntityManager(entityManager);
+		
 		setTypeServico(TypeServicoEnum.NATURAL_LANGUAGE_CLASSIFIER);
 		setCliente(cliente);
 		

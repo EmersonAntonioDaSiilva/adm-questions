@@ -30,7 +30,8 @@ public abstract class WatsonServiceFactory  {
 	public static final double CONFIDENCE_MINIMO_RR = ApplicationPropertiesUtils.getValueAsDouble("index.manager.confidence.minimo.rr");
 	public static final String NAO_SE_APLICA = ApplicationPropertiesUtils.getValue("index.manager.nao.se.aplica");
 	
-	protected EntityManager entityManager;
+	@Setter
+	private EntityManager entityManager;
 	
 	@Setter
 	private TypeServicoEnum typeServico;
@@ -45,12 +46,7 @@ public abstract class WatsonServiceFactory  {
 	private DialogService serviceDialog;
 	private RetrieveAndRank serviceRR;
 	private DocumentConversion serviceDC;
-	
-	public WatsonServiceFactory(EntityManager entityManager){
-		this.entityManager = entityManager;
-	}
-	
-	
+
 	private WatsonService service() throws ApplicationException {
 		WatsonService watsonService = null;
 

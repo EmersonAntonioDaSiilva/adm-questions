@@ -43,9 +43,11 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	@Getter
 	private String idClusterSolr;
 	
+	private EntityManager entityManager;
 
 	public ServiceRetrieveAndRank(Cliente cliente, EntityManager entityManager) throws ApplicationException {
-		super(entityManager);
+		this.entityManager = entityManager;
+		setEntityManager(entityManager);
 		
 		setTypeServico(TypeServicoEnum.RETRIEVE_AND_RANK);
 		setCliente(cliente);

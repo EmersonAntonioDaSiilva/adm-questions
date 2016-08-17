@@ -3,6 +3,15 @@
 
 	<display-name>Magna Sistemas</display-name>
 
+	<servlet>
+        <servlet-name>javax.ws.rs.core.Application</servlet-name>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>javax.ws.rs.core.Application</servlet-name>
+        <url-pattern>/rh/*</url-pattern>
+    </servlet-mapping>
+
 	<!-- Activate the JSF 2.0 servlet and tell the context which URLs to send through JSF -->
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -24,6 +33,7 @@
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Production</param-value>
 	</context-param>
+	
 	<context-param>
 		<param-name>javax.faces.SKIP_COMMENTS</param-name>
 		<param-value>true</param-value>
