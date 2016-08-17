@@ -81,7 +81,7 @@ public @Stateless class UsuarioPerfilDAO extends GenericDAO<UsuarioPerfil, Integ
 	}
 
 	public UsuarioPerfil findByIdCliente(String idCliente) {
-		UsuarioPerfil retornoUsuarioPerfil = null;
+		UsuarioPerfil retornoUsuarioPerfil = new UsuarioPerfil();
 		
 		try {
 			CriteriaQuery<UsuarioPerfil> criteriaQuery = createCriteriaQuery();

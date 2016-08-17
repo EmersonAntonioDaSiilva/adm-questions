@@ -294,19 +294,23 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 
 	private void getProfileUser() {
 		UsuarioPerfilDAO usuarioPerfilDAO = new UsuarioPerfilDAO(entityManager);
+		UsuarioPerfil profile = null;
 
 		if (usuarioPerfil.getEmail() != null && !usuarioPerfil.getEmail().isEmpty()) {
-			usuarioPerfil = usuarioPerfilDAO.findByEmail(usuarioPerfil.getEmail());
+			profile = usuarioPerfilDAO.findByEmail(usuarioPerfil.getEmail());
 		} else if (usuarioPerfil.getClientId() != null) {
-			usuarioPerfil = usuarioPerfilDAO.findByIdCliente(usuarioPerfil.getClientId());
+			profile = usuarioPerfilDAO.findByIdCliente(usuarioPerfil.getClientId());
 		}
 
-		HashMap<String, String> profileValues = new HashMap<>();
-		profileValues.put("NOME", usuarioPerfil.getNome());
-		profileValues.put("DATA_ADM", DateUtils.format(usuarioPerfil.getDataAdmissao()));
-		profileValues.put("DATA_NASC", DateUtils.format(usuarioPerfil.getDataNascimento()));
-		service.updateProfile(usuarioPerfil.getDialogId(), Integer.parseInt(usuarioPerfil.getClientId()),
-				profileValues);
+		if(profile != null){
+			usuarioPerfil = profile;
+			HashMap<String, String> profileValues = new HashMap<>();
+			profileValues.put("NOME", usuarioPerfil.getNome());
+			profileValues.put("DATA_ADM", DateUtils.format(profile.getDataAdmissao()));
+			profileValues.put("DATA_NASC", DateUtils.format(profile.getDataNascimento()));
+			service.updateProfile(profile.getDialogId(), Integer.parseInt(profile.getClientId()),
+					profileValues);
+		}
 	}
 
 	@POST
