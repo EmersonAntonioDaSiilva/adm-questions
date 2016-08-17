@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
@@ -58,7 +59,7 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 	}
 
 
-	public Classificacao findByNome(String descricao) {
+	public Classificacao findByNome(String descricao) throws DaoException {
 		Classificacao retornoClassificacao = null;
 		
 		try {
@@ -75,13 +76,13 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 				retornoClassificacao = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		return retornoClassificacao;
 
 	}
 
-	public List<Classificacao> findByClienteAndTopico(Cliente cliente, Topico topico) {
+	public List<Classificacao> findByClienteAndTopico(Cliente cliente, Topico topico) throws DaoException {
 		List<Classificacao> retornoClassificacao = null;
 		
 		try {
@@ -97,15 +98,15 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 				retornoClassificacao = entityManager.createQuery(criteriaQuery).getResultList();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		return retornoClassificacao;
 	}
 	
-	public List<Classificacao> findByRangeOfDataCadastro(Cliente cliente, Topico topico, LocalDateTime dataInicio, LocalDateTime dataFim) {
+	public List<Classificacao> findByRangeOfDataCadastro(Cliente cliente, Topico topico, LocalDateTime dataInicio, LocalDateTime dataFim)throws DaoException {
 		return buscaDataCadastroEntreDuasDatas(cliente, topico,  dataInicio, dataFim);
 	}
-	public List<Classificacao> findByRangeOfDataCadastro(Cliente cliente, Topico topico, LocalDate dataInicio, LocalDate dataFim) {
+	public List<Classificacao> findByRangeOfDataCadastro(Cliente cliente, Topico topico, LocalDate dataInicio, LocalDate dataFim) throws DaoException{
 		
 		LocalDateTime dataHoraInicio = LocalDateTime.of(dataInicio, LocalTime.MIN);
 		LocalDateTime dataHoraFim = LocalDateTime.of(dataFim, LocalTime.MAX);
@@ -134,7 +135,7 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 			}
 			
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		
 		return retornoClassificacao;
@@ -156,7 +157,7 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 		return buscaDataCadastroSentimento(cliente, topico, dataHoraInicio, dataHoraFim, sentimento);
 	}
 	
-	private List<Classificacao> buscaDataCadastroSentimento(Cliente cliente, Topico topico, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, Integer sentimento) {
+	private List<Classificacao> buscaDataCadastroSentimento(Cliente cliente, Topico topico, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, Integer sentimento) throws DaoException {
 		List<Classificacao> retornoClassificacao = null;
 		
 		try {
@@ -178,7 +179,7 @@ public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integ
 			}
 			
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		
 		return retornoClassificacao;

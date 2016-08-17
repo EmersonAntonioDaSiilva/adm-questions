@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.DadosWatson;
@@ -53,7 +54,7 @@ public @Stateless class DadosWatsonDAO extends GenericDAO<DadosWatson, Integer> 
 			super.delete(entity);
 	}
 
-	public DadosWatson findByClienteAndTypeServico(Cliente cliente, TypeServicoEnum typeServico) {
+	public DadosWatson findByClienteAndTypeServico(Cliente cliente, TypeServicoEnum typeServico) throws DaoException {
 		DadosWatson retornoDadosWatson = null;
 		
 		try {
@@ -69,12 +70,12 @@ public @Stateless class DadosWatsonDAO extends GenericDAO<DadosWatson, Integer> 
 				retornoDadosWatson = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		return retornoDadosWatson;
 	}
 	
-	public List<DadosWatson> getDadosGeraArquivo(Collection<Predicate> predicates) {
+	public List<DadosWatson> getDadosGeraArquivo(Collection<Predicate> predicates)throws DaoException {
 		List<DadosWatson> retornoDadosWatson = null;
 
 		try {
@@ -86,7 +87,7 @@ public @Stateless class DadosWatsonDAO extends GenericDAO<DadosWatson, Integer> 
 				retornoDadosWatson = entityManager.createQuery(criteriaQuery).getResultList();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		return retornoDadosWatson;
 	}

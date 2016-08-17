@@ -8,6 +8,7 @@ import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
 
 import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.manager.GenericCRUD;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.StopWordsDAO;
@@ -42,12 +43,16 @@ public class StopWordsManager extends GenericCRUD<StopWords, Integer, StopWordsD
 		validarDados();
 	}	
 	
-	private void validarDados() {
-		StopWordsDAO stopWordsDAO = new StopWordsDAO(entityManager);
-		StopWords byDescricao = stopWordsDAO.findByNome(entity.getDescricao());
-		
-		if(byDescricao != null && !entity.equals(byDescricao)){
-			throw new ApplicationException("Já existe um registro uma StopWords com esta Descição: " + entity.getDescricao());
+	private void validarDados() throws ApplicationException {
+		try {
+			StopWordsDAO stopWordsDAO = new StopWordsDAO(entityManager);
+			StopWords byDescricao = stopWordsDAO.findByNome(entity.getDescricao());
+			
+			if(byDescricao != null && !entity.equals(byDescricao)){
+				throw new ApplicationException("Já existe um registro uma StopWords com esta Descrição: " + entity.getDescricao());
+			}
+		} catch (Exception e) {
+			throw new ApplicationException(e.getMessage(),e);
 		}
 	}
 }

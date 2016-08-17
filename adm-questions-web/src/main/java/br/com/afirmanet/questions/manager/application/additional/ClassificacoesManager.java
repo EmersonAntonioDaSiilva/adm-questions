@@ -10,6 +10,8 @@ import javax.persistence.EntityManager;
 
 import org.omnifaces.cdi.ViewScoped;
 
+import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.faces.primefaces.model.LazyEntityModel;
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
@@ -69,18 +71,23 @@ public class ClassificacoesManager implements Serializable {
 		carregaDadosClassificacao();
 	}
 	
-	public void carregaDadosClassificacao(){
-		ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);		
-		Classificacao classificacao = new Classificacao();
-		classificacao.setCliente(cliente);
-		classificacao.setTopico(topico);		
-		lstClassificacao = new LazyEntityModel<>(classificacaoDAO, classificacao);
+	public void carregaDadosClassificacao() throws ApplicationException{
+		try {
+			ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);		
+			Classificacao classificacao = new Classificacao();
+			classificacao.setCliente(cliente);
+			classificacao.setTopico(topico);		
+			lstClassificacao = new LazyEntityModel<>(classificacaoDAO, classificacao);
 
-		RespostaDAO respostaDAO = new RespostaDAO(entityManager);
-		Resposta resposta = new Resposta();
-		resposta.setCliente(cliente);
-		resposta.setTopico(topico);		
-		lstResposta = new LazyEntityModel<>(respostaDAO, resposta);
+			RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+			Resposta resposta = new Resposta();
+			resposta.setCliente(cliente);
+			resposta.setTopico(topico);		
+			lstResposta = new LazyEntityModel<>(respostaDAO, resposta);
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			throw new ApplicationException(e.getMessage(),e);
+		}
 	
 	}
 }

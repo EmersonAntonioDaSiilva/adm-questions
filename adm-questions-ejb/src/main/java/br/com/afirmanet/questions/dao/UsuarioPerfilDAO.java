@@ -10,9 +10,11 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.UsuarioPerfil;
 import lombok.NoArgsConstructor;
@@ -51,7 +53,7 @@ public @Stateless class UsuarioPerfilDAO extends GenericDAO<UsuarioPerfil, Integ
 	}
 
 
-	public UsuarioPerfil findByEmail(String email) {
+	public UsuarioPerfil findByEmail(String email) throws DaoException {
 		UsuarioPerfil retornoUsuarioPerfil = null;
 		
 		try {
@@ -67,8 +69,12 @@ public @Stateless class UsuarioPerfilDAO extends GenericDAO<UsuarioPerfil, Integ
 
 				retornoUsuarioPerfil = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
+			
+		} catch (NoResultException e){
+			retornoUsuarioPerfil = null;
+			
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		return retornoUsuarioPerfil;
 

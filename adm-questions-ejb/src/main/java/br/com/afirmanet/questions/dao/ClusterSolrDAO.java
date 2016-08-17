@@ -15,6 +15,7 @@ import javax.persistence.criteria.Predicate;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 
 
@@ -50,7 +51,7 @@ public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolrDAO, Intege
 	}
 
 
-	public ClusterSolrDAO findByNome(String descricao) {
+	public ClusterSolrDAO findByNome(String descricao)throws DaoException{
 		ClusterSolrDAO retornoClassificacao = null;
 		
 		try {
@@ -67,7 +68,7 @@ public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolrDAO, Intege
 				retornoClassificacao = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		return retornoClassificacao;
 

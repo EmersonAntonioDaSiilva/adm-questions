@@ -8,6 +8,7 @@ import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
 
 import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.manager.GenericCRUD;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.TopicoDAO;
@@ -40,24 +41,32 @@ public class TopicoManager extends GenericCRUD<Topico, Integer, TopicoDAO> imple
 		validarDados();
 	}
 	
-	public List<Cliente> carregaDescricao(){
-		List<Cliente> lstDescricaoCliente;
+	public List<Cliente> carregaDescricao() throws ApplicationException{
+		try {
+			List<Cliente> lstDescricaoCliente;
 
-		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
-		//lstDescricaoCliente= clienteDAO.findAll(Order.asc(Cliente_.descricao));
-		
-		lstDescricaoCliente = clienteDAO.findAll();
-		
-		return lstDescricaoCliente;
+			ClienteDAO clienteDAO = new ClienteDAO(entityManager);
+			//lstDescricaoCliente= clienteDAO.findAll(Order.asc(Cliente_.descricao));
+			
+			lstDescricaoCliente = clienteDAO.findAll();
+			
+			return lstDescricaoCliente;
+		} catch (Exception e) {
+			throw new ApplicationException(e.getMessage(),e);
+		}
 	}
 	
 	
-	private void validarDados() {
-		TopicoDAO classeDAO = new TopicoDAO(entityManager);
-		Topico byDescricao = classeDAO.findByNome(entity.getDescricao());
-		
-		if(byDescricao != null && !entity.equals(byDescricao)){
-			throw new ApplicationException("Já existe um registro em Cliente com esta Descição: " + entity.getDescricao());
+	private void validarDados() throws ApplicationException {
+		try {
+			TopicoDAO classeDAO = new TopicoDAO(entityManager);
+			Topico byDescricao = classeDAO.findByNome(entity.getDescricao());
+			
+			if(byDescricao != null && !entity.equals(byDescricao)){
+				throw new ApplicationException("Já existe um registro em Cliente com esta Descrição: " + entity.getDescricao());
+			}
+		} catch (DaoException e) {
+			throw new ApplicationException(e.getMessage(),e);
 		}
 	}
 }

@@ -56,31 +56,34 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	
 	private void createClusterSolr() throws ApplicationException{
 		
-		try{
 			// Recupera o identificador do cluster (se já foi criado)
-			getClusterSolr();
-			
-			// se o identificador for nulo
-			// é executado a rotina de criação da rotina do cluster
-			if(idClusterSolr == null){
-				createCluster(1); // cria cluster
-				uploadConfiguration(); // configuração (arquivos xml)
-				createCollection(); // criação da coleção
-				indexDocumentAndCommit(); // indexa os documentos
+			try {
+				getClusterSolr();
+				
+				// se o identificador for nulo
+				// é executado a rotina de criação da rotina do cluster
+				if(idClusterSolr == null){
+					createCluster(1); // cria cluster
+					uploadConfiguration(); // configuração (arquivos xml)
+					createCollection(); // criação da coleção
+					indexDocumentAndCommit(); // indexa os documentos
+				}
+			} catch (Exception e) {
+				throw new ApplicationException(e.getMessage(),e);
 			}
-			
-		}catch(Exception e){
-			throw new ApplicationException(e);
-		}
 		
 	}
 	
-	private void uploadConfiguration() {
-		String caminho = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
-		caminho = caminho.concat("/resources/files/zip/solrconfig.zip");
-		
-		File configZip = new File(caminho);
-		service.uploadSolrClusterConfigurationZip(idClusterSolr, NOME_CONFIG, configZip);
+	private void uploadConfiguration() throws ApplicationException{
+		try {
+			String caminho = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
+			caminho = caminho.concat("/resources/files/zip/solrconfig.zip");
+			
+			File configZip = new File(caminho);
+			service.uploadSolrClusterConfigurationZip(idClusterSolr, NOME_CONFIG, configZip);
+		} catch (Exception e) {
+			throw new ApplicationException(e.getMessage());
+		}
 	}
 	
 	private void getClusterSolr() {

@@ -11,14 +11,16 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
-import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.Topico;
 
 @Slf4j
 @NoArgsConstructor
@@ -52,7 +54,7 @@ public @Stateless class TopicoDAO extends GenericDAO<Topico, Integer> implements
 	}
 
 
-	public Topico findByNome(String descricao) {
+	public Topico findByNome(String descricao) throws DaoException {
 		Topico retornoInsumo = null;
 		
 		try {
@@ -68,14 +70,16 @@ public @Stateless class TopicoDAO extends GenericDAO<Topico, Integer> implements
 
 				retornoInsumo = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
+		} catch (NoResultException e){
+			retornoInsumo = null;
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 		return retornoInsumo;
 
 	}
 
-	public List<Topico> findbyCliente(Cliente cliente) {
+	public List<Topico> findbyCliente(Cliente cliente) throws DaoException {
 		List<Topico> retornoClasse= new ArrayList<>();
 		
 		try {
@@ -90,7 +94,7 @@ public @Stateless class TopicoDAO extends GenericDAO<Topico, Integer> implements
 				retornoClasse = entityManager.createQuery(criteriaQuery).getResultList();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 
 		return retornoClasse;		

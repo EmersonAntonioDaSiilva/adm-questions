@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
@@ -68,6 +69,9 @@ public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implemen
 
 				retornoCliente = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
+		} catch (NoResultException e){
+			retornoCliente = null;
+			
 		} catch (Exception e) {
 			throw new DaoException(e.getMessage(), e);
 		}

@@ -10,6 +10,7 @@ import org.omnifaces.cdi.ViewScoped;
 
 import br.com.afirmanet.core.enumeration.CrudActionEnum;
 import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.interceptor.Message;
 import br.com.afirmanet.core.manager.GenericCRUD;
 import br.com.afirmanet.questions.dao.TopicoDAO;
@@ -27,13 +28,13 @@ import lombok.Setter;
 @ViewScoped
 public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO> implements Serializable {
 	private static final long serialVersionUID = 3925507169074921562L;
-	
+
 	@Getter
 	private List<Cliente> lstCliente;
-		
+
 	@Getter
 	private List<Topico> lstTopico;
-	
+
 	@Getter
 	@Setter
 	private String descricaoPergunta;
@@ -46,10 +47,10 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	public void init() {
 		showDeleteButton = true;
 		descricaoPergunta = "";
-		
+
 		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
 		lstCliente = clienteDAO.findAll();
-	}	
+	}
 
 	@Override
 	protected void beforeSave() {
@@ -64,29 +65,37 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 		perguntas = null;
 		validarDados();
 	}
-	
+
 	@Override
 	protected void afterUpdate() {
 		beforeDetail();
 	}
-		
-	public void carregaDescricaoClasse(){
-		TopicoDAO classeDAO = new TopicoDAO(entityManager);
-		
-		
-		if(currentAction.equals(CrudActionEnum.SEARCH)){
-			lstTopico = classeDAO.findbyCliente(searchParam.getCliente());
-		}else{
-			lstTopico = classeDAO.findbyCliente(entity.getCliente());
+
+	public void carregaDescricaoClasse() throws DaoException {
+		try {
+			TopicoDAO classeDAO = new TopicoDAO(entityManager);
+
+			if (currentAction.equals(CrudActionEnum.SEARCH)) {
+				lstTopico = classeDAO.findbyCliente(searchParam.getCliente());
+			} else {
+				lstTopico = classeDAO.findbyCliente(entity.getCliente());
+			}
+		} catch (Exception e) {
+			addErrorMessage(e.getMessage(), e);
 		}
 	}
-	
-	private void validarDados() {
-		RespostaDAO respostaDAO = new RespostaDAO(entityManager);
-		Resposta byDescricao = respostaDAO.findByNome(entity.getTitulo());
-		
-		if(byDescricao != null && !entity.equals(byDescricao)){
-			throw new ApplicationException("Já existe um registro em Resposta com esta Descição: " + entity.getTitulo());
+
+	private void validarDados() throws ApplicationException {
+		try {
+			RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+			Resposta byDescricao = respostaDAO.findByNome(entity.getTitulo());
+
+			if (byDescricao != null && !entity.equals(byDescricao)) {
+				throw new ApplicationException("Já existe um registro em Resposta com esta Descrição: "
+						+ entity.getTitulo());
+			}
+		} catch (DaoException e) {
+			throw new ApplicationException(e.getMessage(), e);
 		}
 	}
 
@@ -95,27 +104,30 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 		PerguntaDAO perguntaDAO = new PerguntaDAO(entityManager);
 		perguntas = perguntaDAO.findAllByResposta(entity);
 	}
-	
+
 	@Transactional
-	public void insertPergunta(){
-		if(validarDadosPergunta()){
+	public void insertPergunta() throws ApplicationException {
+		if (descricaoPergunta==null)
+			addErrorMessage("Favor inserir uma descrição");
+		
+		else if (validarDadosPergunta()) {
 			PerguntaDAO perguntaDAO = new PerguntaDAO(entityManager);
 			Pergunta byPergunta = new Pergunta();
 			byPergunta.setResposta(entity);
 			byPergunta.setDescricao(descricaoPergunta);
-			
+
 			perguntaDAO.save(byPergunta);
-			
+
 			descricaoPergunta = "";
 			beforeDetail();
-		}else{
-			throw new ApplicationException("Já existe um registro em Pergunta com esta Descição: " + descricaoPergunta);
+		} else {
+			throw new ApplicationException("Já existe um registro em Pergunta com esta Descrição: " + descricaoPergunta);
 		}
 	}
 
 	@Message
 	@Transactional
-	public void deletePergunta(Pergunta dellPergunta){
+	public void deletePergunta(Pergunta dellPergunta) {
 		try {
 			PerguntaDAO perguntaDAO = new PerguntaDAO(entityManager);
 			perguntaDAO.deleteById(perguntaDAO.getId(dellPergunta));
@@ -125,20 +137,27 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 			throw new ApplicationException(e.getMessage(), e);
 		}
 	}
-	
-	private boolean validarDadosPergunta() {
+
+	private boolean validarDadosPergunta() throws ApplicationException {
 		boolean retorno = true;
-		
-		PerguntaDAO perguntaDAO = new PerguntaDAO(entityManager);
-		Pergunta byPergunta = new Pergunta();
-		byPergunta.setResposta(entity);
-		byPergunta.setDescricao(descricaoPergunta);
-		byPergunta = perguntaDAO.findPerguntaByDescricaoAndResposta(byPergunta);
-		
-		if(byPergunta != null){
-			retorno = false;
+
+		try {
+
+			PerguntaDAO perguntaDAO = new PerguntaDAO(entityManager);
+			Pergunta byPergunta = new Pergunta();
+			byPergunta.setResposta(entity);
+			byPergunta.setDescricao(descricaoPergunta);
+			byPergunta = perguntaDAO.findPerguntaByDescricaoAndResposta(byPergunta);
+
+			if (byPergunta != null) {
+				retorno = false;
+			}
+
+			return retorno;
+
+		} catch (DaoException e) {
+			throw new ApplicationException(e.getMessage());
 		}
-		
-		return retorno;
+
 	}
 }

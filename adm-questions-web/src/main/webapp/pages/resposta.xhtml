@@ -64,8 +64,8 @@
 			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
 			</afirmanet:selectOneMenu>		
 		
-			<afirmanet:inputText label="Titulo" id="insertDescricao" value="#{manager.entity.titulo}" maxlength="100" size="80" />
-			<afirmanet:inputTextarea label="Definição da Resposta" id="insertDefinicao" value="#{manager.entity.definicao}" maxlength="800" cols="80" rows="10"/>
+			<afirmanet:inputText label="Titulo" id="insertDescricao" value="#{manager.entity.titulo}" maxlength="100" size="80" required="true" />
+			<afirmanet:inputTextarea label="Definição da Resposta" id="insertDefinicao" value="#{manager.entity.definicao}" maxlength="800" cols="80" rows="10" required="true" />
 		 
 		</p:panelGrid>		
 	</ui:define>

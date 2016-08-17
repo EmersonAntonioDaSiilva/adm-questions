@@ -32,9 +32,7 @@ public class ClienteManager extends GenericCRUD<Cliente, Integer, ClienteDAO> im
 		validarDados();
 	}
 	
-
-	
-	private void validarDados() {
+	private void validarDados() throws ApplicationException{
 		try {
 			ClienteDAO clienteDAO = new ClienteDAO(entityManager);
 			Cliente byDescricao = clienteDAO.findByNome(entity.getDescricao());
@@ -43,7 +41,7 @@ public class ClienteManager extends GenericCRUD<Cliente, Integer, ClienteDAO> im
 				throw new ApplicationException("Já existe um registro em Cliente com esta Descição: " + entity.getDescricao());
 			}
 		} catch (Exception e) {
-			addErrorMessage(e.getMessage(), e);
+			throw new ApplicationException(e.getMessage(), e);
 		}
 	}
 }

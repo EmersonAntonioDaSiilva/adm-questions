@@ -55,6 +55,9 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 	private static final String INFORMAR_NOME = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.nome");
 	private static final String INFORMAR_DATA_NASCIMENTO = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.data.nascimento");
 	private static final String INFORMAR_DATA_ADMISSAO = ApplicationPropertiesUtils.getValue("dialogRH.manager.informar.data.admissao");
+	private static final String MINDATENASCS = ApplicationPropertiesUtils.getValue("dialogRH.manager.mindatenascs");
+	private static final String MAXDATENASCS = ApplicationPropertiesUtils.getValue("dialogRH.manager.maxdatenascs");
+	private static final String DATEADMISSAOS = ApplicationPropertiesUtils.getValue("dialogRH.manager.dateadmissaos");
 
 	private static final int PESQUISAR_DB = ApplicationPropertiesUtils.getValueAsInteger("dialogRH.manager.pesquisar.db");
 
@@ -273,14 +276,12 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 		LocalDate date;
 
 		// Variáveis auxiliares dataNascimento
-		String minDateNascS = ("01/01/1930");
-		String maxDateNascS = ("01/01/2001");
-		LocalDate minDateNasc = LocalDate.parse(minDateNascS, formatter);
-		LocalDate maxDateNasc = LocalDate.parse(maxDateNascS, formatter);
+		
+		LocalDate minDateNasc = LocalDate.parse(MINDATENASCS, formatter);
+		LocalDate maxDateNasc = LocalDate.parse(MAXDATENASCS, formatter);
 
 		// Variáveis auxiliares dataAdmissão
-		String dateAdmissaoS = ("01/01/1996");
-		LocalDate dateAdmissao = LocalDate.parse(dateAdmissaoS, formatter);
+		LocalDate dateAdmissao = LocalDate.parse(DATEADMISSAOS, formatter);
 
 		if (conversation.getResponse() != null) {
 			String resposta = conversation.getResponse().get(0);

@@ -16,6 +16,7 @@ import javax.persistence.criteria.Predicate;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.entity.Cliente;
@@ -53,7 +54,7 @@ public @Stateless class StopWordsDAO extends GenericDAO<StopWords, Integer> impl
 	}
 
 
-	public StopWords findByNome(String descricao) {
+	public StopWords findByNome(String descricao) throws DaoException {
 		StopWords retornoStopWords = null;
 		
 		try {
@@ -70,13 +71,13 @@ public @Stateless class StopWordsDAO extends GenericDAO<StopWords, Integer> impl
 				retornoStopWords = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage());
 		}
 		return retornoStopWords;
 
 	}
 
-	public List<StopWords> findbyCliente(Cliente cliente) {
+	public List<StopWords> findbyCliente(Cliente cliente) throws DaoException {
 		List<StopWords> retornoStopWords= new ArrayList<>();
 		
 		try {
@@ -91,7 +92,7 @@ public @Stateless class StopWordsDAO extends GenericDAO<StopWords, Integer> impl
 				retornoStopWords = entityManager.createQuery(criteriaQuery).getResultList();
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			throw new DaoException(e.getMessage(),e);
 		}
 
 		return retornoStopWords;		

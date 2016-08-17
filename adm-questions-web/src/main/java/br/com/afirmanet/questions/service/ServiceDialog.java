@@ -9,6 +9,7 @@ import com.ibm.watson.developer_cloud.dialog.v1.DialogService;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 
 import br.com.afirmanet.core.exception.ApplicationException;
+import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.questions.dao.ClassificacaoDAO;
 import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
@@ -33,20 +34,24 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		
 	}
 	
-	public void gravaPerguntaEncontrada(Topico topico, Classification classificacao, Integer sentimento) {
-		ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
-		Classificacao classificacaoEntity = new Classificacao();
+	public void gravaPerguntaEncontrada(Topico topico, Classification classificacao, Integer sentimento)throws DaoException {
+		try {
+			ClassificacaoDAO classificacaoDAO = new ClassificacaoDAO(entityManager);
+			Classificacao classificacaoEntity = new Classificacao();
 
-		classificacaoEntity.setDataCadastro(LocalDateTime.now());
-		classificacaoEntity.setConfidence(classificacao.getTopConfidence());
-		classificacaoEntity.setPergunta(classificacao.getText());
-		classificacaoEntity.setResposta(classificacao.getTopClass());
-		classificacaoEntity.setSentimento(sentimento);
-		classificacaoEntity.setCliente(getCliente());
-		classificacaoEntity.setTopico(topico);
-		classificacaoEntity.setClassifier(classificacao.getId());
+			classificacaoEntity.setDataCadastro(LocalDateTime.now());
+			classificacaoEntity.setConfidence(classificacao.getTopConfidence());
+			classificacaoEntity.setPergunta(classificacao.getText());
+			classificacaoEntity.setResposta(classificacao.getTopClass());
+			classificacaoEntity.setSentimento(sentimento);
+			classificacaoEntity.setCliente(getCliente());
+			classificacaoEntity.setTopico(topico);
+			classificacaoEntity.setClassifier(classificacao.getId());
 
-		classificacaoDAO.save(classificacaoEntity);
+			classificacaoDAO.save(classificacaoEntity);
+		} catch (Exception e) {
+			throw new DaoException("Não foi possível gravar a classificação, " + classificacao.getId() + " do Serviço Dialog",e);
+		}
 	}
 	
 }
