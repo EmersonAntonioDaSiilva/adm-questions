@@ -3,6 +3,7 @@ package br.com.afirmanet.questions.dao;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -10,21 +11,23 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
-import br.com.afirmanet.core.exception.DaoException;
-import br.com.afirmanet.core.persistence.GenericDAO;
-import br.com.afirmanet.questions.entity.Cliente;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import br.com.afirmanet.core.persistence.GenericDAO;
+import br.com.afirmanet.questions.entity.Topico;
+import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.StopWords;
 
+@Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implements Serializable {
+public @Stateless class StopWordsDAO extends GenericDAO<StopWords, Integer> implements Serializable {
 	private static final long serialVersionUID = 6907863285648197379L;
 
-	public ClienteDAO(EntityManager entityManager) {
+	public StopWordsDAO(EntityManager entityManager) {
 		super(entityManager);
 	}
 
@@ -37,7 +40,7 @@ public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implemen
 	
 	@Override
 	@SuppressWarnings("unused")
-	public Collection<Predicate> createPaginationPredicates(Cliente entity) {
+	public Collection<Predicate> createPaginationPredicates(StopWords entity) {
 		Collection<Predicate> predicates = createPredicates();
 
 		return super.createPaginationPredicates(entity);
@@ -45,15 +48,16 @@ public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implemen
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void delete(Cliente entity) {
+	public void delete(StopWords entity) {
 			super.delete(entity);
 	}
 
 
-	public Cliente findByNome(String descricao) throws DaoException {
-		Cliente retornoCliente = null;
+	public StopWords findByNome(String descricao) {
+		StopWords retornoStopWords = null;
+		
 		try {
-			CriteriaQuery<Cliente> criteriaQuery = createCriteriaQuery();
+			CriteriaQuery<StopWords> criteriaQuery = createCriteriaQuery();
 			Collection<Predicate> predicates = new ArrayList<>();
 
 			if (descricao != null && !descricao.isEmpty()) {
@@ -63,16 +67,33 @@ public @Stateless class ClienteDAO extends GenericDAO<Cliente, Integer> implemen
 			if(!predicates.isEmpty()){
 				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
 
-				retornoCliente = entityManager.createQuery(criteriaQuery).getSingleResult();
+				retornoStopWords = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
-		} catch (NoResultException  e) {
-			retornoCliente = null;
-			
-		} catch (Exception  e) {
-			throw new DaoException(e.getMessage(), e);
-
+		} catch (Exception e) {
+			log.error(e.getMessage());
 		}
-		return retornoCliente;
+		return retornoStopWords;
 
+	}
+
+	public List<StopWords> findbyCliente(Cliente cliente) {
+		List<StopWords> retornoStopWords= new ArrayList<>();
+		
+		try {
+			CriteriaQuery<StopWords> criteriaQuery = createCriteriaQuery();
+			Collection<Predicate> predicates = new ArrayList<>();
+
+			predicates.add(cb.equal(root.get("cliente"), cliente));
+
+			if(!predicates.isEmpty()){
+				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
+
+				retornoStopWords = entityManager.createQuery(criteriaQuery).getResultList();
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+
+		return retornoStopWords;		
 	}
 }

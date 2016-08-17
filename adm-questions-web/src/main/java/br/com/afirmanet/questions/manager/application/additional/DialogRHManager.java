@@ -16,6 +16,9 @@ import javax.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.omnifaces.cdi.ViewScoped;
 
 import br.com.afirmanet.core.exception.ApplicationException;
@@ -34,6 +37,7 @@ import br.com.afirmanet.questions.entity.UsuarioPerfil;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
 import br.com.afirmanet.questions.manager.vo.DialogVO;
 import br.com.afirmanet.questions.service.ServiceDialog;
+import br.com.afirmanet.questions.service.ServiceRetrieveAndRank;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -90,18 +94,19 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 	@Setter
 	private Boolean actionDialog;
 
+	private ServiceRetrieveAndRank serviceRetrieveAndRank;
 	private ServiceDialog serviceDialog;
 	private Cliente cliente;
 	private Topico topico;
 
 	@PostConstruct
 	protected void inicializar() {
-
 		try {
 			ClienteDAO clieteDAO = new ClienteDAO(entityManager);
 			cliente = clieteDAO.findByNome("m.watson");
 
 			serviceDialog = new ServiceDialog(cliente, entityManager);
+			serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
 
 			TopicoDAO topicoDAO = new TopicoDAO(entityManager);
 			lstTopico = topicoDAO.findbyCliente(cliente);
@@ -153,17 +158,32 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 			if (PESQUISAR_DB == pesquisaBD) {
 				jsonElement = json.get("classificacao");
 				String topClass = jsonElement.getAsString();
-				RespostaDAO respostaDAO = new RespostaDAO(entityManager);
-				resposta = respostaDAO.findByDescricao(topClass);
+
+				jsonElement = json.get("confidente");
+				Double confidente = jsonElement.getAsDouble();
 
 				Classification classificacao = new Classification();
 				classificacao.setText(converse.getInput());
 				classificacao.setTopClass(topClass);
+				classificacao.setTopConfidence(confidente);
 				classificacao.setId(converse.getDialogId());
 
-				
-				serviceDialog.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_ENCONTRADA_DIALOG);
-				
+				if(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC > confidente && WatsonServiceFactory.CONFIDENCE_MINIMO_RR < confidente){
+					serviceDialog.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
+					resposta = searchRetrieve(converse.getInput());
+
+				}else if(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC <= confidente) {
+					serviceDialog.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_POSITIVO);
+					
+					RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+					resposta = respostaDAO.findByDescricao(topClass);
+					
+				}else {
+					serviceDialog.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
+					
+					RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+					resposta = respostaDAO.findByDescricao(topClass);
+				}
 			}
 		} catch (JsonSyntaxException e) {
 			e.printStackTrace();
@@ -172,6 +192,20 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 		return resposta;
 	}
 
+	private String searchRetrieve(String pergunta) {
+		QueryResponse queryResponse = serviceRetrieveAndRank.searchAllDocs(pergunta);
+
+		SolrDocumentList results = queryResponse.getResults();
+		
+		SolrDocument solrDocument = results.get(0);
+		Object fieldValue = solrDocument.getFieldValue("body");
+		String resposta = fieldValue.toString();
+		resposta = resposta.substring(1, resposta.length() - 1);
+
+		return resposta;
+	}
+
+	
 	@Transactional
 	public void btEmail() throws ApplicationException {
 		try {

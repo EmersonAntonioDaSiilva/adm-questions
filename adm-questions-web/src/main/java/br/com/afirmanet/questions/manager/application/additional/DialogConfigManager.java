@@ -18,8 +18,16 @@ import javax.xml.bind.Marshaller;
 
 import org.omnifaces.cdi.ViewScoped;
 
+import br.com.afirmanet.questions.dialog.ChatflowNode;
 import br.com.afirmanet.questions.dialog.DialogType;
+import br.com.afirmanet.questions.dialog.FlowType;
+import br.com.afirmanet.questions.dialog.FolderNodeType;
+import br.com.afirmanet.questions.dialog.GrammarType;
+import br.com.afirmanet.questions.dialog.InputNodeType;
 import br.com.afirmanet.questions.dialog.ObjectFactory;
+import br.com.afirmanet.questions.dialog.OutputNodeType;
+import br.com.afirmanet.questions.dialog.PromptType;
+import br.com.afirmanet.questions.dialog.SelectionTypeType;
 import br.com.afirmanet.questions.dialog.VarFolderType;
 import br.com.afirmanet.questions.dialog.VarFolderTypeType;
 import br.com.afirmanet.questions.dialog.VarType;
@@ -34,10 +42,24 @@ public class DialogConfigManager implements Serializable {
 	
 	private ObjectFactory objFactory;
 	private DialogType dialog;
+	private FlowType flow;
 	private VarType varType;
+	private FolderNodeType folderNode;
+	private InputNodeType inputNode;
+	private OutputNodeType outputNode;
+	private GrammarType grammar;
+	private PromptType prompt;
 	private VarFolderType varFolder;
 	private VariablesType variables;
 
+	//Form Library
+	private String idNo;
+	private String entrada;
+	private String saida;
+	private String nomePastaLibrary;
+	private String goTo;
+	
+	//Form Variables
 	private String nomeVariavel;
 	private String tipoVariavel;
 	private String nomePasta;
@@ -47,7 +69,65 @@ public class DialogConfigManager implements Serializable {
 	public void init() {
 		objFactory = new ObjectFactory();
 		dialog = objFactory.createDialogType();
+		
 		varType = objFactory.createVarType();
+	}
+	
+	public void incluirNoLibrary() {
+		if (flow != null && flow.getFolder().size() > 0) {
+			for (FolderNodeType folderNodeIt : flow.getFolder()) {
+				if (folderNodeIt.getId().equals(nomePastaLibrary)) {
+					for (ChatflowNode chatflowNodeInputIt : folderNodeIt.getInputOrOutputOrDefault()) {
+						if (chatflowNodeInputIt.getId().equals(idNo) && chatflowNodeInputIt instanceof InputNodeType){
+							InputNodeType inputNodeTmp = (InputNodeType) chatflowNodeInputIt;
+							for (Object itNo : inputNodeTmp.getActionOrScriptOrGrammar()) {
+								if (itNo instanceof GrammarType){
+									GrammarType conteudoNo = (GrammarType) itNo;
+									conteudoNo.getItemOrSourceOrParam().add(objFactory.createGrammarTypeItem(entrada));
+								}
+							}
+							for (ChatflowNode chatflowNodeConteudoIt : inputNodeTmp.getInputOrOutputOrDefault()) {
+								if (chatflowNodeConteudoIt instanceof OutputNodeType) {
+									OutputNodeType outputNodeNo = (OutputNodeType) chatflowNodeConteudoIt;
+									for (Object outputConteudoIt : outputNodeNo.getActionOrScriptOrPrompt()){
+										if (outputConteudoIt instanceof PromptType) {
+											PromptType prompt = (PromptType) outputConteudoIt;
+											prompt.getContent().add(objFactory.createPromptTypeItem(saida));
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		} else {
+			if (flow.equals(null)) {
+				flow = objFactory.createFlowType();
+			}
+			
+			//grammar
+			grammar = objFactory.createGrammarType();
+			grammar.getItemOrSourceOrParam().add(objFactory.createGrammarTypeItem(entrada));
+			
+			//output
+			prompt = objFactory.createPromptType();
+			prompt.setSelectionType(SelectionTypeType.RANDOM);
+			prompt.getContent().add(objFactory.createPromptTypeItem(saida));
+			outputNode = objFactory.createOutputNodeType();
+			outputNode.getActionOrScriptOrPrompt().add(prompt);
+			
+			//inputNode
+			inputNode = objFactory.createInputNodeType();
+			inputNode.getActionOrScriptOrGrammar().add(grammar);
+			inputNode.getInputOrOutputOrDefault().add(outputNode);
+			
+			folderNode = objFactory.createFolderNodeType();
+			folderNode.setLabel(nomePastaLibrary);
+			folderNode.getInputOrOutputOrDefault().add(inputNode);
+			
+			flow.getFolder().add(folderNode);
+		}
 	}
 	
 	public void incluirVariavel() {
@@ -171,7 +251,6 @@ public class DialogConfigManager implements Serializable {
 		if (variables != null && variables.getVarFolder().size() > 0) {
 			for (VarFolderType varFolderIt : variables.getVarFolder()) {
 				listaPastas.add(new SelectItem(varFolderIt.getName(), varFolderIt.getName()));
-				System.out.println("PASSEI NO GET: " + varFolderIt.getName());
 			}
 		}
 		return listaPastas;
@@ -179,5 +258,45 @@ public class DialogConfigManager implements Serializable {
 
 	public void setListaPastas(List<SelectItem> listaPastas) {
 		this.listaPastas = listaPastas;
+	}
+	
+	public String getIdNo() {
+		return idNo;
+	}
+
+	public void setIdNo(String idNo) {
+		this.idNo = idNo;
+	}
+
+	public String getEntrada() {
+		return entrada;
+	}
+
+	public void setEntrada(String entrada) {
+		this.entrada = entrada;
+	}
+
+	public String getSaida() {
+		return saida;
+	}
+
+	public void setSaida(String saida) {
+		this.saida = saida;
+	}
+
+	public String getNomePastaLibrary() {
+		return nomePastaLibrary;
+	}
+
+	public void setNomePastaLibrary(String nomePastaLibrary) {
+		this.nomePastaLibrary = nomePastaLibrary;
+	}
+
+	public String getGoTo() {
+		return goTo;
+	}
+
+	public void setGoTo(String goTo) {
+		this.goTo = goTo;
 	}
 }

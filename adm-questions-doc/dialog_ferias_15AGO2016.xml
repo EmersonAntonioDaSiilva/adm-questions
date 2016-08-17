@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog xsi:noNamespaceSchemaLocation="WatsonDialogDocument_1.1.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <flow>
+        <folder label="Main">
+            <output>
+                <prompt selectionType="RANDOM">
+                    <item>Enter your weather related question.</item>
+                </prompt>
+                <getUserInput>
+                    <search ref="folder_200143"/>
+                    <default>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>I couldn't determine what you are asking about.</item>
+                            </prompt>
+                        </output>
+                    </default>
+                </getUserInput>
+            </output>
+        </folder>
+        <folder label="Library">
+            <folder label="NLC Intents" id="folder_200143">
+                <input isAutoLearnCandidate="false" isRelatedNodeCandidate="true">
+                    <grammar>
+                        <item>conditions</item>
+                    </grammar>
+                    <output>
+                        <prompt selectionType="RANDOM">
+                            <item>I believe you are asking about conditions. </item>
+                        </prompt>
+                    </output>
+                </input>
+                <input>
+                    <grammar>
+                        <item>temperature</item>
+                    </grammar>
+                    <output>
+                        <prompt selectionType="RANDOM">
+                            <item>I believe you are asking about temperture. </item>
+                        </prompt>
+                    </output>
+                </input>
+            </folder>
+        </folder>
+        <folder label="Global"/>
+        <folder label="Concepts"/>
+    </flow>
+    <constants>
+        <var_folder name="Home"/>
+    </constants>
+    <variables>
+        <var_folder name="Home">
+            <var name="CLASSIFIER_CLASS_0" type="TEXT" description="auto-created"/>
+            <var name="CLASSIFIER_CONF_0" type="TEXT" description="auto-created"/>
+            <var name="CLASSIFIER_CLASS_1" type="TEXT" description="auto-created"/>
+            <var name="CLASSIFIER_CONF_1" type="TEXT" description="auto-created"/>
+        </var_folder>
+    </variables>
+    <settings>
+        <setting name="AUTOLEARN" type="USER">false</setting>
+        <setting name="LANGUAGE" type="USER">en-US</setting>
+        <setting name="RESPONSETIME" type="USER">-2</setting>
+        <setting name="MAXAUTOLEARNITEMS" type="USER">4</setting>
+        <setting name="NUMAUTOSETRELATED" type="USER">0</setting>
+        <setting name="TIMEZONEID" type="USER">Australia/Sydney</setting>
+        <setting name="AUTOSETRELATEDNODEID" type="USER">0</setting>
+        <setting name="INPUTMASKTYPE" type="USER">0</setting>
+        <setting name="CONCEPTMATCHING" type="USER">0</setting>
+        <setting name="DNR_NODE_ID">-15</setting>
+        <setting name="MULTISENT">0</setting>
+        <setting name="USE_CONCEPTS">3</setting>
+        <setting name="ENTITIES_SCOPE">3</setting>
+        <setting name="USER_LOGGING">2</setting>
+        <setting name="USE_TRANSLATIONS">3</setting>
+        <setting name="USE_STOP_WORDS">3</setting>
+        <setting name="USE_SPELLING_CORRECTIONS">3</setting>
+        <setting name="USE_AUTOMATIC_STOPWORDS_DETECTION">0</setting>
+        <setting name="PLATFORM_VERSION">10.1</setting>
+        <setting name="UI_COLOUR"></setting>
+        <setting name="PARENT_ACCOUNT"></setting>
+        <setting name="AL_NONE_LABEL">None of the above</setting>
+        <setting name="CLS_SEARCH_MODE">0</setting>
+        <setting name="CLS_MODEL">0</setting>
+        <setting name="CLS_ENDPOINT"></setting>
+        <setting name="CLS_USERNAME"></setting>
+        <setting name="CLS_PASSWORD"></setting>
+        <setting name="CLS_MODELNAME">17aa5bx80-nlc-275</setting>
+        <setting name="CLS_ADVANCED_SETTINGS">false</setting>
+        <setting name="CLS_MAXNBEST">3</setting>
+        <setting name="CLS_USE_OFFTOPIC">false</setting>
+        <setting name="DEFAULT_DNR_RETURN_POINT_CANDIDATE">-1</setting>
+    </settings>
+    <specialSettings>
+        <specialSetting label="DNR Join Statement">
+            <variations/>
+        </specialSetting>
+        <specialSetting label="AutoLearn Statement">
+            <variations/>
+        </specialSetting>
+    </specialSettings>
+</dialog>
