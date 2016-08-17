@@ -3,6 +3,7 @@
 				xmlns:h="http://xmlns.jcp.org/jsf/html" 
 				xmlns:f="http://xmlns.jcp.org/jsf/core"
 				xmlns:p="http://primefaces.org/ui" 
+				xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
 				xmlns:afirmanet="http://afirmanet.com.br/componentes" 
 				template="/templates/default-page.xhtml">
 	
@@ -12,8 +13,8 @@
 	
 	<ui:define name="content">
 		<h:form id="formQuestuionRH">
+			<p:growl id="updateMessage" showDetail="true" sticky="true" /> 
 			<p:panel id="searchFilter" header="Gerar Relatório de Classificação por Sentimento" toggleable="false">
-				
 				<afirmanet:selectOneMenu listener="#{relatorioClassificacaoManager.selecionarCliente}"
 										 value="#{manager.cliente}" 
 										 label="Cliente" required="true"
@@ -38,12 +39,12 @@
 									 required="true" />
 				
 
-						 
-		        <afirmanet:commandButtonConfirm action="#{manager.buscarClassificacao}" 
-												style="margin: 10px auto;" 
-												ajax="true"
-												value="Gerar Gráfico de Classificações"
-												update="@form" />
+				<p:commandButton action="#{manager.buscarClassificacao}" 
+								 style="margin: 10px auto;" 
+								 ajax="true"
+								 value="Gerar Gráfico de Classificações"
+								 update="@form" />	
+		        
 				
 				<p:chart type="bar" 
 						 model="#{manager.barModel}" 
@@ -52,37 +53,64 @@
 					<p:ajax event="itemSelect" listener="#{relatorioClassificacaoManager.chartItemSelect}" update="@form" />	 
 				</p:chart>
 				
-				<p:dataTable paginator="true"
-							 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-							 rendered="#{manager.lstClassificaoChart.size() > 0}"
-							 rows="10"
-							 rowsPerPageTemplate="5,10,15"
-							 value="#{relatorioClassificacaoManager.lstClassificaoChart}"
-							 var="classificacao">
-							 
-					<f:facet name="header">
-				        Sentimentos  
-				    </f:facet>	
-				    <p:column headerText="alterar">
-					    <p:inputSwitch value="#{classificacao.classificado}">
-				            <p:ajax listener="#{manager.adicionarAtualizacao(classificacao)}" update="@form" />
-				        </p:inputSwitch> 
-				    </p:column>
-					<p:column headerText="Pergunta" sortBy="#{classificacao.pergunta}">
-        				<h:outputText value="#{classificacao.pergunta}" />
-				    </p:column>
-				 
-				    <p:column headerText="Resposta">
-				    	<h:outputText value="#{classificacao.resposta}" />
-				    </p:column>
-				 
-				    <p:column headerText="Confidence" sortBy="#{classificacao.confidence}">
-				        <h:outputText value="#{classificacao.confidence * 100}">
-				        	<f:convertNumber type="number" groupingUsed="true" minFractionDigits="1" pattern="#0.0"/>
-				        </h:outputText>
-				        <h:outputLabel value=" %" />
-				    </p:column>
-				</p:dataTable>
+				<p:panel rendered="#{manager.lstClassificaoChart != null and manager.lstClassificaoChart.size() > 0}">
+					<p:dataTable paginator="true"
+								 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								 rows="10"
+								 rowsPerPageTemplate="5,10,15"
+								 value="#{manager.lstClassificaoChart}"
+								 var="classificacao"
+								 selection="#{manager.lstClassificacaoUpdate}" 
+					 			 rowKey="#{classificacao.id}">
+							
+						<p:ajax event="rowSelect" update="@form" />	 
+						<f:facet name="header">
+					        Selecione aqui as classificações que devem ter suas respostas alteradas  
+					    </f:facet>
+					    <p:column selectionMode="multiple" style="width:16px; text-align:center" />
+						
+						<p:column headerText="ID" sortBy="#{classificacao.id}">
+	        				<h:outputText value="#{classificacao.id}" />
+					    </p:column>
+						
+						<p:column headerText="Pergunta" sortBy="#{classificacao.pergunta}">
+	        				<h:outputText value="#{classificacao.pergunta}" />
+					    </p:column>
+					 
+					    <p:column headerText="Resposta">
+					    	<h:outputText value="#{classificacao.resposta}" />
+					    </p:column>
+					 
+					    <p:column headerText="Confidence" sortBy="#{classificacao.confidence}">
+					        <h:outputText value="#{classificacao.confidence * 100}">
+					        	<f:convertNumber type="number" groupingUsed="true" minFractionDigits="1" pattern="#0.0"/>
+					        </h:outputText>
+					        <h:outputLabel value=" %" />
+					    </p:column>
+					</p:dataTable>
+					
+					<afirmanet:selectOneMenu id="selectResposta"
+											 value="#{manager.resposta}" 
+											 label="Mudar resposta" 
+											 selectWidth="250px"
+											 width="150px">
+			            <f:selectItems value="#{manager.lstResposta}" var="resposta" itemValue="#{resposta}" itemLabel="#{resposta.titulo}"  />
+						
+					</afirmanet:selectOneMenu>
+					 
+					
+					<p:commandButton action="#{manager.adicionarModificacoes}" 
+									 style="margin: 10px auto;" 
+									 ajax="true"
+									 value="atualizar respostas"
+									 update="@form" />	
+									 
+					<p:commandButton action="#{manager.limparSelecionados}" 
+									 style="margin: 10px;" 
+									 ajax="true"
+									 value="Limpar selecionados"
+									 update="@form" />
+				</p:panel>	
 			</p:panel>
 			
 			<script>

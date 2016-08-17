@@ -18,7 +18,9 @@ import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -54,9 +56,6 @@ public class Classificacao implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_topico")
 	private Topico topico;	
-	
-	@Transient
-	private boolean classificado;
 	
 	@Transient
 	public String getDataCadastroFormatMesAno(){
