@@ -5,13 +5,13 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class DialogVO implements Serializable {
-	private static final long serialVersionUID = -6114713261531714391L;
+public class InterlocucaoVO implements Serializable{
+	private static final long serialVersionUID = 6592105917263633837L;
 
-	private String idDialog;
 	private String idConversation;
 	private String idCliente;
 	private String horario;
-	private String pessoa;
-	private String dialogo;
+	private String nome;
+	private String interlocutor;
+
 }

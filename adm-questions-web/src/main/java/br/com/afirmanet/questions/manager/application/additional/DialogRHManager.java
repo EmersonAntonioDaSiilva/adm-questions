@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -24,7 +23,8 @@ import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.core.util.TimeUtils;
 import br.com.afirmanet.questions.entity.Topico;
-import br.com.afirmanet.questions.manager.vo.DialogVO;
+import br.com.afirmanet.questions.manager.vo.ConversaVO;
+import br.com.afirmanet.questions.manager.vo.InterlocucaoVO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,7 +53,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 
 	@Getter
 	@Setter
-	private List<DialogVO> lstDialog;
+	private List<String> lstDialog;
 
 	@Getter
 	@Setter
@@ -63,7 +63,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 	@Setter
 	private Boolean actionDialog;
 
-	private DialogVO dialogVO;
+	private ConversaVO dialogVO;
 	
 	@PostConstruct
 	protected void inicializar() {
@@ -78,25 +78,28 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 
 	}
 
-	@Transactional
 	public void btPergunta() throws ApplicationException {
 		try{
 			if (pergunta != null && !"".equals(pergunta)) {
 
 				
-				DialogVO perguntaDialogVO = new DialogVO();
-				perguntaDialogVO.setPessoa("Eu");
-				perguntaDialogVO.setIdCliente(dialogVO.getIdCliente());
-				perguntaDialogVO.setHorario(TimeUtils.timeNow());
-				perguntaDialogVO.setDialogo(pergunta);
-				lstDialog.add(perguntaDialogVO);
-
+				if(dialogVO.getNome() == null)
+					dialogVO.setNome("EU");
 				
-				Invocation saveBook = client.target(getRestServiceDialog()).path("/dialog").request().buildPost(Entity.entity(perguntaDialogVO, MediaType.APPLICATION_JSON));			 
+				dialogVO.setHorario(TimeUtils.timeNow());
+				dialogVO.setLocucao(pergunta);
+				
+				lstDialog.add(dialogVO.getHorario() + " - " + dialogVO.getNome() + ": " + dialogVO.getLocucao());
+				
+				Invocation saveBook = client.target(getRestServiceDialog()).path("/dialog").request().buildPost(Entity.entity(dialogVO, MediaType.APPLICATION_JSON));			 
 				Response response = saveBook.invoke();
-				DialogVO resposta = response.readEntity(DialogVO.class);
-
-				lstDialog.add(resposta);
+				dialogVO = response.readEntity(ConversaVO.class);
+				
+				InterlocucaoVO interlocucaoVO = dialogVO.getLstInterlocucaoVO().get(dialogVO.getLstInterlocucaoVO().size() -1);
+				
+				String strResposta = interlocucaoVO.getHorario() + " - " + interlocucaoVO.getNome() + ": " + interlocucaoVO.getInterlocutor();
+				
+				lstDialog.add(strResposta);
 				pergunta = "";
 			}
 			
@@ -105,7 +108,6 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 		}
 	}
 
-	@Transactional
 	public void btEmail() throws ApplicationException {
 		try {
 			if (email != null && !"".equals(email)) {
@@ -113,9 +115,13 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 				actionUsuarioPerfil = Boolean.FALSE;
 				actionDialog = Boolean.TRUE;
 
-				dialogVO = client.target(getRestServiceDialog()).path("/dialogForeHand/{email}").resolveTemplate("email", email).request().get(DialogVO.class);
+				dialogVO = client.target(getRestServiceDialog()).path("/dialogForeHand/{email}").resolveTemplate("email", email).request().get(ConversaVO.class);
 
-				lstDialog.add(dialogVO);
+				InterlocucaoVO interlocucaoVO = dialogVO.getLstInterlocucaoVO().get(dialogVO.getLstInterlocucaoVO().size() -1);
+				
+				String strResposta = interlocucaoVO.getHorario() + " - " + interlocucaoVO.getNome() + ": " + interlocucaoVO.getInterlocutor();
+				
+				lstDialog.add(strResposta);
 			}
 		} catch (ApplicationException e) {
 			addErrorMessage(e.getMessage());

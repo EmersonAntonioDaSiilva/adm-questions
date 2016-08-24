@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -47,7 +49,8 @@ import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.entity.UsuarioPerfil;
 import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
-import br.com.afirmanet.questions.manager.vo.DialogVO;
+import br.com.afirmanet.questions.manager.vo.ConversaVO;
+import br.com.afirmanet.questions.manager.vo.InterlocucaoVO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -73,8 +76,6 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 	private DialogService service;
 
 	private ServiceRetrieveAndRank serviceRetrieveAndRank;
-	private Conversation conversation;
-	private UsuarioPerfil usuarioPerfil;
 
 	private Topico topico;
 	private Cliente cliente;
@@ -180,17 +181,15 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		return resposta;
 	}
 
-	private Conversation getDialog() throws ApplicationException {
-		conversation = new Conversation();
+	private Conversation getConversation(ConversaVO conversaVO) throws ApplicationException {
+		Conversation conversation = new Conversation();
 
-		if (usuarioPerfil != null) {
-			if (usuarioPerfil.getClientId() != null) {
-				conversation.setClientId(Integer.parseInt(usuarioPerfil.getClientId()));
-			}
+		if (conversaVO.getIdCliente() != null) {
+			conversation.setClientId(Integer.parseInt(conversaVO.getIdCliente()));
+		}
 
-			if (usuarioPerfil.getConversationId() != null) {
-				conversation.setId(usuarioPerfil.getConversationId());
-			}
+		if (conversaVO.getIdConversation() != null) {
+			conversation.setId(Integer.parseInt(conversaVO.getIdConversation()));
 		}
 
 		conversation.setDialogId(getIdDialog());
@@ -199,10 +198,14 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		return conversation;
 	}
 
-	private void updateUsuarioPerfil(Conversation conversation) throws ApplicationException {
+	private UsuarioPerfil updateUsuarioPerfil(ConversaVO conversaVO) throws ApplicationException {
 		Boolean isUpdate = Boolean.FALSE;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+		UsuarioPerfilDAO usuarioPerfilDAO = new UsuarioPerfilDAO(entityManager);
+		UsuarioPerfil profile = usuarioPerfilDAO.findByEmail(conversaVO.getEmail());
+
+		
 		LocalDate dateAtual = LocalDate.now();
 		LocalDate date;
 
@@ -216,12 +219,12 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		String dateAdmissaoS = ("01/01/1996");
 		LocalDate dateAdmissao = LocalDate.parse(dateAdmissaoS, formatter);
 
-		if (conversation.getResponse() != null) {
-			String resposta = conversation.getResponse().get(0);
-			String pergunta = conversation.getInput();
+		if (conversaVO.getLstInterlocucaoVO() != null && !conversaVO.getLstInterlocucaoVO().isEmpty()) {
+			String resposta = conversaVO.getLstInterlocucaoVO().get(conversaVO.getLstInterlocucaoVO().size()-1).getInterlocutor();
+			String pergunta = conversaVO.getLocucao();
 
 			if (resposta.indexOf(INFORMAR_NOME) >= 0) {
-				usuarioPerfil.setNome(pergunta);
+				profile.setNome(pergunta);
 				isUpdate = Boolean.TRUE;
 			}
 
@@ -239,7 +242,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 					throw new ApplicationException("Data de nascimento incorreta. Digite um valor válido");
 				}
 
-				usuarioPerfil.setDataNascimento(date);
+				profile.setDataNascimento(date);
 				isUpdate = Boolean.TRUE;
 			}
 
@@ -258,30 +261,39 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 					throw new ApplicationException("Data de admissão inválida. Digite um valor válido");
 				}
 
-				usuarioPerfil.setDataAdmissao(date);
+				profile.setDataAdmissao(date);
 				isUpdate = Boolean.TRUE;
 			}
 
 		}
 
-		if (usuarioPerfil.getEmail() != null && !"".equals(usuarioPerfil.getEmail()) && usuarioPerfil.getId() == null) {
+		
+		if (profile != null && profile.getEmail() != null && !"".equals(profile.getEmail()) && profile.getId() == null) {
 			isUpdate = Boolean.TRUE;
 		}
 
-		if (isUpdate) {
-			usuarioPerfil.setClientId(conversation.getClientId().toString());
-			usuarioPerfil.setConversationId(conversation.getId());
-			usuarioPerfil.setDialogId(conversation.getDialogId());
-
-			UsuarioPerfilDAO usuarioPerfilDAO = new UsuarioPerfilDAO(entityManager);
-
-			if (usuarioPerfil.getId() == null) {
-				usuarioPerfilDAO.save(usuarioPerfil);
+		if (profile == null || isUpdate) {
+			
+			if(profile == null)
+				profile = new UsuarioPerfil();
+			
+			
+			if(conversaVO.getIdConversation() != null)
+				profile.setConversationId(Integer.parseInt(conversaVO.getIdConversation()));
+			
+			profile.setClientId(conversaVO.getIdCliente());
+			profile.setDialogId(conversaVO.getIdDialog());
+			profile.setEmail(conversaVO.getEmail());
+			
+			if (profile.getId() == null) {
+				usuarioPerfilDAO.save(profile);
 			} else {
-				usuarioPerfilDAO.update(usuarioPerfil);
+				usuarioPerfilDAO.update(profile);
 			}
 
 		}
+
+		return profile;
 	}
 
 	private String getIdDialog() {
@@ -292,74 +304,99 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		return dialogs.get(0).getId();
 	}
 
-	private void getProfileUser() {
-		UsuarioPerfilDAO usuarioPerfilDAO = new UsuarioPerfilDAO(entityManager);
-		UsuarioPerfil profile = null;
+	private ConversaVO getProfileUser(ConversaVO conversaVO) {
+		UsuarioPerfil profile =  updateUsuarioPerfil(conversaVO);
 
-		if (usuarioPerfil.getEmail() != null && !usuarioPerfil.getEmail().isEmpty()) {
-			profile = usuarioPerfilDAO.findByEmail(usuarioPerfil.getEmail());
-		} else if (usuarioPerfil.getClientId() != null) {
-			profile = usuarioPerfilDAO.findByIdCliente(usuarioPerfil.getClientId());
+		conversaVO.setHorario(TimeUtils.timeNow());
+		
+		try {
+			if(profile != null){
+				HashMap<String, String> profileValues = new HashMap<>();
+				if(profile.getConversationId() != null)
+					conversaVO.setIdConversation(profile.getConversationId().toString());
+
+				conversaVO.setIdCliente(profile.getClientId());
+				conversaVO.setIdDialog(profile.getDialogId());
+				conversaVO.setEmail(profile.getEmail());
+
+				if (profile.getNome() != null && !profile.getNome().isEmpty()) {
+					conversaVO.setNome(profile.getNome());
+					profileValues.put("NOME", profile.getNome());				
+					service.updateProfile(profile.getDialogId(), Integer.parseInt(profile.getClientId()), profileValues);
+					
+				} else {
+					throw new ApplicationException("Nome não encontrado!! Dados encontrados: " + conversaVO.toString());
+				}
+				
+				if (profile.getDataAdmissao() != null) {
+					conversaVO.setDataAdmin(DateUtils.format(profile.getDataAdmissao()));
+					profileValues.put("DATA_ADM", DateUtils.format(profile.getDataAdmissao()));
+					service.updateProfile(profile.getDialogId(), Integer.parseInt(profile.getClientId()), profileValues);
+					
+				} else {
+					throw new ApplicationException("Data de Admissão não encontrado!! Dados encontrados: " + conversaVO.toString());
+				}		
+				
+				if (profile.getDataNascimento() != null) {
+					conversaVO.setDataNasci(DateUtils.format(profile.getDataNascimento()));
+					profileValues.put("DATA_NASC", DateUtils.format(profile.getDataNascimento()));
+					service.updateProfile(profile.getDialogId(), Integer.parseInt(profile.getClientId()), profileValues);
+					
+				} else {
+					throw new ApplicationException("Data de Nascimento não encontrado!! Dados encontrados: " + conversaVO.toString());
+				}		
+				
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 
-		if(profile != null){
-			usuarioPerfil = profile;
-			HashMap<String, String> profileValues = new HashMap<>();
-			profileValues.put("NOME", usuarioPerfil.getNome());
-			profileValues.put("DATA_ADM", DateUtils.format(profile.getDataAdmissao()));
-			profileValues.put("DATA_NASC", DateUtils.format(profile.getDataNascimento()));
-			service.updateProfile(profile.getDialogId(), Integer.parseInt(profile.getClientId()),
-					profileValues);
+		Conversation conversation = getConversation(conversaVO);
+		conversation = service.converse(conversation, conversaVO.getLocucao());
+
+		InterlocucaoVO interlocucaoVO = new InterlocucaoVO();
+		interlocucaoVO.setHorario(TimeUtils.timeNow());
+		interlocucaoVO.setIdCliente(conversation.getClientId().toString());
+		interlocucaoVO.setIdConversation(conversation.getId().toString());
+		interlocucaoVO.setNome("M.Watson");
+		interlocucaoVO.setInterlocutor(tratarRespostas(conversation));
+
+		
+		if(conversaVO.getLstInterlocucaoVO() == null){
+			conversaVO.setLstInterlocucaoVO(new ArrayList<>());
 		}
+		
+		conversaVO.setIdCliente(conversation.getClientId().toString());
+		conversaVO.setIdConversation(conversation.getId().toString());
+		conversaVO.setIdDialog(conversation.getDialogId());
+		conversaVO.getLstInterlocucaoVO().add(interlocucaoVO);
+		
+		return conversaVO;
 	}
 
 	@POST
 	@Path("/dialog")
 	@Consumes({ "application/json" })
 	@Produces({ "application/json" })
-	public DialogVO dialog(final DialogVO pergunta) {
+	@Transactional
+	public ConversaVO dialog(final ConversaVO locutor) {
 		initDados();
 
-		usuarioPerfil = new UsuarioPerfil();
-		usuarioPerfil.setClientId(pergunta.getIdCliente());
-
-		getProfileUser();
-
-		conversation = getDialog();
-		conversation = service.converse(conversation, pergunta.getDialogo());
-		updateUsuarioPerfil(conversation);
-
-		DialogVO dialogVO = new DialogVO();
-		dialogVO.setHorario(TimeUtils.timeNow());
-		dialogVO.setPessoa("M.Watson");
-		dialogVO.setDialogo(tratarRespostas(conversation));
-
-		return dialogVO;
+		return getProfileUser(locutor);
 	}
-
+	
 	@GET
 	@Path("/dialogForeHand/{email}")
-	public DialogVO dialogForeHand(@PathParam("email") String email) {
+	@Transactional
+	public ConversaVO dialogForeHand(@PathParam("email") String email) {
 		initDados();
 
-		usuarioPerfil = new UsuarioPerfil();
-		usuarioPerfil.setEmail(email);
+		ConversaVO conversaVO = new ConversaVO();
+		conversaVO.setEmail(email);
+		conversaVO.setLocucao("Oi");
 
-		getProfileUser();
+		conversaVO = getProfileUser(conversaVO);
 
-		conversation = getDialog();
-		conversation = service.converse(conversation, "Oi");
-
-		updateUsuarioPerfil(conversation);
-
-		DialogVO dialogVO = new DialogVO();
-		dialogVO.setHorario(TimeUtils.timeNow());
-		dialogVO.setIdConversation(conversation.getId().toString());
-		dialogVO.setIdDialog(conversation.getDialogId());
-		dialogVO.setIdCliente(conversation.getClientId().toString());
-		dialogVO.setPessoa("M.Watson");
-		dialogVO.setDialogo(tratarRespostas(conversation));
-
-		return dialogVO;
+		return conversaVO;
 	}
 }
