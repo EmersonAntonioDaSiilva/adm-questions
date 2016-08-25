@@ -206,91 +206,95 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		UsuarioPerfil profile = usuarioPerfilDAO.findByEmail(conversaVO.getEmail());
 
 		
-		LocalDate dateAtual = LocalDate.now();
-		LocalDate date;
+		try {
+			LocalDate dateAtual = LocalDate.now();
+			LocalDate date;
 
-		// Variáveis auxiliares dataNascimento
-		String minDateNascS = ("01/01/1930");
-		String maxDateNascS = ("01/01/2001");
-		LocalDate minDateNasc = LocalDate.parse(minDateNascS, formatter);
-		LocalDate maxDateNasc = LocalDate.parse(maxDateNascS, formatter);
+			// Variáveis auxiliares dataNascimento
+			String minDateNascS = ("01/01/1930");
+			String maxDateNascS = ("01/01/2001");
+			LocalDate minDateNasc = LocalDate.parse(minDateNascS, formatter);
+			LocalDate maxDateNasc = LocalDate.parse(maxDateNascS, formatter);
 
-		// Variáveis auxiliares dataAdmissão
-		String dateAdmissaoS = ("01/01/1996");
-		LocalDate dateAdmissao = LocalDate.parse(dateAdmissaoS, formatter);
+			// Variáveis auxiliares dataAdmissão
+			String dateAdmissaoS = ("01/01/1996");
+			LocalDate dateAdmissao = LocalDate.parse(dateAdmissaoS, formatter);
 
-		if (conversaVO.getLstInterlocucaoVO() != null && !conversaVO.getLstInterlocucaoVO().isEmpty()) {
-			String resposta = conversaVO.getLstInterlocucaoVO().get(conversaVO.getLstInterlocucaoVO().size()-1).getInterlocutor();
-			String pergunta = conversaVO.getLocucao();
+			if (conversaVO.getLstInterlocucaoVO() != null && !conversaVO.getLstInterlocucaoVO().isEmpty()) {
+				String resposta = conversaVO.getLstInterlocucaoVO().get(conversaVO.getLstInterlocucaoVO().size()-1).getInterlocutor();
+				String pergunta = conversaVO.getLocucao();
 
-			if (resposta.indexOf(INFORMAR_NOME) >= 0) {
-				profile.setNome(pergunta);
+				if (resposta.indexOf(INFORMAR_NOME) >= 0) {
+					profile.setNome(pergunta);
+					isUpdate = Boolean.TRUE;
+				}
+
+				if (resposta.indexOf(INFORMAR_DATA_NASCIMENTO) >= 0) {
+
+					try {
+						date = LocalDate.parse(pergunta, formatter);
+					} catch (Exception e) {
+						isUpdate = Boolean.FALSE;
+						throw new ApplicationException(
+								"Data de nascimento inválida. Favor digitar novamente no formato: dd/mm/aaaa", e);
+					}
+
+					if ((date.isBefore(minDateNasc)) || date.isAfter(maxDateNasc)) {
+						throw new ApplicationException("Data de nascimento incorreta. Digite um valor válido");
+					}
+
+					profile.setDataNascimento(date);
+					isUpdate = Boolean.TRUE;
+				}
+
+				if (resposta.indexOf(INFORMAR_DATA_ADMISSAO) >= 0) {
+
+					try {
+						date = LocalDate.parse(pergunta, formatter);
+
+					} catch (Exception e) {
+						isUpdate = Boolean.FALSE;
+						throw new ApplicationException(
+								"Data de admissão inválida. Favor digitar novamente no formato dd/mm/aaaa", e);
+					}
+
+					if (date.isAfter(dateAtual) || date.isBefore(dateAdmissao)) {
+						throw new ApplicationException("Data de admissão inválida. Digite um valor válido");
+					}
+
+					profile.setDataAdmissao(date);
+					isUpdate = Boolean.TRUE;
+				}
+
+			}
+
+			
+			if (profile != null && profile.getEmail() != null && !"".equals(profile.getEmail()) && profile.getId() == null) {
 				isUpdate = Boolean.TRUE;
 			}
 
-			if (resposta.indexOf(INFORMAR_DATA_NASCIMENTO) >= 0) {
-
-				try {
-					date = LocalDate.parse(pergunta, formatter);
-				} catch (Exception e) {
-					isUpdate = Boolean.FALSE;
-					throw new ApplicationException(
-							"Data de nascimento inválida. Favor digitar novamente no formato: dd/mm/aaaa", e);
+			if (profile == null || isUpdate) {
+				
+				if(profile == null)
+					profile = new UsuarioPerfil();
+				
+				
+				if(conversaVO.getIdConversation() != null)
+					profile.setConversationId(Integer.parseInt(conversaVO.getIdConversation()));
+				
+				profile.setClientId(conversaVO.getIdCliente());
+				profile.setDialogId(conversaVO.getIdDialog());
+				profile.setEmail(conversaVO.getEmail());
+				
+				if (profile.getId() == null) {
+					usuarioPerfilDAO.save(profile);
+				} else {
+					usuarioPerfilDAO.update(profile);
 				}
 
-				if ((date.isBefore(minDateNasc)) || date.isAfter(maxDateNasc)) {
-					throw new ApplicationException("Data de nascimento incorreta. Digite um valor válido");
-				}
-
-				profile.setDataNascimento(date);
-				isUpdate = Boolean.TRUE;
 			}
-
-			if (resposta.indexOf(INFORMAR_DATA_ADMISSAO) >= 0) {
-
-				try {
-					date = LocalDate.parse(pergunta, formatter);
-
-				} catch (Exception e) {
-					isUpdate = Boolean.FALSE;
-					throw new ApplicationException(
-							"Data de admissão inválida. Favor digitar novamente no formato dd/mm/aaaa", e);
-				}
-
-				if (date.isAfter(dateAtual) || date.isBefore(dateAdmissao)) {
-					throw new ApplicationException("Data de admissão inválida. Digite um valor válido");
-				}
-
-				profile.setDataAdmissao(date);
-				isUpdate = Boolean.TRUE;
-			}
-
-		}
-
-		
-		if (profile != null && profile.getEmail() != null && !"".equals(profile.getEmail()) && profile.getId() == null) {
-			isUpdate = Boolean.TRUE;
-		}
-
-		if (profile == null || isUpdate) {
-			
-			if(profile == null)
-				profile = new UsuarioPerfil();
-			
-			
-			if(conversaVO.getIdConversation() != null)
-				profile.setConversationId(Integer.parseInt(conversaVO.getIdConversation()));
-			
-			profile.setClientId(conversaVO.getIdCliente());
-			profile.setDialogId(conversaVO.getIdDialog());
-			profile.setEmail(conversaVO.getEmail());
-			
-			if (profile.getId() == null) {
-				usuarioPerfilDAO.save(profile);
-			} else {
-				usuarioPerfilDAO.update(profile);
-			}
-
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 		}
 
 		return profile;
@@ -327,6 +331,15 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 				} else {
 					throw new ApplicationException("Nome não encontrado!! Dados encontrados: " + conversaVO.toString());
 				}
+
+				if (profile.getDataNascimento() != null) {
+					conversaVO.setDataNasci(DateUtils.format(profile.getDataNascimento()));
+					profileValues.put("DATA_NASC", DateUtils.format(profile.getDataNascimento()));
+					service.updateProfile(profile.getDialogId(), Integer.parseInt(profile.getClientId()), profileValues);
+					
+				} else {
+					throw new ApplicationException("Data de Nascimento não encontrado!! Dados encontrados: " + conversaVO.toString());
+				}		
 				
 				if (profile.getDataAdmissao() != null) {
 					conversaVO.setDataAdmin(DateUtils.format(profile.getDataAdmissao()));
@@ -337,14 +350,6 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 					throw new ApplicationException("Data de Admissão não encontrado!! Dados encontrados: " + conversaVO.toString());
 				}		
 				
-				if (profile.getDataNascimento() != null) {
-					conversaVO.setDataNasci(DateUtils.format(profile.getDataNascimento()));
-					profileValues.put("DATA_NASC", DateUtils.format(profile.getDataNascimento()));
-					service.updateProfile(profile.getDialogId(), Integer.parseInt(profile.getClientId()), profileValues);
-					
-				} else {
-					throw new ApplicationException("Data de Nascimento não encontrado!! Dados encontrados: " + conversaVO.toString());
-				}		
 				
 			}
 		} catch (Exception e) {
@@ -364,6 +369,8 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		
 		if(conversaVO.getLstInterlocucaoVO() == null){
 			conversaVO.setLstInterlocucaoVO(new ArrayList<>());
+		}else{
+			conversaVO.getLstInterlocucaoVO().clear();
 		}
 		
 		conversaVO.setIdCliente(conversation.getClientId().toString());

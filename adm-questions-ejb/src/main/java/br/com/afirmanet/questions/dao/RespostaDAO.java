@@ -1,5 +1,7 @@
 package br.com.afirmanet.questions.dao;
 
+import static br.com.afirmanet.questions.entity.Resposta_.titulo;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,15 +15,16 @@ import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Resposta;
 import br.com.afirmanet.questions.entity.Topico;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -117,7 +120,10 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 			predicates.add(cb.equal(root.get("topico"), topico));
 
 			if(!predicates.isEmpty()){
-				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
+				
+				List<Order> orderList = getOrderList(br.com.afirmanet.core.persistence.Order.asc(titulo));
+
+				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {})).orderBy(orderList);;
 
 				retornoResposta = entityManager.createQuery(criteriaQuery).getResultList();
 			}

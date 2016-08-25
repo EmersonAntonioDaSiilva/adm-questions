@@ -92,11 +92,12 @@
 											 value="#{manager.resposta}" 
 											 label="Mudar resposta" 
 											 selectWidth="250px"
-											 width="150px">
+											 width="150px"
+											 listener="#{manager.atualizarDefinicao}">
 			            <f:selectItems value="#{manager.lstResposta}" var="resposta" itemValue="#{resposta}" itemLabel="#{resposta.titulo}"  />
-						
 					</afirmanet:selectOneMenu>
 					 
+					<afirmanet:outputText id="idDefinicao" label="Definição" value="#{manager.resposta.definicao}"/>
 					
 					<p:commandButton action="#{manager.adicionarModificacoes}" 
 									 style="margin: 10px auto;" 

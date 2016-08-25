@@ -182,6 +182,10 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 
 	}
 
+	public void atualizarDefinicao(){
+		
+	}
+	
 	public void buscarClassificacao() {
 		RespostaDAO respostaDAO = new RespostaDAO(entityManager);
 		this.lstResposta = respostaDAO.findByClienteAndTopico(this.cliente, this.topico);

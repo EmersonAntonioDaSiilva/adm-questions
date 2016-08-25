@@ -29,7 +29,9 @@ import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
 import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Serializable {
 	private static final long serialVersionUID = -452444688310099799L;
 
@@ -191,6 +193,8 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		} catch (IOException e) {
 			throw new ApplicationException(e.getMessage(), e);
 		}
+		
+		log.info(response.toString());
 		
 		return  response;
 		
