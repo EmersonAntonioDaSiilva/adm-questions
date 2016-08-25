@@ -60,7 +60,10 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	@Getter
 	@Setter
 	private Resposta resposta;
-
+	
+	@Getter
+	private String definicao; 
+	
 	@Getter
 	private List<Cliente> lstCliente;
 
@@ -94,6 +97,8 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	@Getter
 	@Setter
 	private String monthYear;
+	
+	private Integer sentimento;
 
 	@PostConstruct
 	public void inicializar() {
@@ -183,7 +188,11 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	}
 
 	public void atualizarDefinicao(){
-		
+		if(this.resposta != null){
+			this.definicao = this.resposta.getDefinicao();
+		}else{
+			this.definicao = "";
+		}
 	}
 	
 	public void buscarClassificacao() {
@@ -213,7 +222,7 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 		LocalDate dtFim = LocalDate.of(ano, mes, dia).plusMonths(1);
 		dtFim = LocalDate.of(dtFim.getYear(), dtFim.getMonth(), 1).minusDays(1);
 
-		Integer sentimento = 0;
+		sentimento = 0;
 
 		if (RelatorioClassificacaoEnum.SENTIMENTO_POSITIVO.getChartLabel().equals(mySeries.getLabel())) {
 			sentimento = RelatorioClassificacaoEnum.SENTIMENTO_POSITIVO.getCodigo();
@@ -258,6 +267,17 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 			classificacaoDAO.update(this.lstClassificacaoUpdate);
 			perguntaDAO.save(perguntas);
 			this.lstClassificacaoUpdate =  new ArrayList<>();
+			
+			String[] monthYearTexto = monthYear.split(" ");
+			String month = monthYearTexto[0];
+			
+			MesEnum mesEnum = lstMes.stream().filter(m -> m.getDescricao().equals(month)).findFirst().get();
+			Integer year = Integer.parseInt(monthYearTexto[1]);
+			
+			LocalDate dtIni = LocalDate.of(year, mesEnum.getCodigo(), 1);
+			LocalDate dtFim = LocalDate.of(year, mesEnum.getCodigo(), 1).plusMonths(1).minusDays(1);
+
+			this.lstClassificaoChart = classificacaoDAO.findByDataCadastroESentimento(cliente, topico, dtIni, dtFim, sentimento);
 		}
 	}
 	

@@ -12,8 +12,7 @@
 	<ui:param name="manager" value="#{relatorioClassificacaoManager}" />
 	
 	<ui:define name="content">
-		<h:form id="formQuestuionRH">
-			<p:growl id="updateMessage" showDetail="true" sticky="true" /> 
+		<h:form id="formRC">
 			<p:panel id="searchFilter" header="Gerar Relatório de Classificação por Sentimento" toggleable="false">
 				<afirmanet:selectOneMenu listener="#{relatorioClassificacaoManager.selecionarCliente}"
 										 value="#{manager.cliente}" 
@@ -93,11 +92,11 @@
 											 label="Mudar resposta" 
 											 selectWidth="250px"
 											 width="150px"
-											 listener="#{manager.atualizarDefinicao}">
-			            <f:selectItems value="#{manager.lstResposta}" var="resposta" itemValue="#{resposta}" itemLabel="#{resposta.titulo}"  />
+											 listener="#{relatorioClassificacaoManager.atualizarDefinicao}">
+			            <f:selectItems value="#{manager.lstResposta}" var="resposta" itemValue="#{resposta}" itemLabel="#{resposta.titulo}" />
 					</afirmanet:selectOneMenu>
 					 
-					<afirmanet:outputText id="idDefinicao" label="Definição" value="#{manager.resposta.definicao}"/>
+					<afirmanet:outputText id="idDefinicao" label="Definição" value="#{manager.definicao}"/>
 					
 					<p:commandButton action="#{manager.adicionarModificacoes}" 
 									 style="margin: 10px auto;" 
