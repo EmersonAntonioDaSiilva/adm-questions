@@ -69,6 +69,10 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 				if(idClusterSolr == null){
 					createCluster(1); // cria cluster
 					uploadConfiguration(); // configuração (arquivos xml)
+					
+					service.createRanker("rankRH", training)
+					
+					
 					createCollection(); // criação da coleção
 					indexDocumentAndCommit(); // indexa os documentos
 				}
