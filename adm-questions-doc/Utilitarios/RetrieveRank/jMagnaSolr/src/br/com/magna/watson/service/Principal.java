@@ -17,9 +17,9 @@ public class Principal extends javax.swing.JFrame {
      * Creates new form Principal
      */
     public Principal() {
-        System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": Iniciando aplicação.");
+    	messageLog("Iniciando aplicação.");
     	initComponents();
-    	System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": Aplicação iniciada. O sistema está pronto para criar o cluster Solr.");
+    	messageLog("Aplicação iniciada. O sistema está pronto para criar o cluster Solr.");
     }
 
     /**
@@ -191,34 +191,34 @@ public class Principal extends javax.swing.JFrame {
 
     private void criar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criar
         // TODO add your handling code here:
-    	System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": Criando cluster Solr...");
+    	messageLog("Criando cluster Solr...");
     	
     	if("".equals(jTextField1.getText().trim()) || "".equals(jTextField2.getText().trim())){
-    		System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": [ERROR]: Login e senha do RR deve ser informado.");
+    		messageLog("[ERROR]: Login e senha do RR deve ser informado.");
     		jLabel3.setText("[ERROR]: Login e senha do RR deve ser informado.");
         }
         
         if("".equals(jTextField4.getText().trim()) || "".equals(jTextField3.getText().trim())){
-        	System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": [ERROR]: Login e senha do DC deve ser informado.");
+        	messageLog("[ERROR]: Login e senha do DC deve ser informado.");
             jLabel3.setText("[ERROR]: Login e senha do DC deve ser informado.");
         }
         
-        System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": Serviço Document Conversion.");
+        messageLog("Serviço Document Conversion.");
         ServiceDocumentConversion servDC = new ServiceDocumentConversion(jTextField4.getText().trim(),
                                                                                 jTextField3.getText().trim());
         
-        System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": Serviço Document Conversion está ok.");
+        messageLog("Serviço Document Conversion está ok.");
         
-        System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": Serviço Retrieve and Rank.");
+        messageLog("Serviço Retrieve and Rank.");
         ServiceRetrieveRank servRR = new ServiceRetrieveRank(jTextField1.getText().trim(),
                                                                 jTextField2.getText().trim());
-        System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": Serviço Retrieve and Rank está ok.");
+        messageLog("Serviço Retrieve and Rank está ok.");
         try{
             servRR.createClusterSolr(servDC);
-            System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": [SUCESSO]: Criado cluster com sucesso.");
+            messageLog("[SUCESSO]: Criado cluster com sucesso.");
             jLabel3.setText("[SUCESSO]: Criado cluster com sucesso.");
         }catch(Exception e){
-        	System.out.println(new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date())+": [ERROR] "+ e.getMessage());
+        	messageLog("[ERROR] "+ e.getMessage());
         	jLabel3.setText("[ERROR]: "+ e.getMessage());
         }
         
@@ -258,6 +258,11 @@ public class Principal extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void messageLog(String text){
+    	System.out.println(new SimpleDateFormat("dd-mm-yyyy hh:mm:ss").format(new Date())+": "+ text);
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
