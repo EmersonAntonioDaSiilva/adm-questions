@@ -17,18 +17,18 @@ import javax.persistence.criteria.Predicate;
 import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Cliente;
-import br.com.afirmanet.questions.entity.ProtWords;
+import br.com.afirmanet.questions.entity.Synonyms;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ProtWordsDAO  extends GenericDAO<ProtWords, Integer> implements Serializable {
+public class SynonymsDAO extends GenericDAO<Synonyms, Integer> implements Serializable {
 	
-	private static final long serialVersionUID = 6173759683888815887L;
+	private static final long serialVersionUID = 3049018584560975642L;
 
-	public ProtWordsDAO(EntityManager entityManager) {
+	public SynonymsDAO(EntityManager entityManager) {
 		super(entityManager);
 	}
 
@@ -39,49 +39,49 @@ public class ProtWordsDAO  extends GenericDAO<ProtWords, Integer> implements Ser
 	
 	@Override
 	@SuppressWarnings("unused")
-	public Collection<Predicate> createPaginationPredicates(ProtWords entity) {
+	public Collection<Predicate> createPaginationPredicates(Synonyms entity) {
 		Collection<Predicate> predicates = createPredicates();
 		return super.createPaginationPredicates(entity);
 	}
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void delete(ProtWords entity) {
-			super.delete(entity);
+	public void delete(Synonyms entity) {
+		super.delete(entity);
 	}
 
 
-	public ProtWords findByNome(String descricao) throws DaoException {
-		ProtWords retornoProtWords = null;
+	public Synonyms findByDescricao(String descricao) throws DaoException {
+		Synonyms retornoSynonyms = null;
 		
 		try {
-			CriteriaQuery<ProtWords> criteriaQuery = createCriteriaQuery();
+			CriteriaQuery<Synonyms> criteriaQuery = createCriteriaQuery();
 			Collection<Predicate> predicates = new ArrayList<>();
 
 			if (descricao != null && !descricao.isEmpty()) {
-				predicates.add(cb.equal(cb.lower(root.get("descricao")), descricao.toLowerCase()));
+				predicates.add(cb.like(cb.lower(root.get("descricao")), descricao.toLowerCase()));
 			}
 
 			if(!predicates.isEmpty()){
 				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
 
-				retornoProtWords = entityManager.createQuery(criteriaQuery).getSingleResult();
+				retornoSynonyms = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
-		}
-		catch(NoResultException e){
+		} catch (NoResultException e) {
 			// Nada a fazer
-		}catch (Exception e) {
-			throw new DaoException(e.getMessage());
 		}
-		return retornoProtWords;
+		catch (Exception e) {
+				throw new DaoException(e.getMessage());
+		}
+		return retornoSynonyms;
 
 	}
 
-	public List<ProtWords> findbyCliente(Cliente cliente) throws DaoException {
-		List<ProtWords> retornoProtWords= new ArrayList<>();
+	public List<Synonyms> findbyCliente(Cliente cliente) throws DaoException {
+		List<Synonyms> retornoSynonyms= new ArrayList<>();
 		
 		try {
-			CriteriaQuery<ProtWords> criteriaQuery = createCriteriaQuery();
+			CriteriaQuery<Synonyms> criteriaQuery = createCriteriaQuery();
 			Collection<Predicate> predicates = new ArrayList<>();
 
 			predicates.add(cb.equal(root.get("cliente"), cliente));
@@ -89,13 +89,13 @@ public class ProtWordsDAO  extends GenericDAO<ProtWords, Integer> implements Ser
 			if(!predicates.isEmpty()){
 				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
 
-				retornoProtWords = entityManager.createQuery(criteriaQuery).getResultList();
+				retornoSynonyms = entityManager.createQuery(criteriaQuery).getResultList();
 			}
 		} catch (Exception e) {
 			throw new DaoException(e.getMessage(),e);
 		}
 
-		return retornoProtWords;		
+		return retornoSynonyms;		
 	}
 
 }
