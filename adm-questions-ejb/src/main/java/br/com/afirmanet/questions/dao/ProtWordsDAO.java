@@ -10,6 +10,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
@@ -66,7 +68,10 @@ public class ProtWordsDAO  extends GenericDAO<ProtWords, Integer> implements Ser
 
 				retornoProtWords = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
-		} catch (Exception e) {
+		}
+		catch(NoResultException e){
+			// Nada a fazer
+		}catch (Exception e) {
 			throw new DaoException(e.getMessage());
 		}
 		return retornoProtWords;
