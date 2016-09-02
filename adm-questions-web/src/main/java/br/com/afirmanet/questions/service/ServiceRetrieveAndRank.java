@@ -70,8 +70,6 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 					createCluster(1); // cria cluster
 					uploadConfiguration(); // configuração (arquivos xml)
 					
-					service.createRanker("rankRH", training)
-					
 					
 					createCollection(); // criação da coleção
 					indexDocumentAndCommit(); // indexa os documentos
