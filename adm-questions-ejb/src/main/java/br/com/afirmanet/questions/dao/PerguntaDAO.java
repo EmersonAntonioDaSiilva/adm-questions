@@ -15,15 +15,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Pergunta;
 import br.com.afirmanet.questions.entity.Resposta;
+import lombok.NoArgsConstructor;
 
 
-@Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public @Stateless class PerguntaDAO extends GenericDAO<Pergunta, Integer> implements Serializable {

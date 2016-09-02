@@ -59,7 +59,7 @@ public class ServiceDocumentConversion extends WatsonServiceFactory implements S
 				for(int i = 0; i < arquivos.length; i++){
 					// TODO Colocar as regras de validação para os documentos
 					//String mediaTypeFromFile = ConversionUtils.getMediaTypeFromFile(arquivos[i]);
-					Answers execute = service.convertDocumentToAnswer(arquivos[i]);
+					Answers execute = service.convertDocumentToAnswer(arquivos[i]).execute();
 					
 					SolrInputDocument document = new SolrInputDocument();
 					document.addField("id", execute.getAnswerUnits().get(0).getId());

@@ -1,7 +1,5 @@
 package br.com.afirmanet.questions.dao;
 
-import static br.com.afirmanet.questions.entity.Resposta_.titulo;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,12 +20,10 @@ import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Resposta;
+import br.com.afirmanet.questions.entity.Resposta_;
 import br.com.afirmanet.questions.entity.Topico;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-
-@Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implements Serializable {
@@ -121,7 +117,7 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 
 			if(!predicates.isEmpty()){
 				
-				List<Order> orderList = getOrderList(br.com.afirmanet.core.persistence.Order.asc(titulo));
+				List<Order> orderList = getOrderList(br.com.afirmanet.core.persistence.Order.asc(Resposta_.titulo));
 
 				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {})).orderBy(orderList);;
 

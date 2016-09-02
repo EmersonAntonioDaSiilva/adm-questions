@@ -8,7 +8,6 @@ import javax.inject.Named;
 import org.omnifaces.cdi.ViewScoped;
 
 import br.com.afirmanet.core.exception.ApplicationException;
-import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.manager.GenericCRUD;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.StopWordsDAO;

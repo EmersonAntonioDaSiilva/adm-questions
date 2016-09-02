@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.persistence.PersistenceException;
 
 import org.omnifaces.cdi.ViewScoped;
 

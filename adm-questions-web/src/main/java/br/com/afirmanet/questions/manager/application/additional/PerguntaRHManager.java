@@ -102,7 +102,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 		
 		try {
 			if(pergunta != null &&  !"".equals(pergunta)){
-				classificacao = serviceNLC.getService().classify(getIdClassificacao(), pergunta);
+				classificacao = serviceNLC.getService().classify(getIdClassificacao(), pergunta).execute();
 				
 				if (classificacao.getClasses().get(0).getConfidence().compareTo(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC) == -1) {
 					serviceNLC.gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
@@ -184,7 +184,7 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 	private String getIdClassificacao() {
 		Classifiers classifiers;
 		try {
-			classifiers = serviceNLC.getService().getClassifiers();
+			classifiers = serviceNLC.getService().getClassifiers().execute();
 			List<Classifier> lstClassifiers = classifiers.getClassifiers();
 			Classifier classifier = lstClassifiers.get(0);
 

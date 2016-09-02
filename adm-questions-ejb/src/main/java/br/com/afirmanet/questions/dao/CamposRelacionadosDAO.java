@@ -18,10 +18,8 @@ import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.CamposRelacionados;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
-@Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public @Stateless class CamposRelacionadosDAO extends GenericDAO<CamposRelacionados, Integer> implements Serializable {

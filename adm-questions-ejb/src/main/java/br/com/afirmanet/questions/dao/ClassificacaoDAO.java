@@ -24,10 +24,8 @@ import br.com.afirmanet.questions.entity.Classificacao;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Topico;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
-@Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public @Stateless class ClassificacaoDAO extends GenericDAO<Classificacao, Integer> implements Serializable {
