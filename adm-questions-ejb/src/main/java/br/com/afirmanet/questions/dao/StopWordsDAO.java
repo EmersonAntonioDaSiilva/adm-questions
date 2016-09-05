@@ -14,15 +14,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
-import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.StopWords;
+import lombok.NoArgsConstructor;
 
-@Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public @Stateless class StopWordsDAO extends GenericDAO<StopWords, Integer> implements Serializable {

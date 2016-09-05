@@ -19,9 +19,7 @@ import br.com.afirmanet.core.persistence.GenericDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.ProtWords;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ProtWordsDAO  extends GenericDAO<ProtWords, Integer> implements Serializable {

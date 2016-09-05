@@ -13,13 +13,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
+import lombok.NoArgsConstructor;
 
 
-@Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolrDAO, Integer> implements Serializable {

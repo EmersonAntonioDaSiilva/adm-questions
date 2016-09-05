@@ -20,10 +20,8 @@ import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.DadosWatson;
 import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
-@Slf4j
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public @Stateless class DadosWatsonDAO extends GenericDAO<DadosWatson, Integer> implements Serializable {
