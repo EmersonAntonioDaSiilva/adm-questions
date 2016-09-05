@@ -11,6 +11,7 @@
 		
 	<ui:define name="searchFilterBlock">
 		<p:panelGrid columns="2">
+			<p:growl id="generatedFile" showDetail="true" sticky="true" /> 
 			<afirmanet:inputText label="Synonyms (Palavra)" id="searchNome" value="#{manager.searchParam.descricao}" maxlength="100"/>
 		</p:panelGrid>
 	</ui:define>
@@ -29,13 +30,32 @@
 	</ui:define>
 	<!-- ./recordDetailBlock -->
 
+	<ui:define name="generateFilebutton">
+		<p:commandButton action="#{manager.gerarArquivoTxt}" 
+						 id="generateFileTXT"
+						 style="margin: 10px auto;" 
+						 rendered="#{manager.entityList != null and manager.entityList.rowCount > 0}"		 					 
+						 value="Gerar arquivo TXT" ajax="true" update="generatedFile" />
+	</ui:define>	
+
 	<ui:define name="recordInsertEditBlock">
 		<p:panelGrid columns="1">
-			<afirmanet:selectOneMenu  value="#{manager.entity.cliente}" label="Clientes" >
+			<afirmanet:selectOneMenu value="#{manager.entity.cliente}" label="Clientes" width="150px">
 				<f:selectItems value="#{manager.lstCliente}" var ="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}"/>
 			</afirmanet:selectOneMenu>
 		
-			<afirmanet:inputText label="Grupo de Synonyms" id="insertNome" value="#{manager.entity.descricao}"  maxlength="150" /> (Separe por vírgula)
+			<p:panelGrid columns="2">
+				<afirmanet:inputText label="Grupo de Synonyms" 
+									 id="insertNome" 
+									 width="150px" 
+									 value="#{manager.entity.descricao}"  
+									 maxlength="150" />
+				(Separe por vírgula)
+			</p:panelGrid>
+			<p:panelGrid columns="2">
+				<p:outputLabel style="width: 150px;" value="Mapeado?: " />
+	        	<p:selectBooleanCheckbox value="#{manager.entity.mapeado}" />
+	        </p:panelGrid>
 		</p:panelGrid>		
 	</ui:define>
 	<!-- ./recordInsertEditBlock -->

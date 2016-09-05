@@ -29,4 +29,13 @@ ALTER TABLE prot_words ALTER COLUMN id_prot_words SET DEFAULT nextval('sq_prot_w
 REVOKE ALL ON SEQUENCE sq_prot_words FROM PUBLIC;
 REVOKE ALL ON SEQUENCE sq_prot_words FROM question_magna;
 GRANT ALL ON SEQUENCE sq_prot_words TO question_magna;
-GRANT SELECT,UPDATE ON SEQUENCE sq_prot_words TO PUBLIC;
+GRANT SELECT, UPDATE ON SEQUENCE sq_prot_words TO PUBLIC;
+
+
+
+
+INSERT INTO prot_words (id_cliente, descricao) VALUES (1, 'força');
+INSERT INTO prot_words (id_cliente, descricao) VALUES (1, 'destruir');
+INSERT INTO prot_words (id_cliente, descricao) VALUES (1, 'falar');
+INSERT INTO prot_words (id_cliente, descricao) VALUES (1, 'buscar');
+INSERT INTO prot_words (id_cliente, descricao) VALUES (1, 'anexar');

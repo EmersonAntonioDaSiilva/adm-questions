@@ -36,6 +36,8 @@ public class Synonyms implements Serializable {
 
 	private String descricao;
 	
+	private Boolean mapeado;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;

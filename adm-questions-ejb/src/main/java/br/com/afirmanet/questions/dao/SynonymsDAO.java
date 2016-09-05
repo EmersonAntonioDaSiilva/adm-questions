@@ -51,7 +51,7 @@ public class SynonymsDAO extends GenericDAO<Synonyms, Integer> implements Serial
 	}
 
 
-	public Synonyms findByDescricao(String descricao) throws DaoException {
+	public Synonyms findByDescricao(String descricao, Boolean mapeado) throws DaoException {
 		Synonyms retornoSynonyms = null;
 		
 		try {
@@ -60,6 +60,7 @@ public class SynonymsDAO extends GenericDAO<Synonyms, Integer> implements Serial
 
 			if (descricao != null && !descricao.isEmpty()) {
 				predicates.add(cb.like(cb.lower(root.get("descricao")), descricao.toLowerCase()));
+				predicates.add(cb.equal(root.get("mapeado"), mapeado));
 			}
 
 			if(!predicates.isEmpty()){
