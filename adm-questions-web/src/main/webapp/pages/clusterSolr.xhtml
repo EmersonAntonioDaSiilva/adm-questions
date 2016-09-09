@@ -41,51 +41,46 @@
 	<!-- ./searchResultBlock -->
 
 	<ui:define name="recordDetailBlock">
-		<h:form>
-			<p:panelGrid columns="1">
-				<p:growl id="sinchronizedCluster" showDetail="true" sticky="true" /> 
-				
-				<afirmanet:outputText label="Nome do Cluster" value="#{manager.entity.nomeCluster}" width="150px" />
-				
-				<afirmanet:outputText label="ID do Cluster" value="#{manager.entity.idCluster}" width="150px" />
-				
-				<afirmanet:outputText label="Unidade do Cluster" value="#{manager.entity.unitCluster}" width="150px" />
-				
-				<afirmanet:outputText label="Nome da Config" value="#{manager.entity.nomeConfig}" width="150px" />
-				
-				<afirmanet:outputText label="Nome da Collection" value="#{manager.entity.nomeCollection}" width="150px" />
-				
-				<afirmanet:outputText label="Status" value="#{manager.entity.statusCluster}" width="150px" />
-				
-				<p:commandButton action="#{manager.criarCluster}"
-								 disabled="#{manager.entity.idCluster == null ? false : true}"
-								 process="@this"
-								 update="@form" 
-								 value="Criar" />
-								 
-				<p:commandButton action="#{manager.apagarCluster}" 
-								 disabled="#{manager.entity.idCluster == null ? true : false}"
-								 process="@form"
-								 update="@form" 
-								 value="Apagar" />
-								 
-				<p:commandButton action="#{manager.atualizarConfiguracao}" 
-								 disabled="#{manager.entity.idCluster == null ? true : false}"
-								 process="@form"
-								 update="@form" 
-								 value="Atualizar Dicionário" />
-								 
-				<p:commandButton action="#{manager.sincronizarCluster}"
-								 process="@form"
-								 update="@form" 
-								 value="Sincronizar" />
-			</p:panelGrid>
+		<p:panelGrid columns="1">
+			<p:growl id="sinchronizedCluster" showDetail="true" sticky="true" /> 
 			
-			<p:panelGrid column="4" style="margin-top: 20px;">
-				
-			</p:panelGrid>
-		</h:form>
+			<afirmanet:outputText label="Nome do Cluster" value="#{manager.entity.nomeCluster}" width="150px" />
+			
+			<afirmanet:outputText label="ID do Cluster" value="#{manager.entity.idCluster}" width="150px" />
+			
+			<afirmanet:outputText label="Unidade do Cluster" value="#{manager.entity.unitCluster}" width="150px" />
+			
+			<afirmanet:outputText label="Nome da Config" value="#{manager.entity.nomeConfig}" width="150px" />
+			
+			<afirmanet:outputText label="Nome da Collection" value="#{manager.entity.nomeCollection}" width="150px" />
+			
+			<afirmanet:outputText label="Status" value="#{manager.entity.statusCluster}" width="150px" />
+		</p:panelGrid>
 		
+		<p:panelGrid column="4" style="margin-top: 20px;">
+			<p:commandButton action="#{manager.criarCluster}"
+							 disabled="#{manager.entity.idCluster == null ? false : true}"
+							 update="@form" 
+							 value="Criar" />
+							 
+			<p:commandButton action="#{manager.apagarCluster}" 
+							 disabled="#{manager.entity.idCluster == null ? true : false}"
+							 update="@form" 
+							 value="Apagar" />
+							 
+			<p:commandButton action="#{manager.atualizarConfiguracao}" 
+							 disabled="#{manager.entity.idCluster == null ? true : false}"
+							 update="@form" 
+							 value="Atualizar Dicionário" />
+							 
+			<p:commandButton action="#{manager.sincronizarCluster}"
+							 update="@form" 
+							 value="Sincronizar" />
+			
+			<p:commandButton action="#{manager.gerarTeste}"
+							 update="@form" 
+							 value="Teste" />				 	 
+		</p:panelGrid>
 	</ui:define>
 	<!-- ./recordDetailBlock -->
 

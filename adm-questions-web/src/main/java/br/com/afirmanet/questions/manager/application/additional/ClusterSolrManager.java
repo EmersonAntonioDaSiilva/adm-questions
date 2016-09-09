@@ -43,7 +43,6 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 	
 	@Override
 	public void init() {
-		
 		ClienteDAO clienteDAO = new ClienteDAO(entityManager);
 		lstCliente = clienteDAO.findAll();
 		lstUnidade = Arrays.asList(Unidade.values());

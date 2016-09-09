@@ -202,7 +202,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		return builderHttpSolrClient.build();
 	}
 
-	private void indexDocumentAndCommit(String idCluster, String nomeCollection) throws Exception{
+	private void indexDocumentAndCommit(String idCluster, String nomeCollection) throws Exception {
 		// Instância do Solr
 		HttpSolrClient solrCliente = getSolrClient(idCluster);
 		
