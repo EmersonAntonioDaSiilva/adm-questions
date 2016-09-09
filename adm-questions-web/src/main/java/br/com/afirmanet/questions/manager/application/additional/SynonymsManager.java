@@ -25,14 +25,13 @@ import lombok.Getter;
 
 @Named
 @ViewScoped
-public class SynonymsManager  extends GenericCRUD<Synonyms, Integer, SynonymsDAO> implements Serializable {
+public class SynonymsManager extends GenericCRUD<Synonyms, Integer, SynonymsDAO> implements Serializable {
 	
 	private static final long serialVersionUID = 8204659315590143728L;
 	
 	@Getter
 	private List<Cliente> lstCliente;
 
-	
 	@Override
 	public void init() {
 		showDeleteButton = true;

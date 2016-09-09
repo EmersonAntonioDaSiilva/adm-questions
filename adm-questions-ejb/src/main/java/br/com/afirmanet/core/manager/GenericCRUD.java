@@ -95,10 +95,16 @@ public class GenericCRUD<T, ID extends Serializable, D extends GenericDAO<?, ?>>
 	protected void afterPrepareEdit() {
 		// Basta implementar o que vc precisa
 	}
-
+	
 	@Message
 	@Transactional
 	public void update() {
+		update(true);
+	}
+
+	@Message
+	@Transactional
+	public void update(boolean exibeMensagem) {
 		if (validateUpdate()) {
 			entityManager.joinTransaction();
 
@@ -106,8 +112,10 @@ public class GenericCRUD<T, ID extends Serializable, D extends GenericDAO<?, ?>>
 			gravarHistorico(AcaoEnum.ALTERAR);
 			executeUpdate();
 			afterUpdate();
-
-			addInfoMessageFromResourceBundle("update.success");
+			
+			if(exibeMensagem) {
+				addInfoMessageFromResourceBundle("update.success");
+			}
 			currentAction = CrudActionEnum.DETAIL;
 		}
 	}

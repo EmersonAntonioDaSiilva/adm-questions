@@ -184,7 +184,6 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 	public void selecionarCliente() {
 		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
 		this.lstTopico = topicoDAO.findbyCliente(this.cliente);
-
 	}
 
 	public void atualizarDefinicao(){

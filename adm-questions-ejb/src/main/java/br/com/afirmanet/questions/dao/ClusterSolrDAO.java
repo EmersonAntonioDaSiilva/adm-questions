@@ -3,6 +3,7 @@ package br.com.afirmanet.questions.dao;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -15,12 +16,14 @@ import javax.persistence.criteria.Predicate;
 
 import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
+import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.ClusterSolr;
 import lombok.NoArgsConstructor;
 
 
 @NoArgsConstructor
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolrDAO, Integer> implements Serializable {
+public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolr, Integer> implements Serializable {
 	private static final long serialVersionUID = 6907863285648197379L;
 
 	public ClusterSolrDAO(EntityManager entityManager) {
@@ -36,7 +39,7 @@ public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolrDAO, Intege
 	
 	@Override
 	@SuppressWarnings("unused")
-	public Collection<Predicate> createPaginationPredicates(ClusterSolrDAO entity) {
+	public Collection<Predicate> createPaginationPredicates(ClusterSolr entity) {
 		Collection<Predicate> predicates = createPredicates();
 
 		return super.createPaginationPredicates(entity);
@@ -44,20 +47,20 @@ public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolrDAO, Intege
 
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void delete(ClusterSolrDAO entity) {
+	public void delete(ClusterSolr entity) {
 			super.delete(entity);
 	}
 
 
-	public ClusterSolrDAO findByNome(String descricao)throws DaoException{
-		ClusterSolrDAO retornoClassificacao = null;
+	public ClusterSolr findByNome(String descricao) throws DaoException {
+		ClusterSolr retornoClassificacao = null;
 		
 		try {
-			CriteriaQuery<ClusterSolrDAO> criteriaQuery = createCriteriaQuery();
+			CriteriaQuery<ClusterSolr> criteriaQuery = createCriteriaQuery();
 			Collection<Predicate> predicates = new ArrayList<>();
 
 			if (descricao != null && !descricao.isEmpty()) {
-				predicates.add(cb.equal(cb.lower(root.get("nome_cluster")), descricao.toLowerCase()));
+				predicates.add(cb.equal(cb.lower(root.get("nomeCluster")), descricao.toLowerCase()));
 			}
 
 			if(!predicates.isEmpty()){
@@ -70,6 +73,30 @@ public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolrDAO, Intege
 		}
 		return retornoClassificacao;
 
+	}
+	
+	public List<ClusterSolr> findByCliente(Cliente cliente) throws DaoException {
+		List<ClusterSolr> retornoClusters = null;
+		
+		try {
+			CriteriaQuery<ClusterSolr> criteriaQuery = createCriteriaQuery();
+			Collection<Predicate> predicates = new ArrayList<>();
+			
+			if (cliente != null) {
+				predicates.add(cb.equal(root.get("cliente"), cliente));
+			}
+			
+			if(!predicates.isEmpty()){
+				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
+
+				retornoClusters = entityManager.createQuery(criteriaQuery).getResultList();
+			}
+			
+		} catch(Exception e) {
+			throw new DaoException(e.getMessage());
+		}
+		
+		return retornoClusters;
 	}
 
 }

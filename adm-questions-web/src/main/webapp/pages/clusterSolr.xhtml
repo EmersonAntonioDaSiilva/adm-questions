@@ -1,0 +1,142 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+				xmlns:h="http://xmlns.jcp.org/jsf/html" 
+				xmlns:f="http://xmlns.jcp.org/jsf/core"
+				xmlns:p="http://primefaces.org/ui" 
+				xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+				xmlns:afirmanet="http://afirmanet.com.br/componentes" 
+				template="/templates/crud.xhtml">
+
+	<ui:param name="entityName" value="Cluster Solr" />
+	<ui:param name="manager" value="#{clusterSolrManager}" />
+	
+	<ui:define name="searchFilterBlock">
+		<p:panelGrid columns="1">
+			
+			<afirmanet:selectOneMenu label="Clientes" 
+									 listener="#{clusterSolrManager.selecionarCliente}"
+									 selectWidth="250px"
+									 required="true"
+									 value="#{manager.entity.cliente}" 
+									 width="150px">
+				<f:selectItems itemLabel="#{cliente.descricao}"
+							   itemValue="#{cliente}" 
+							   value="#{manager.lstCliente}" 
+							   var="cliente" />
+			</afirmanet:selectOneMenu>
+			
+			<afirmanet:inputText label="Nome do Cluster" 
+								 id="searchNome" 
+								 value="#{manager.searchParam.nomeCluster}" 
+								 maxlength="100"
+								 width="150px" />
+		</p:panelGrid>
+	</ui:define>
+	<!-- ./searchFilterBlock -->
+
+	<ui:define name="searchResultBlock">
+		<afirmanet:column headerText="Cliente" value="#{entity.cliente.descricao}"/>
+		<afirmanet:column headerText="Nome do Cluster" value="#{entity.nomeCluster}"/>
+	</ui:define>
+	<!-- ./searchResultBlock -->
+
+	<ui:define name="recordDetailBlock">
+		<h:form>
+			<p:panelGrid columns="1">
+				<p:growl id="sinchronizedCluster" showDetail="true" sticky="true" /> 
+				
+				<afirmanet:outputText label="Nome do Cluster" value="#{manager.entity.nomeCluster}" width="150px" />
+				
+				<afirmanet:outputText label="ID do Cluster" value="#{manager.entity.idCluster}" width="150px" />
+				
+				<afirmanet:outputText label="Unidade do Cluster" value="#{manager.entity.unitCluster}" width="150px" />
+				
+				<afirmanet:outputText label="Nome da Config" value="#{manager.entity.nomeConfig}" width="150px" />
+				
+				<afirmanet:outputText label="Nome da Collection" value="#{manager.entity.nomeCollection}" width="150px" />
+				
+				<afirmanet:outputText label="Status" value="#{manager.entity.statusCluster}" width="150px" />
+				
+				<p:commandButton action="#{manager.criarCluster}"
+								 disabled="#{manager.entity.idCluster == null ? false : true}"
+								 process="@this"
+								 update="@form" 
+								 value="Criar" />
+								 
+				<p:commandButton action="#{manager.apagarCluster}" 
+								 disabled="#{manager.entity.idCluster == null ? true : false}"
+								 process="@form"
+								 update="@form" 
+								 value="Apagar" />
+								 
+				<p:commandButton action="#{manager.atualizarConfiguracao}" 
+								 disabled="#{manager.entity.idCluster == null ? true : false}"
+								 process="@form"
+								 update="@form" 
+								 value="Atualizar Dicionário" />
+								 
+				<p:commandButton action="#{manager.sincronizarCluster}"
+								 process="@form"
+								 update="@form" 
+								 value="Sincronizar" />
+			</p:panelGrid>
+			
+			<p:panelGrid column="4" style="margin-top: 20px;">
+				
+			</p:panelGrid>
+		</h:form>
+		
+	</ui:define>
+	<!-- ./recordDetailBlock -->
+
+	<ui:define name="recordInsertEditBlock">
+		<p:panelGrid columns="1">
+			<afirmanet:selectOneMenu label="Clientes" 
+									 selectWidth="250px"
+									 required="true"
+									 value="#{manager.entity.cliente}" 
+									 width="150px">
+				<f:selectItems itemLabel="#{cliente.descricao}"
+							   itemValue="#{cliente}" 
+							   value="#{manager.lstCliente}" 
+							   var="cliente" />
+			</afirmanet:selectOneMenu>
+			
+			<afirmanet:inputText id="insertNome"
+								 label="Nome do Cluster"  
+								 maxlength="150" 
+								 selectWidth="242px"
+								 required="true"
+								 value="#{manager.entity.nomeCluster}"  
+								 width="150px" />
+			
+			<afirmanet:inputText id="insertNomeConfig" 
+								 label="Nome Config" 
+								 maxlength="150"
+								 selectWidth="242px"
+								 required="true"
+								 value="#{manager.entity.nomeConfig}"  
+								 width="150px" />	
+								 
+			<afirmanet:inputText id="insertNomeCollection" 
+								 label="Nome Collection"
+								 maxlength="150"
+								 selectWidth="242px"
+								 required="true"
+								 value="#{manager.entity.nomeCollection}"
+								 width="150px" />		
+								 
+			<afirmanet:selectOneMenu label="Unidade" 
+									 selectWidth="250px"
+									 required="true"
+									 value="#{manager.entity.unitCluster}" 
+									 width="150px">
+				<f:selectItems itemLabel="#{unidade.quantidade} - #{unidade.capacidadeEmDisco} de capacidade em disco"
+							   itemValue="#{unidade.quantidade}" 
+							   value="#{manager.lstUnidade}" 
+							   var="unidade" />
+			</afirmanet:selectOneMenu>			
+		</p:panelGrid>				
+	</ui:define>
+	<!-- ./recordInsertEditBlock -->			
+</ui:composition>
