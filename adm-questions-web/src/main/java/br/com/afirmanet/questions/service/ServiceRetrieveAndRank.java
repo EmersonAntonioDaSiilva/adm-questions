@@ -75,6 +75,33 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 			}
 	}
 	
+	public void updateClusterSolr(String nomeCluster, String nomeConfig, String nomeCollection) throws ApplicationException{
+		// Recupera o identificador do cluster (se já foi criado)
+		try {
+			SolrCluster solrCluster = sincronizarConfiguracao(nomeCluster);
+			
+			// se o identificador for nulo
+			// é executado a rotina de criação da rotina do cluster
+			if(solrCluster != null){
+				
+				deleteCollectionSolr(solrCluster.getId(), nomeCollection);
+				deleteConfigSolr(solrCluster.getId(), nomeConfig);
+				
+				uploadConfiguration(solrCluster.getId(), nomeConfig); // configuração (arquivos xml)
+				
+				createCollection(solrCluster.getId(), nomeConfig, nomeCollection); // criação da coleção
+				indexDocumentAndCommit(solrCluster.getId(),  nomeCollection); // indexa os documentos
+			} else {
+				throw new ApplicationException("Cluster não encontrado");
+			}
+			
+		} catch (Exception e) {
+			throw new ApplicationException(e.getMessage(),e);
+		}
+	}
+	
+	
+	
 	public Boolean existClusterConfig(String solrClusterId, String nomeConfig) {
 		Boolean retorno = Boolean.FALSE;
 		SolrConfigs solrClusterConfigurations = service.getSolrClusterConfigurations(solrClusterId).execute();
@@ -178,6 +205,20 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 
 	public void deleteClusterSolr(String idClusterSolr) throws ApplicationException {
 		service.deleteSolrCluster(idClusterSolr).execute();
+	}
+
+	public void deleteConfigSolr(String idClusterSolr, String configName) throws ApplicationException {
+		service.deleteSolrClusterConfiguration(idClusterSolr, configName).execute();
+	}
+
+	public void deleteCollectionSolr(String idClusterSolr, String nomeCollection) throws Exception {
+		final CollectionAdminRequest.Delete deleteCollectionRequest = new CollectionAdminRequest.Delete();
+		deleteCollectionRequest.setCollectionName(nomeCollection);
+		
+	    final CollectionAdminResponse response = deleteCollectionRequest.process(getSolrClient(idClusterSolr)); // Executa a processo de criação da coleção
+	    if (!response.isSuccess()) {
+	    	throw new IllegalStateException("Falha ao criar collection: "+ response.getErrorMessages().toString());
+	    }
 	}
 
 	//TODO trocar os metodos deprecation por um em operação

@@ -20,7 +20,6 @@ Televisão, Televisões, TV, TVs
 Termo,Termos,Frase,Frases,Texto,Textos
 Relevância,relevâncias,significado,significados
 Língua,Línguas,Idiomas,Idiomas
-Féria,Férias,Repouso,Gozo
 Acordo,Convenção,Permissão
 Pecuniário,Em dinheiro
 Abono,Garantia,Fiança

@@ -11,6 +11,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 
@@ -67,7 +68,10 @@ public @Stateless class StopWordsDAO extends GenericDAO<StopWords, Integer> impl
 
 				retornoStopWords = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
-		} catch (Exception e) {
+		}
+		catch(NoResultException ee){
+		}
+		catch (Exception e) {
 			throw new DaoException(e.getMessage());
 		}
 		return retornoStopWords;

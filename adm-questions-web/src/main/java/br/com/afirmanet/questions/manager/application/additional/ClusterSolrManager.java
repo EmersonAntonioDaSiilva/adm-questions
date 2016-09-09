@@ -118,7 +118,7 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 		FacesContext context = FacesContext.getCurrentInstance();
 		try {
 			if(service.existClusterConfig(entity.getIdCluster(), entity.getNomeConfig())) {
-				service.uploadConfiguration(entity.getIdCluster(), entity.getNomeConfig());
+				service.updateClusterSolr(entity.getNomeCluster(), entity.getNomeConfig(), entity.getNomeCollection());
 				context.addMessage("sinchronizedCluster", new FacesMessage("Atualização feita com sucesso"));
 			} else { 
 				context.addMessage("sinchronizedCluster", new FacesMessage("Não pode ser a atualização, cluster não existente"));
