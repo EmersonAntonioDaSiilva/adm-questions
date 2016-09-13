@@ -56,8 +56,9 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 		entity.setStatusCluster(Status.INATIVO);
 	}
 	
-	public void selecionarCliente() {
-		service = new ServiceRetrieveAndRank(entity.getCliente(), entityManager);
+	@Override
+	protected void beforeSearch() {
+		service = new ServiceRetrieveAndRank(searchParam.getCliente(), entityManager);
 	}
 	
 	@Override

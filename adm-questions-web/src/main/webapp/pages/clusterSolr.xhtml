@@ -13,10 +13,9 @@
 	<ui:define name="searchFilterBlock">
 		<p:panelGrid columns="1">
 			<afirmanet:selectOneMenu label="Clientes" 
-									 listener="#{clusterSolrManager.selecionarCliente}"
 									 selectWidth="250px"
 									 required="true"
-									 value="#{manager.entity.cliente}" 
+									 value="#{manager.searchParam.cliente}" 
 									 width="150px">
 				<f:selectItems itemLabel="#{cliente.descricao}"
 							   itemValue="#{cliente}" 
