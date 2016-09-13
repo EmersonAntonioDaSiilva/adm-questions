@@ -60,6 +60,15 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 		service = new ServiceRetrieveAndRank(entity.getCliente(), entityManager);
 	}
 	
+	@Override
+	protected void beforeUpdate() throws ApplicationException {
+		if(entity.getIdCluster() != null) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage("clusterMessages", new FacesMessage("Não é permitido alterar um cluster sincronizado"));
+			throw new ApplicationException("Não é permitido alterar um cluster sincronizado");
+		}
+	}
+	
 	@Transactional
 	public void sincronizarCluster() {
 		
@@ -67,12 +76,12 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 		FacesContext context = FacesContext.getCurrentInstance();
 		
 		if(cluster == null) {
-			context.addMessage("sinchronizedCluster", new FacesMessage("Não existe o cluster criado"));
+			context.addMessage("clusterMessages", new FacesMessage("Não existe o cluster criado"));
 			
 			entity.setIdCluster(null);
 			entity.setStatusCluster(Status.INATIVO);
 		} else {
-			context.addMessage("sinchronizedCluster", new FacesMessage("Cluster sincronizado"));
+			context.addMessage("clusterMessages", new FacesMessage("Cluster sincronizado"));
 			entity.setIdCluster(cluster.getId());
 			entity.setStatusCluster(Status.ATIVO);
 		}
@@ -86,13 +95,13 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 		try {
 			service.createClusterSolr(entity.getNomeCluster(), entity.getUnitCluster(), entity.getNomeConfig(), entity.getNomeCollection());
 			SolrCluster cluster = service.sincronizarConfiguracao(entity.getNomeCluster());
-			context.addMessage("sinchronizedCluster", new FacesMessage("Cluster sincronizado"));
+			context.addMessage("clusterMessages", new FacesMessage("Cluster sincronizado"));
 			entity.setIdCluster(cluster.getId());
 			
 			entity.setStatusCluster(Status.ATIVO);
 			update();
 		} catch(Exception e) {
-			context.addMessage("sinchronizedCluster", new FacesMessage(e.getMessage()));
+			context.addMessage("clusterMessages", new FacesMessage(e.getMessage()));
 		}
 	}
 	
@@ -107,9 +116,9 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 			entity.setStatusCluster(Status.INATIVO);
 			update(false);
 			
-			context.addMessage("sinchronizedCluster", new FacesMessage("Cluster deletado com sucesso"));
+			context.addMessage("clusterMessages", new FacesMessage("Cluster deletado com sucesso"));
 		} else {
-			context.addMessage("sinchronizedCluster", new FacesMessage("Não foi possível deletar o Cluster"));
+			context.addMessage("clusterMessages", new FacesMessage("Não foi possível deletar o Cluster"));
 		}
 		
 	}
@@ -119,12 +128,12 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 		try {
 			if(service.existClusterConfig(entity.getIdCluster(), entity.getNomeConfig())) {
 				service.updateClusterSolr(entity.getNomeCluster(), entity.getNomeConfig(), entity.getNomeCollection());
-				context.addMessage("sinchronizedCluster", new FacesMessage("Atualização feita com sucesso"));
+				context.addMessage("clusterMessages", new FacesMessage("Atualização feita com sucesso"));
 			} else { 
-				context.addMessage("sinchronizedCluster", new FacesMessage("Não pode ser a atualização, cluster não existente"));
+				context.addMessage("clusterMessages", new FacesMessage("Não pode ser a atualização, cluster não existente"));
 			}
 		} catch(Exception e) {
-			context.addMessage("sinchronizedCluster", new FacesMessage(e.getMessage()));
+			context.addMessage("clusterMessages", new FacesMessage(e.getMessage()));
 		}
 	}
 	

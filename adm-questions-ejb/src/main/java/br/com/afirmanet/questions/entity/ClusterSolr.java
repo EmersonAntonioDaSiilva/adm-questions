@@ -39,11 +39,11 @@ public class ClusterSolr implements Serializable {
 	public enum Unidade {
 		ZERO(0, null, "FREE", ""),
 		UMA(1, 1, "32GB", "4GB"),
-		DUAS(2, 2, "8GB", ""),
-		TRES(3, 3, "12GB", ""), 
-		QUATRO(4, 4, "16GB", ""),
-		CINCO(5, 5, "20GB", ""), 
-		SEIS(6, 6, "24GB", ""),
+		DUAS(2, 2, "64GB", ""),
+		TRES(3, 3, "96GB", ""), 
+		QUATRO(4, 4, "128GB", ""),
+		CINCO(5, 5, "160GB", ""), 
+		SEIS(6, 6, "192GB", ""),
 		SETE(7, 7, "224GB", "");
 		
 		@Getter
