@@ -63,8 +63,8 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 	@Override
 	protected void beforeUpdate() throws ApplicationException {
 		if(entity.getIdCluster() != null) {
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage("clusterMessages", new FacesMessage("Não é permitido alterar um cluster sincronizado"));
+			FacesContext facesContext = getFacesContext();
+			facesContext.addMessage("clusterMessages", new FacesMessage("Não é permitido alterar um cluster sincronizado"));
 			throw new ApplicationException("Não é permitido alterar um cluster sincronizado");
 		}
 	}
@@ -73,15 +73,15 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 	public void sincronizarCluster() {
 		
 		SolrCluster cluster = service.sincronizarConfiguracao(entity.getNomeCluster());
-		FacesContext context = FacesContext.getCurrentInstance();
+		FacesContext facesContext = getFacesContext();
 		
 		if(cluster == null) {
-			context.addMessage("clusterMessages", new FacesMessage("Não existe o cluster criado"));
+			facesContext.addMessage("clusterMessages", new FacesMessage("Não existe o cluster criado"));
 			
 			entity.setIdCluster(null);
 			entity.setStatusCluster(Status.INATIVO);
 		} else {
-			context.addMessage("clusterMessages", new FacesMessage("Cluster sincronizado"));
+			facesContext.addMessage("clusterMessages", new FacesMessage("Cluster sincronizado"));
 			entity.setIdCluster(cluster.getId());
 			entity.setStatusCluster(Status.ATIVO);
 		}
@@ -91,17 +91,17 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 	
 	@Transactional
 	public void criarCluster() {
-		FacesContext context = FacesContext.getCurrentInstance();
+		FacesContext facesContext = getFacesContext();
 		try {
 			service.createClusterSolr(entity.getNomeCluster(), entity.getUnitCluster(), entity.getNomeConfig(), entity.getNomeCollection());
 			SolrCluster cluster = service.sincronizarConfiguracao(entity.getNomeCluster());
-			context.addMessage("clusterMessages", new FacesMessage("Cluster sincronizado"));
+			facesContext.addMessage("clusterMessages", new FacesMessage("Cluster sincronizado"));
 			entity.setIdCluster(cluster.getId());
 			
 			entity.setStatusCluster(Status.ATIVO);
 			update();
 		} catch(Exception e) {
-			context.addMessage("clusterMessages", new FacesMessage(e.getMessage()));
+			facesContext.addMessage("clusterMessages", new FacesMessage(e.getMessage()));
 		}
 	}
 	
