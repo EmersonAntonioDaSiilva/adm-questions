@@ -75,7 +75,7 @@
 	
 	<ui:define name="recordInsertEditBlock">
 		<p:panelGrid columns="1">
-			<p:panelGrid  columns="3" styleClass="ux-inputcontainer">
+			<p:panelGrid columns="3" styleClass="ux-inputcontainer">
 				<p:outputLabel for="selectTopico" value="Topico:" style="width: 100px;" />
 				<h:selectOneMenu id="selectTopico" value="#{manager.entity.topico}" converter="omnifaces.SelectItemsConverter">
 					<f:selectItem itemLabel="Selecione aqui..." itemValue="" />
@@ -85,7 +85,6 @@
 			</p:panelGrid>
 			<afirmanet:inputText label="Titulo" id="insertDescricao" value="#{manager.entity.titulo}" maxlength="100" size="80" />
 			<afirmanet:inputTextarea label="Definição da Resposta" id="insertDefinicao" value="#{manager.entity.definicao}" maxlength="800" cols="80" rows="10"/>
-		 
 		</p:panelGrid>		
 	</ui:define>
 	<!-- ./recordInsertEditBlock -->

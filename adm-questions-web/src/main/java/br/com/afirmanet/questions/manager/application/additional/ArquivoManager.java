@@ -32,8 +32,8 @@ import lombok.Setter;
 @Named
 @ViewScoped
 public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> implements Serializable {
-	private static final long serialVersionUID = -5823701722365522817L;
 	
+	private static final long serialVersionUID = -5823701722365522817L;
 	
 	@Getter
 	@Setter
@@ -64,8 +64,8 @@ public class ArquivoManager extends GenericCRUD<Resposta, Integer, RespostaDAO> 
 	}
 	
 	private List<Resposta> recuperarResposta() {
-			RespostaDAO respostaDAO =  new RespostaDAO(entityManager);
-			return respostaDAO.getDadosGeraArquivo(genericDAO.createPaginationPredicates(searchParam));
+		RespostaDAO respostaDAO =  new RespostaDAO(entityManager);
+		return respostaDAO.getDadosGeraArquivo(genericDAO.createPaginationPredicates(searchParam));
 	}
 
 	private File criarDiretorioEArquivoCSV() {
