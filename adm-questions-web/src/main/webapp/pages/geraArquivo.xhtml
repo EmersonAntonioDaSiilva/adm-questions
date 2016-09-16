@@ -6,30 +6,27 @@
 				xmlns:afirmanet="http://afirmanet.com.br/componentes" 
 				template="/templates/crud.xhtml">
 	
-	<ui:param name="entityName" value="Arquivo" />
+	<ui:param name="entityName" value="Gerar Retreino" />
 	<ui:param name="manager" value="#{arquivoManager}" />
 	
 	<ui:define name="searchFilterBlock">
-		
-		<afirmanet:selectOneMenu listener="#{arquivoManager.selecionarCliente}"
-								 value="#{manager.searchParam.cliente}" 
-								 label="Cliente" required="true"
-								 selectWidth="250px">
-	            <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}"  />
-		</afirmanet:selectOneMenu>
-		
-		<afirmanet:selectOneMenu value="#{manager.searchParam.topico}" 
-								 label="Tópico" required="true"
-								 style="width: 250px;"
-								 selectWidth="250px">
-	            <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}"  />
-		</afirmanet:selectOneMenu>
-		
-		<afirmanet:inputText label="Resposta" 
-		 					 id="searchNome" 
-		 					 value="#{manager.searchParam.titulo}"  
-		 					 maxlength="100" size="80" /> 
-
+		<p:panelGrid columns="1">
+			<afirmanet:selectOneMenu listener="#{arquivoManager.selecionarCliente}"
+									 value="#{manager.searchParam.cliente}" 
+									 label="Cliente" required="true">
+		            <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}"  />
+			</afirmanet:selectOneMenu>
+			
+			<afirmanet:selectOneMenu value="#{manager.searchParam.topico}" 
+									 label="Tópico" required="true">
+		            <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}"  />
+			</afirmanet:selectOneMenu>
+			
+			<afirmanet:inputText label="Resposta" 
+			 					 id="searchNome" 
+			 					 value="#{manager.searchParam.titulo}"  
+			 					 maxlength="100" size="80" /> 
+		</p:panelGrid>
 	</ui:define>
 
 	<ui:define name="searchResultBlock">
