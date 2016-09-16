@@ -22,7 +22,7 @@
 		            <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}"  />
 			</afirmanet:selectOneMenu>
 			
-			<afirmanet:inputText label="Resposta" 
+			<afirmanet:inputText label="Intenção" 
 			 					 id="searchNome" 
 			 					 value="#{manager.searchParam.titulo}"  
 			 					 maxlength="100" size="80" /> 
@@ -32,7 +32,7 @@
 	<ui:define name="searchResultBlock">
 		<afirmanet:column headerText="Cliente" value="#{entity.cliente.descricao}" />
 		<afirmanet:column headerText="Topico" value="#{entity.topico.descricao}" />
-		<afirmanet:column headerText="Titulo" value="#{entity.titulo}" />
+		<afirmanet:column headerText="Intenção" value="#{entity.titulo}" />
 		<afirmanet:column headerText="Qtde Pergunta"  width="5px" value="#{entity.perguntas.size()}" />
 	</ui:define>
 	<!-- ./searchResultBlock -->
@@ -41,7 +41,7 @@
 		<p:panelGrid columns="1">
 			<afirmanet:outputText label="Cliente" value="#{manager.entity.cliente.descricao}" />
 			<afirmanet:outputText label="Topico" value="#{manager.entity.topico.descricao}" />
-			<afirmanet:outputText label="Titulo" value="#{manager.entity.titulo}" />
+			<afirmanet:outputText label="Intenção" value="#{manager.entity.titulo}" />
 			<afirmanet:outputText label="Definição" value="#{manager.entity.definicao}" />			
 		</p:panelGrid>
 		
@@ -50,9 +50,6 @@
 		
 		<p:dataTable id="recordDetailCompositTable" widgetVar="recordDetailCompositTable" value="#{manager.perguntas}" var="pergunta" >
 			<afirmanet:column headerText="Pergunta" value="#{pergunta.descricao}"/>
-			<!-- <p:column headerText="Pergunta">
-		        <h:outputText value="#{pergunta.descricao}" />
-		    </p:column> -->
 			<p:column style="width: 30px;">
 				<p:commandButton id="btDeletar" title="Deletar" icon="ui-icon-trash" action="#{manager.deletePergunta(pergunta)}" immediate="true" update="@form"  />
 			</p:column>
@@ -72,7 +69,7 @@
 	
 	<ui:define name="recordInsertEditBlock">
 		<p:panelGrid columns="1">
-			<p:panelGrid  columns="3" styleClass="ux-inputcontainer">
+			<p:panelGrid columns="3" styleClass="ux-inputcontainer">
 				<p:outputLabel for="selectTopico" value="Topico:" style="width: 100px;" />
 				<h:selectOneMenu id="selectTopico" value="#{manager.entity.topico}" converter="omnifaces.SelectItemsConverter">
 					<f:selectItem itemLabel="Selecione aqui..." itemValue="" />
@@ -80,9 +77,8 @@
 				</h:selectOneMenu>
 				<p:message for="selectTopico" display="icon" showDetail="false" showSummary="true" />
 			</p:panelGrid>
-			<afirmanet:inputText label="Titulo" id="insertDescricao" value="#{manager.entity.titulo}" maxlength="100" size="80" />
+			<afirmanet:inputText label="Intenção" id="insertDescricao" value="#{manager.entity.titulo}" maxlength="100" size="80" />
 			<afirmanet:inputTextarea label="Definição da Resposta" id="insertDefinicao" value="#{manager.entity.definicao}" maxlength="800" cols="80" rows="10"/>
-		 
 		</p:panelGrid>		
 	</ui:define>
 	<!-- ./recordInsertEditBlock -->

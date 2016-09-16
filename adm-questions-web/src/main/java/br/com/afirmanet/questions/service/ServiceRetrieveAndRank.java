@@ -39,9 +39,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	@Getter
 	private RetrieveAndRank service;
 	
-	private static final String NOME_CLUSTER = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.cluster"),
-			  					NOME_CONFIG = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.config"),
-			  					NOME_COLECTION = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.colection");
+	private static final String NOME_COLECTION = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.colection");
 	
 	private EntityManager entityManager;
 

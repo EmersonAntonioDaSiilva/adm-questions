@@ -130,6 +130,11 @@ public class RelatorioClassificacaoManager extends AbstractManager implements Se
 
 	private BarChartModel initBarModel() {
 		BarChartModel model = new BarChartModel();
+		model.setSeriesColors(
+				RelatorioClassificacaoEnum.SENTIMENTO_POSITIVO.getCorHexadecimal() + "," +
+				RelatorioClassificacaoEnum.SENTIMENTO_IMPARCIAL.getCorHexadecimal() + "," +
+				RelatorioClassificacaoEnum.SENTIMENTO_NEGATIVO.getCorHexadecimal()
+		);
 		
 		String[] monthYearTexto = monthYear.split(" ");
 		String month = monthYearTexto[0];
