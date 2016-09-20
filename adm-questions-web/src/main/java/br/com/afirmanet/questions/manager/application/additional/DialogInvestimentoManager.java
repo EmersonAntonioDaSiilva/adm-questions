@@ -75,7 +75,9 @@ public class DialogInvestimentoManager extends AbstractManager implements Serial
 		} catch (ApplicationException e) {
 			addErrorMessage(e.getMessage(), e);
 		}
-
+		
+		email = "investimento@banco.original.com.br";
+		btEmail();
 	}
 
 	public void btPergunta() throws ApplicationException {
