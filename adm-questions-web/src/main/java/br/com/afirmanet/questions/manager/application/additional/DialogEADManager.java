@@ -122,7 +122,7 @@ public class DialogEADManager extends AbstractManager implements Serializable {
 				actionDialog = Boolean.TRUE;
 				
 				dialogVO = new ConversaVO();
-				dialogVO = client.target(getRestServiceDialog()).path("/dialogForeHand/{email}/{cliente}").resolveTemplate("email", email).resolveTemplate("cliente", "alura").request().get(ConversaVO.class);
+				dialogVO = client.target(getRestServiceDialog()).path("/dialogForeHand/{email}/{cliente}").resolveTemplate("email", email).resolveTemplate("cliente", "Alura").request().get(ConversaVO.class);
 
 				InterlocucaoVO interlocucaoVO = dialogVO.getLstInterlocucaoVO().get(dialogVO.getLstInterlocucaoVO().size() -1);
 				

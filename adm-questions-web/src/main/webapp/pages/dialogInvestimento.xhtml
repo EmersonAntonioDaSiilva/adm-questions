@@ -12,30 +12,12 @@
 
 	<ui:define name="content">
 		<h:form id="formDialogRH">
-			<p:dialog visible="#{dialogInvestimentoManager.actionUsuarioPerfil}" widgetVar="dlgEmail" modal="true" height="100" header="Poderia nos fornecer o seu e-mail?" closable="false">
-    			<p:panelGrid>
-					<p:row>
-						<p:column>
-							<afirmanet:inputMail label="e-mail" class="txtPergunta" value="#{dialogInvestimentoManager.email}"  maxlength="200" size="100" required="true"/>					
-						</p:column>
-						<p:column style="width: 30px; text-align:left; vertical-align: bottom;">
-							<p:commandLink actionListener="#{dialogInvestimentoManager.btEmail}" update="@form" onsuccess="PF('dlgEmail').hide();">
-								<h:graphicImage value="/resources/images/icon-buscar.gif" style="width: 50px; height: 50px;" />
-							</p:commandLink>					
-						</p:column>			
-					</p:row>
-				</p:panelGrid>
-			</p:dialog> 
-			
 			<p:panel id="dialogFilter">
 				<section id="formulario">
 					<p:panelGrid>
 						<p:row>
-							<p:column rowspan="4">
-								<h:graphicImage class="mascote" value="/resources/images/mascoteMW.gif" />					
-							</p:column>
 							<p:column colspan="2" style="width: 100%; vertical-align: top;" >
-								<p:dataTable id="dialogTable" value="#{dialogInvestimentoManager.lstDialog}" var="dialog" scrollable="true" scrollHeight="250" styleClass="tree-table-no-header">
+								<p:dataTable id="dialogTable" value="#{dialogInvestimentoManager.lstDialog}" var="dialog" scrollable="true" scrollHeight="250"  styleClass="tree-table-no-header">
 									<afirmanet:column value="#{dialog}"/>
 								</p:dataTable>
 							</p:column>

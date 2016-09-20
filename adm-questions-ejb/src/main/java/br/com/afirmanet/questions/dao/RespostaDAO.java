@@ -55,15 +55,16 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 	}
 
 
-	public Resposta findByNome(String descricao) throws DaoException {
+	public Resposta findByTitulo(Resposta entity) throws DaoException {
 		Resposta retornoInsumo = null;
 		
 		try {
 			CriteriaQuery<Resposta> criteriaQuery = createCriteriaQuery();
 			Collection<Predicate> predicates = new ArrayList<>();
 
-			if (descricao != null && !descricao.isEmpty()) {
-				predicates.add(cb.equal(cb.lower(root.get("titulo")), descricao.toLowerCase()));
+			if (entity.getTitulo() != null && !entity.getTitulo().isEmpty()) {
+				predicates.add(cb.equal(cb.lower(root.get("titulo")), entity.getTitulo()));
+				predicates.add(cb.equal(cb.lower(root.get("cliente")), entity.getCliente()));
 			}
 
 			if(!predicates.isEmpty()){

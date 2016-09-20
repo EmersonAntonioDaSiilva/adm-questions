@@ -102,7 +102,7 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	private void validarDados() throws ApplicationException {
 		try {
 			RespostaDAO respostaDAO = new RespostaDAO(entityManager);
-			Resposta byDescricao = respostaDAO.findByNome(entity.getTitulo());
+			Resposta byDescricao = respostaDAO.findByTitulo(entity);
 
 			if (byDescricao != null && !entity.equals(byDescricao)) {
 				throw new ApplicationException("Já existe um registro em Resposta com esta Descrição: "
