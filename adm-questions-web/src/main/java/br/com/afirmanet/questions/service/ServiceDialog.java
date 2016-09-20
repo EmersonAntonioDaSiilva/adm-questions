@@ -94,7 +94,11 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		setCliente(cliente);
 
 		service = getServiceDialog();
-		serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
+		try {
+			serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 
 	}
 
@@ -145,8 +149,9 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 				if (WatsonServiceFactory.CONFIDENCE_MINIMO_NLC > confidente
 						&& WatsonServiceFactory.CONFIDENCE_MINIMO_RR < confidente) {
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
-					resposta = searchRetrieve(converse.getInput());
-
+					if(serviceRetrieveAndRank != null){
+						resposta = searchRetrieve(converse.getInput());
+					}
 				} else if (WatsonServiceFactory.CONFIDENCE_MINIMO_NLC <= confidente) {
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_POSITIVO);
 
