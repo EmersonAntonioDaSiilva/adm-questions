@@ -152,6 +152,9 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
 					if(serviceRetrieveAndRank != null){
 						resposta = searchRetrieve(converse.getInput());
+					}else{
+						RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+						resposta = respostaDAO.findByDescricao(topClass);
 					}
 				} else if (WatsonServiceFactory.CONFIDENCE_MINIMO_NLC <= confidente) {
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_POSITIVO);
