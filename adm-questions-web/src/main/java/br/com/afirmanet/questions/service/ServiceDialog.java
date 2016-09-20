@@ -105,7 +105,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 			Classificacao classificacaoEntity = new Classificacao();
 
 			classificacaoEntity.setDataCadastro(LocalDateTime.now());
-			classificacaoEntity.setConfidence(classificacao.getClasses().get(0).getConfidence());
+			classificacaoEntity.setConfidence(WatsonServiceFactory.CONFIDENCE_MINIMO_NLC);
 			classificacaoEntity.setPergunta(classificacao.getText());
 			classificacaoEntity.setResposta(classificacao.getTopClass());
 			classificacaoEntity.setSentimento(sentimento);
@@ -301,7 +301,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 
 	private String getIdDialog() {
 		// Pega todos os Dialog configurados
-		List<Dialog> dialogs = service.getDialogs().execute();
+		List<Dialog> dialogs = service.getDialogs();
 				
 		// Retorna o id do Dialog encontrado
 		return dialogs.get(0).getId();
@@ -356,7 +356,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		}
 
 		Conversation conversation = getConversation(conversaVO);
-		conversation = service.converse(conversation, conversaVO.getLocucao()).execute();
+		conversation = service.converse(conversation, conversaVO.getLocucao());
 
 		InterlocucaoVO interlocucaoVO = new InterlocucaoVO();
 		interlocucaoVO.setHorario(TimeUtils.timeNow());

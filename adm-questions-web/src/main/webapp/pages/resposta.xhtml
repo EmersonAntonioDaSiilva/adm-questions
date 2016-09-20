@@ -69,7 +69,7 @@
 
 	<ui:define name="recordInsertEditBlock">
 		<p:panelGrid columns="1">
-			<afirmanet:selectOneMenu label="Topico" value="#{manager.entity.cliente}" listener="#{respostaManager.carregaDescricaoClasse}" required="true">
+			<afirmanet:selectOneMenu label="Cliente" value="#{manager.entity.cliente}" listener="#{respostaManager.carregaDescricaoClasse}" required="true">
 			    <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}" />
 			</afirmanet:selectOneMenu>	
 

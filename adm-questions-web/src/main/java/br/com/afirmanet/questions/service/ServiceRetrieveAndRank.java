@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -21,7 +22,6 @@ import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrCluster.Status;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOptions;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusters;
-import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrConfigs;
 
 import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.core.util.ApplicationPropertiesUtils;
@@ -102,9 +102,10 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	
 	public Boolean existClusterConfig(String solrClusterId, String nomeConfig) {
 		Boolean retorno = Boolean.FALSE;
-		SolrConfigs solrClusterConfigurations = service.getSolrClusterConfigurations(solrClusterId).execute();
+		List<String> solrClusterConfigurations = service.getSolrClusterConfigurations(solrClusterId);
+		//SolrConfigs solrClusterConfigurations = service.getSolrClusterConfigurations(solrClusterId);
 		
-		for (String solrConfig : solrClusterConfigurations.getSolrConfigs()) {
+		for (String solrConfig : solrClusterConfigurations) {
 			if(nomeConfig.equals(solrConfig)) {
 				retorno = Boolean.TRUE;
 				break;
@@ -121,7 +122,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 			caminho = caminho.concat("/resources/files/zip/solrconfig");
 			
 			File config = new File(caminho);
-			service.uploadSolrClusterConfigurationDirectory(idClusterSolr, nomeConfig, config).execute();
+			service.uploadSolrClusterConfigurationDirectory(idClusterSolr, nomeConfig, config);
 			// service.uploadSolrClusterConfigurationZip(idClusterSolr, NOME_CONFIG, configZip);
 			
 			
@@ -135,7 +136,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	private String getClusterSolr() {
 		String retorno = null;
 		
-		SolrClusters listaClusterSolr = service.getSolrClusters().execute();
+		SolrClusters listaClusterSolr = service.getSolrClusters();
 		if(listaClusterSolr.getSolrClusters().size() > 0)
 		{
 			retorno = listaClusterSolr.getSolrClusters().get(0).getId();
@@ -148,7 +149,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		
 		SolrCluster retorno = null;
 		
-		SolrClusters listaClusterSolr = service.getSolrClusters().execute();
+		SolrClusters listaClusterSolr = service.getSolrClusters();
 		if(listaClusterSolr.getSolrClusters().size() > 0)
 		{
 			
@@ -165,7 +166,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	}
 	
 	private SolrCluster getSolrCluster(String idCluster) {
-		return service.getSolrCluster(idCluster).execute();
+		return service.getSolrCluster(idCluster);
 	}
 
 	private String createCluster(String nomeCluster, Integer unit) {
@@ -183,7 +184,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		}
 		
 		// Criação do cluster
-		SolrCluster cluster = service.createSolrCluster(optionCluster).execute();
+		SolrCluster cluster = service.createSolrCluster(optionCluster);
 		
 		String idClusterSolr = cluster.getId();
 		while (cluster.getStatus() == Status.NOT_AVAILABLE) {
@@ -202,11 +203,11 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	}
 
 	public void deleteClusterSolr(String idClusterSolr) throws ApplicationException {
-		service.deleteSolrCluster(idClusterSolr).execute();
+		service.deleteSolrCluster(idClusterSolr);
 	}
 
 	public void deleteConfigSolr(String idClusterSolr, String configName) throws ApplicationException {
-		service.deleteSolrClusterConfiguration(idClusterSolr, configName).execute();
+		service.deleteSolrClusterConfiguration(idClusterSolr, configName);
 	}
 
 	public void deleteCollectionSolr(String idClusterSolr, String nomeCollection) throws Exception {
