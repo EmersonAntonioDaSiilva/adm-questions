@@ -17,8 +17,11 @@ import javax.persistence.criteria.Predicate;
 
 import br.com.afirmanet.core.exception.DaoException;
 import br.com.afirmanet.core.persistence.GenericDAO;
+import javax.persistence.criteria.Order;
 import br.com.afirmanet.questions.entity.Pergunta;
+import br.com.afirmanet.questions.entity.Pergunta_;
 import br.com.afirmanet.questions.entity.Resposta;
+import br.com.afirmanet.questions.entity.Resposta_;
 import lombok.NoArgsConstructor;
 
 
@@ -111,7 +114,9 @@ public @Stateless class PerguntaDAO extends GenericDAO<Pergunta, Integer> implem
 			predicates.add(cb.equal(root.get("resposta"), byResposta));
 			
 			if(!predicates.isEmpty()){
-				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
+				List<Order> orderList = getOrderList(br.com.afirmanet.core.persistence.Order.asc(Pergunta_.descricao));
+				
+				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {})).orderBy(orderList);
 
 				retornoInsumo = entityManager.createQuery(criteriaQuery).getResultList();
 			}

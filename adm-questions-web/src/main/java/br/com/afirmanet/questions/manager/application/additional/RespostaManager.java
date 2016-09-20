@@ -120,7 +120,7 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	}
 
 	@Transactional
-	public void insertPergunta() throws ApplicationException {
+	public void insertPergunta() {
 		if (descricaoPergunta==null)
 			addErrorMessage("Favor inserir uma descrição");
 		
@@ -135,7 +135,7 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 			descricaoPergunta = "";
 			beforeDetail();
 		} else {
-			throw new ApplicationException("Já existe um registro em Pergunta com esta Descrição: " + descricaoPergunta);
+			addErrorMessage("Já existe um registro em Pergunta com esta Descrição: " + descricaoPergunta);
 		}
 	}
 
@@ -148,7 +148,7 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 
 			beforeDetail();
 		} catch (Exception e) {
-			throw new ApplicationException(e.getMessage(), e);
+			addErrorMessage(e.getMessage(), e);
 		}
 	}
 
