@@ -79,13 +79,13 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 
 	private Topico topico;
 	private Cliente cliente;
-
-	private void initDados() throws ApplicationException {
+	
+	private void initDados(String nomeCliente) throws ApplicationException {
 		entityManager = entityManagerFactory.createEntityManager();
 		setEntityManager(entityManager);
 
 		ClienteDAO clieteDAO = new ClienteDAO(entityManager);
-		cliente = clieteDAO.findByNome("m.watson");
+		cliente = clieteDAO.findByNome(nomeCliente);
 
 		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
 		topico = topicoDAO.findbyCliente(cliente).get(0);
@@ -376,6 +376,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		conversaVO.setIdConversation(conversation.getId().toString());
 		conversaVO.setIdDialog(conversation.getDialogId());
 		conversaVO.getLstInterlocucaoVO().add(interlocucaoVO);
+		conversaVO.setCliente(cliente.getDescricao());
 		
 		return conversaVO;
 	}
@@ -386,16 +387,16 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 	@Produces({ "application/json" })
 	@Transactional
 	public ConversaVO dialog(final ConversaVO locutor) {
-		initDados();
+		initDados(locutor.getCliente());
 
 		return getProfileUser(locutor);
 	}
 	
 	@GET
-	@Path("/dialogForeHand/{email}")
+	@Path("/dialogForeHand/{email}/{cliente}")
 	@Transactional
-	public ConversaVO dialogForeHand(@PathParam("email") String email) {
-		initDados();
+	public ConversaVO dialogForeHand(@PathParam("email") String email, @PathParam("cliente") String cliente) {
+		initDados(cliente);
 
 		ConversaVO conversaVO = new ConversaVO();
 		conversaVO.setEmail(email);

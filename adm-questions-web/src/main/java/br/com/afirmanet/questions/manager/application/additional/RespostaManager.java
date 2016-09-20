@@ -53,12 +53,26 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	}
 
 	@Override
+	public void prepareInsert() {
+		super.prepareInsert();
+		
+		if(searchParam.getCliente() != null){
+			entity.setCliente(searchParam.getCliente());
+		}
+		
+		if(searchParam.getTopico() != null){
+			entity.setTopico(searchParam.getTopico());
+		}
+	}
+	
+	@Override
 	protected void beforeSave() {
 		descricaoPergunta = "";
 		perguntas = null;
+
 		validarDados();
 	}
-
+	
 	@Override
 	protected void beforeUpdate() {
 		descricaoPergunta = "";
