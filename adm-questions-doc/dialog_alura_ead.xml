@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog xsi:noNamespaceSchemaLocation="WatsonDialogDocument_1.1.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <flow>
+        <folder label="Main" id="main">
+            <output id="saudacao">
+                <prompt selectionType="RANDOM">
+                    <item>Olá! Sou seu assistente pessoal! Caso tenha algua dúvida, favor me pergunte!</item>
+                </prompt>
+                <getUserInput>
+					<search ref="classifier_EAD">
+                        <classifier policy="SEARCHMODE_CLASSIFIER"
+                            threshold="0.80" exactMatchFirst="true" fuzzyThreshold="0.0" trainOnInput="true" trainOnOutput="true">
+                            <customParams></customParams>
+                        </classifier>
+                    </search>
+                    <default>
+                        <output>
+                            <prompt selectionType="RANDOM">
+                                <item>{"classificacao": "Não se aplica!","pesquisaBD":"1"}</item>
+                            </prompt>
+                        </output>
+                    </default>
+                </getUserInput>
+            </output>
+        </folder>
+        <folder label="Library" id="library">
+            <folder label="Classifier_EAD" id="classifier_EAD">
+                <input>
+                    <grammar>
+                        <item>Sobre_Curso</item>
+                    </grammar>
+                    <output>
+                        <prompt selectionType="RANDOM">
+                            <item>{"classificacao": "Sobre_Curso","pesquisaBD":"1"}</item>
+                        </prompt>
+                    </output>
+                </input>
+                <input>
+                    <grammar>
+                        <item>Aplicacao</item>
+                    </grammar>
+                    <output>
+                        <prompt selectionType="RANDOM">
+                            <item>{"classificacao": "Aplicacao","pesquisaBD":"1"}</item>
+                        </prompt>
+                    </output>
+                </input>
+			</folder>
+			<folder label="Personalidade" id="personalidade">
+				<input>
+                    <grammar>
+                        <item>Oi</item>
+						<item>Olá</item>
+						<item>Bom dia</item>
+						<item>Boa tarde</item>
+						<item>Boa noite</item>
+						<item>Opa</item>
+						<item>$ tudo bem?</item>
+                    </grammar>
+                    <output>
+                        <prompt selectionType="RANDOM">
+                            <item>Olá! Em que posso ajudar?</item>
+							<item>Oi! Em que posso ajudar?</item>
+                        </prompt>
+                    </output>
+                </input>
+				<input>
+					<grammar>
+						<item>Obrigado</item>
+						<item>Valeu</item>
+						<item>obg</item>
+						<item>tks</item>
+						<item>thanks</item>
+					</grammar>
+					<output>
+						<prompt selectionType="RANDOM">
+							<item>De nada!</item>
+							<item>Estou aqui para ajudar!</item>
+						</prompt>
+					</output>
+				</input>
+			</folder>
+		</folder>
+		<folder label="Global"></folder>
+		<folder label="Concepts"></folder>
+    </flow>
+    <constants>
+        <var_folder name="Home">
+            <var_folder name="General" type="CONST"/>
+        </var_folder>
+    </constants>
+    <settings>
+        <setting name="AUTOLEARN" type="USER">false</setting>
+        <setting name="LANGUAGE" type="USER">pt-BR</setting>
+        <setting name="RESPONSETIME" type="USER">-2</setting>
+        <setting name="MAXAUTOLEARNITEMS" type="USER">4</setting>
+        <setting name="NUMAUTOSETRELATED" type="USER">0</setting>
+        <setting name="TIMEZONEID" type="USER">Brazil/East</setting>
+        <setting name="AUTOSETRELATEDNODEID" type="USER">0</setting>
+        <setting name="INPUTMASKTYPE" type="USER">0</setting>
+        <setting name="CONCEPTMATCHING" type="USER">0</setting>
+        <setting name="PLATFORM_VERSION">10.1</setting>
+        <setting name="USE_CONCEPTS">3</setting>
+        <setting name="ENTITIES_SCOPE">3</setting>
+        <setting name="UI_COLOUR"></setting>
+        <setting name="USE_TRANSLATIONS">3</setting>
+        <setting name="USE_SPELLING_CORRECTIONS">3</setting>
+        <setting name="USE_STOP_WORDS">3</setting>
+        <setting name="PARENT_ACCOUNT">pt-br</setting>
+        <setting name="AL_NONE_LABEL">None of the above</setting>
+        <setting name="ENABLE_CLASSIFIERS">false</setting>
+        <setting name="USER_LOGGING">2</setting>
+        <setting name="DEFAULT_DNR_RETURN_POINT_CANDIDATE">-1</setting>
+        <setting name="MULTISENT">0</setting>
+        <setting name="DNR_NODE_ID">-16</setting>
+        <setting name="USE_AUTOMATIC_STOPWORDS_DETECTION">0</setting>
+        <setting name="CLS_SEARCH_MODE">0</setting>
+        <setting name="CLS_MODEL">0</setting>
+        <setting name="CLS_ENDPOINT"></setting>
+        <setting name="CLS_USERNAME"></setting>
+        <setting name="CLS_PASSWORD"></setting>
+        <setting name="CLS_MODELNAME">17aa5bx80-nlc-275</setting>
+        <setting name="CLS_ADVANCED_SETTINGS">true</setting>
+        <setting name="CLS_MAXNBEST">5</setting>
+        <setting name="CLS_USE_OFFTOPIC">false</setting>
+    </settings>
+    <specialSettings>
+        <specialSetting label="AutoLearn Statement">
+            <variations/>
+        </specialSetting>
+        <specialSetting label="DNR Join Statement">
+            <variations/>
+        </specialSetting>
+    </specialSettings>
+</dialog>
