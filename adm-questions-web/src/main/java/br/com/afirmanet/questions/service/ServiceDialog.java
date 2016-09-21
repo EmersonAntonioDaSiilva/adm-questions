@@ -277,7 +277,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 			}
 
 			
-			if (profile != null && profile.getEmail() != null && !"".equals(profile.getEmail()) && profile.getId() == null) {
+			if (profile != null && profile.getEmail() != null && !"".equals(profile.getEmail())) {
 				isUpdate = Boolean.TRUE;
 			}
 
