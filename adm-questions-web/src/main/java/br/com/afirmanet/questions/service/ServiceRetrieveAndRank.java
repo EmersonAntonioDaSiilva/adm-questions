@@ -25,7 +25,9 @@ import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusters;
 
 import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.core.util.ApplicationPropertiesUtils;
+import br.com.afirmanet.questions.dao.ClusterSolrDAO;
 import br.com.afirmanet.questions.entity.Cliente;
+import br.com.afirmanet.questions.entity.ClusterSolr;
 import br.com.afirmanet.questions.enums.TypeServicoEnum;
 import br.com.afirmanet.questions.factory.WatsonServiceFactory;
 import br.com.afirmanet.questions.utils.HttpSolrClientUtils;
@@ -42,53 +44,57 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	private static final String NOME_COLECTION = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.colection");
 	
 	private EntityManager entityManager;
-
+	private ClusterSolr clusterSolr;
+	
 	public ServiceRetrieveAndRank(Cliente cliente, EntityManager entityManager) throws ApplicationException {
 		this.entityManager = entityManager;
 		setEntityManager(entityManager);
 		
 		setTypeServico(TypeServicoEnum.RETRIEVE_AND_RANK);
 		setCliente(cliente);
-		
+
+		ClusterSolrDAO clusterSolrDAO = new ClusterSolrDAO(entityManager);
+		clusterSolr = clusterSolrDAO.findByCliente(getCliente());
+
 		service = getServiceRR();
 		getClusterSolr();
 	}
 	
-	public void createClusterSolr(String nomeCluster, Integer unidadeCluster, String nomeConfig, String nomeCollection) throws ApplicationException{
+	public void createClusterSolr() throws ApplicationException{
 			// Recupera o identificador do cluster (se já foi criado)
 			try {
-				SolrCluster sincronizar = sincronizarConfiguracao(nomeCluster);
+				SolrCluster sincronizar = sincronizarConfiguracao();
 				
 				// se o identificador for nulo
 				// é executado a rotina de criação da rotina do cluster
 				if(sincronizar == null){
-					String idClusterSolr = createCluster(nomeCluster, unidadeCluster); // cria cluster
-					uploadConfiguration(idClusterSolr, nomeConfig); // configuração (arquivos xml)
+					String idClusterSolr = createCluster(clusterSolr.getNomeCluster(), clusterSolr.getUnitCluster()); // cria cluster
+					uploadConfiguration(); // configuração (arquivos xml)
 					
-					createCollection(idClusterSolr, nomeConfig, nomeCollection); // criação da coleção
-					indexDocumentAndCommit(idClusterSolr,  nomeCollection); // indexa os documentos
+					createCollection(idClusterSolr, clusterSolr.getNomeConfig(), clusterSolr.getNomeCollection()); // criação da coleção
+					indexDocumentAndCommit(idClusterSolr,  clusterSolr.getNomeCollection()); // indexa os documentos
 				}
 			} catch (Exception e) {
 				throw new ApplicationException(e.getMessage(),e);
 			}
 	}
 	
-	public void updateClusterSolr(String nomeCluster, String nomeConfig, String nomeCollection) throws ApplicationException{
+	public void updateClusterSolr() throws ApplicationException{
 		// Recupera o identificador do cluster (se já foi criado)
 		try {
-			SolrCluster solrCluster = sincronizarConfiguracao(nomeCluster);
+			SolrCluster solrCluster = sincronizarConfiguracao();
 			
 			// se o identificador for nulo
 			// é executado a rotina de criação da rotina do cluster
 			if(solrCluster != null){
 				
-				deleteCollectionSolr(solrCluster.getId(), nomeCollection);
-				deleteConfigSolr(solrCluster.getId(), nomeConfig);
+				deleteCollectionSolr();
+				deleteConfigSolr();
 				
-				uploadConfiguration(solrCluster.getId(), nomeConfig); // configuração (arquivos xml)
+				uploadConfiguration(); // configuração (arquivos xml)
 				
-				createCollection(solrCluster.getId(), nomeConfig, nomeCollection); // criação da coleção
-				indexDocumentAndCommit(solrCluster.getId(),  nomeCollection); // indexa os documentos
+				createCollection(solrCluster.getId(), clusterSolr.getNomeConfig(), clusterSolr.getNomeCollection()); // criação da coleção
+				indexDocumentAndCommit(solrCluster.getId(), clusterSolr.getNomeCollection()); // indexa os documentos
 			} else {
 				throw new ApplicationException("Cluster não encontrado");
 			}
@@ -100,13 +106,12 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	
 	
 	
-	public Boolean existClusterConfig(String solrClusterId, String nomeConfig) {
+	public Boolean existClusterConfig() {
 		Boolean retorno = Boolean.FALSE;
-		List<String> solrClusterConfigurations = service.getSolrClusterConfigurations(solrClusterId);
-		//SolrConfigs solrClusterConfigurations = service.getSolrClusterConfigurations(solrClusterId);
+		List<String> solrClusterConfigurations = service.getSolrClusterConfigurations(clusterSolr.getIdCluster());
 		
 		for (String solrConfig : solrClusterConfigurations) {
-			if(nomeConfig.equals(solrConfig)) {
+			if(clusterSolr.getNomeConfig().equals(solrConfig)) {
 				retorno = Boolean.TRUE;
 				break;
 			}
@@ -115,15 +120,14 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		return retorno;
 	}
 	
-	public void uploadConfiguration(String idClusterSolr, String nomeConfig) throws ApplicationException{
+	public void uploadConfiguration() throws ApplicationException{
 		try {
 			
 			String caminho = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
 			caminho = caminho.concat("/resources/files/zip/solrconfig");
 			
 			File config = new File(caminho);
-			service.uploadSolrClusterConfigurationDirectory(idClusterSolr, nomeConfig, config);
-			// service.uploadSolrClusterConfigurationZip(idClusterSolr, NOME_CONFIG, configZip);
+			service.uploadSolrClusterConfigurationDirectory(clusterSolr.getIdCluster(), clusterSolr.getNomeConfig(), config);
 			
 			
 		} catch (Exception e) {
@@ -135,7 +139,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	
 	private String getClusterSolr() {
 		String retorno = null;
-		
+
 		SolrClusters listaClusterSolr = service.getSolrClusters();
 		if(listaClusterSolr.getSolrClusters().size() > 0)
 		{
@@ -145,7 +149,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		return retorno;
 	}
 	
-	public SolrCluster sincronizarConfiguracao(String nomeCluster) {
+	public SolrCluster sincronizarConfiguracao() {
 		
 		SolrCluster retorno = null;
 		
@@ -154,7 +158,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		{
 			
 			for(SolrCluster cluster : listaClusterSolr.getSolrClusters()) {
-				if(cluster.getName().equals(nomeCluster)) {
+				if(cluster.getName().equals(clusterSolr.getNomeCluster())) {
 					retorno = cluster;
 					break;
 				}
@@ -202,19 +206,19 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 		
 	}
 
-	public void deleteClusterSolr(String idClusterSolr) throws ApplicationException {
-		service.deleteSolrCluster(idClusterSolr);
+	public void deleteClusterSolr() throws ApplicationException {
+		service.deleteSolrCluster(clusterSolr.getIdCluster());
 	}
 
-	public void deleteConfigSolr(String idClusterSolr, String configName) throws ApplicationException {
-		service.deleteSolrClusterConfiguration(idClusterSolr, configName);
+	public void deleteConfigSolr() throws ApplicationException {
+		service.deleteSolrClusterConfiguration(clusterSolr.getIdCluster(), clusterSolr.getNomeConfig());
 	}
 
-	public void deleteCollectionSolr(String idClusterSolr, String nomeCollection) throws Exception {
+	public void deleteCollectionSolr() throws Exception {
 		final CollectionAdminRequest.Delete deleteCollectionRequest = new CollectionAdminRequest.Delete();
-		deleteCollectionRequest.setCollectionName(nomeCollection);
+		deleteCollectionRequest.setCollectionName(clusterSolr.getNomeCollection());
 		
-	    final CollectionAdminResponse response = deleteCollectionRequest.process(getSolrClient(idClusterSolr)); // Executa a processo de criação da coleção
+	    final CollectionAdminResponse response = deleteCollectionRequest.process(getSolrClient(clusterSolr.getIdCluster())); // Executa a processo de criação da coleção
 	    if (!response.isSuccess()) {
 	    	throw new IllegalStateException("Falha ao criar collection: "+ response.getErrorMessages().toString());
 	    }
@@ -260,14 +264,10 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 	}
 	
 	public QueryResponse searchAllDocs(String pergunta) throws ApplicationException {
-		return searchAllDocs(getClusterSolr(), pergunta);
-	}
-	
-	public QueryResponse searchAllDocs(String idCluster, String pergunta) throws ApplicationException {
 		QueryResponse response;
 		
 		try {
-			HttpSolrClient solrClient = getSolrClient(idCluster);
+			HttpSolrClient solrClient = getSolrClient(clusterSolr.getIdCluster());
 			
 			String pesquisa = "".concat(pergunta); // monta String da pesquisa
 			SolrQuery query = new SolrQuery(pesquisa); // cria os critérios da pesquisa

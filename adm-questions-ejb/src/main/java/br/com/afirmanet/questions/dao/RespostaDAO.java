@@ -64,7 +64,7 @@ public @Stateless class RespostaDAO extends GenericDAO<Resposta, Integer> implem
 
 			if (entity.getTitulo() != null && !entity.getTitulo().isEmpty()) {
 				predicates.add(cb.equal(cb.lower(root.get("titulo")), entity.getTitulo()));
-				predicates.add(cb.equal(cb.lower(root.get("cliente")), entity.getCliente()));
+				predicates.add(cb.equal(root.get("cliente"), entity.getCliente()));
 			}
 
 			if(!predicates.isEmpty()){
