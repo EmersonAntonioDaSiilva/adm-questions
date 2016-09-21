@@ -62,11 +62,9 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 	}
 	
 	@Override
-	protected void beforeUpdate() throws ApplicationException {
+	protected void beforeUpdate() {
 		if(entity.getIdCluster() != null) {
-			FacesContext facesContext = getFacesContext();
-			facesContext.addMessage("clusterMessages", new FacesMessage("Não é permitido alterar um cluster sincronizado"));
-			throw new ApplicationException("Não é permitido alterar um cluster sincronizado");
+			addInfoMessage("Não é permitido alterar um cluster sincronizado");
 		}
 	}
 	
