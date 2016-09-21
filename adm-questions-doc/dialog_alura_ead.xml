@@ -9,6 +9,7 @@
                 <getUserInput>
 					<action varName="CLASSIFIER_CLASS_0" operator="SET_TO_BLANK"/>
 					<action varName="CLASSIFIER_CONF_0" operator="SET_TO_BLANK"/>
+					<search ref="personalidade"/>
 					<search ref="classifier_EAD">
                         <classifier policy="SEARCHMODE_CLASSIFIER"
                             threshold="0.80" exactMatchFirst="true" fuzzyThreshold="0.0" trainOnInput="true" trainOnOutput="true">
