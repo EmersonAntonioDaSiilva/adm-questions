@@ -24,7 +24,6 @@ import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusterOpti
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.model.SolrClusters;
 
 import br.com.afirmanet.core.exception.ApplicationException;
-import br.com.afirmanet.core.util.ApplicationPropertiesUtils;
 import br.com.afirmanet.questions.dao.ClusterSolrDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.ClusterSolr;
@@ -40,8 +39,6 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 
 	@Getter
 	private RetrieveAndRank service;
-	
-	private static final String NOME_COLECTION = ApplicationPropertiesUtils.getValue("service.retrieve.and.rank.nome.colection");
 	
 	private EntityManager entityManager;
 	private ClusterSolr clusterSolr;
@@ -272,7 +269,7 @@ public class ServiceRetrieveAndRank extends WatsonServiceFactory implements Seri
 			String pesquisa = "".concat(pergunta); // monta String da pesquisa
 			SolrQuery query = new SolrQuery(pesquisa); // cria os critérios da pesquisa
 			
-			response = solrClient.query(NOME_COLECTION, query); // retorna pesquisa
+			response = solrClient.query(clusterSolr.getNomeCollection(), query); // retorna pesquisa
 		
 		} catch (SolrServerException e) {
 			throw new ApplicationException(e.getMessage(), e);
