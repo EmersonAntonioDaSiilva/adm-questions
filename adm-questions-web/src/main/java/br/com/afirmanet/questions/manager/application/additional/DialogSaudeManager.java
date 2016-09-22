@@ -76,7 +76,7 @@ public class DialogSaudeManager extends AbstractManager implements Serializable 
 			addErrorMessage(e.getMessage(), e);
 		}
 		
-		email = "investimento@banco.original.com.br";
+		email = "saq@saude.controle.com.br";
 		btEmail();
 	}
 
@@ -117,7 +117,7 @@ public class DialogSaudeManager extends AbstractManager implements Serializable 
 				actionUsuarioPerfil = Boolean.FALSE;
 				actionDialog = Boolean.TRUE;
 
-				dialogVO = client.target(getRestServiceDialog()).path("/dialogForeHand/{email}/{cliente}").resolveTemplate("email", email).resolveTemplate("cliente", "Banco Original").request().get(ConversaVO.class);
+				dialogVO = client.target(getRestServiceDialog()).path("/dialogForeHand/{email}/{cliente}").resolveTemplate("email", email).resolveTemplate("cliente", "Saúde Controle").request().get(ConversaVO.class);
 
 				InterlocucaoVO interlocucaoVO = dialogVO.getLstInterlocucaoVO().get(dialogVO.getLstInterlocucaoVO().size() -1);
 				

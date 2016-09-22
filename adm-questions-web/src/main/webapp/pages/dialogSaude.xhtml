@@ -17,17 +17,17 @@
 					<p:panelGrid>
 						<p:row>
 							<p:column colspan="2" style="width: 100%; vertical-align: top;" >
-								<p:dataTable id="dialogTable" value="#{dialogInvestimentoManager.lstDialog}" var="dialog" scrollable="true" scrollHeight="250"  styleClass="tree-table-no-header">
+								<p:dataTable id="dialogTable" value="#{dialogSaudeManager.lstDialog}" var="dialog" scrollable="true" scrollHeight="250"  styleClass="tree-table-no-header">
 									<afirmanet:column value="#{dialog}"/>
 								</p:dataTable>
 							</p:column>
 						</p:row>
 						<p:row style="height: 50px;">
 							<p:column style="width: 200px;">
-								<h:inputText id="txtPergunta" class="txtPerguntaDialog" value="#{dialogInvestimentoManager.pergunta}" placeholder="Faça a sua pergunta aqui..."/>					
+								<h:inputText id="txtPergunta" class="txtPerguntaDialog" value="#{dialogSaudeManager.pergunta}" placeholder="Faça a sua pergunta aqui..."/>					
 							</p:column>
 							<p:column style="width: 50px; text-align:right; vertical-align: bottom; margin-top: 2px !important;">
-								<p:commandLink actionListener="#{dialogInvestimentoManager.btPergunta}" update="dialogTable, txtPergunta">
+								<p:commandLink actionListener="#{dialogSaudeManager.btPergunta}" update="dialogTable, txtPergunta">
 									<h:graphicImage value="/resources/images/icon-buscar.gif" style="width: 50px; height: 50px;" />
 								</p:commandLink>					
 							</p:column>
