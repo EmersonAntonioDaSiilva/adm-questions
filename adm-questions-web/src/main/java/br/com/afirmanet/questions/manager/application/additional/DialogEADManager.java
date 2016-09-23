@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -25,6 +26,7 @@ import br.com.afirmanet.core.util.TimeUtils;
 import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.manager.vo.ConversaVO;
 import br.com.afirmanet.questions.manager.vo.InterlocucaoVO;
+import br.com.afirmanet.questions.service.ServiceTextSpeech;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,6 +37,8 @@ public class DialogEADManager extends AbstractManager implements Serializable {
 	private static final long serialVersionUID = -5121765995997987972L;
 
 	private Client client = ClientBuilder.newClient().register(JacksonFeature.class);
+	
+	private ServiceTextSpeech serviceTextSpeech;
 
 	@Inject
 	@ApplicationManaged
@@ -74,6 +78,8 @@ public class DialogEADManager extends AbstractManager implements Serializable {
 			actionUsuarioPerfil = Boolean.FALSE;
 			actionDialog = Boolean.FALSE;
 			
+			serviceTextSpeech = new ServiceTextSpeech();
+			
 			defineCliente();
 		} catch (ApplicationException e) {
 			addErrorMessage(e.getMessage(), e);
@@ -104,6 +110,10 @@ public class DialogEADManager extends AbstractManager implements Serializable {
 				
 				lstDialog.add(strResposta);
 				pergunta = "";
+								
+				// Gera audio reprodução Isabela
+				geraAudioReproducao(interlocucaoVO.getInterlocutor());
+				
 			}
 			
 		}catch(ApplicationException e){
@@ -129,9 +139,16 @@ public class DialogEADManager extends AbstractManager implements Serializable {
 				String strResposta = interlocucaoVO.getHorario() + " - " + interlocucaoVO.getNome() + ": " + interlocucaoVO.getInterlocutor();
 				
 				lstDialog.add(strResposta);
+				
+				// Gera audio reprodução Isabela
+				geraAudioReproducao(interlocucaoVO.getInterlocutor());
 			}
 		} catch (ApplicationException e) {
 			addErrorMessage(e.getMessage());
 		}
+	}
+	
+	public void geraAudioReproducao(String texto){
+		serviceTextSpeech.executa(FacesContext.getCurrentInstance().getExternalContext().getRealPath(""),texto);
 	}
 }

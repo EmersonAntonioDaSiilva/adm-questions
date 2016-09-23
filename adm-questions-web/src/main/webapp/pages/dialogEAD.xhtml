@@ -55,13 +55,19 @@
 					</p:column>
 					<p:column style="text-align: right;">
 						<p:commandLink actionListener="#{dialogEADManager.btPergunta}" ajax="true"
-							update="@form:dialogTable, @form:txtPergunta">
+							update="@form:dialogTable, @form:txtPergunta, @form:mediaPanel">
 							<h:graphicImage value="/resources/images/icon-buscar.gif"
 								style="width: 50px; height: 50px;" />
 						</p:commandLink>
 					</p:column>
 				</p:row>
 			</p:panelGrid>
+			<h:panelGrid id="mediaPanel">
+				<p:media id="media" value="/AAA-4673899229-0000-17272bdjjdnx568000.wav" player="quicktime"
+			          style="visibility: hidden;">
+			      <f:param name="autoPlay" value="true" />
+				</p:media>
+			</h:panelGrid>
 		</h:form>
 	</ui:define>
 </ui:composition>
