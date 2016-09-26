@@ -1,0 +1,85 @@
+Synonyms:
+Retrieve_and_Rank => RR, Retrieve_and_Rank_service, serviço_Retrieve_e_Rank, Retrieve_&_Rank_service, serviço_Retrieve_&_Rank
+Apache_Solr => Solr
+-----------------
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+Protwords:
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+Arquivos:
+
+O que é o serviço do Retrieve and Rank
+
+A IBM Watson Retrieve and Rank serviço combina dois componentes de recuperação de informação em um único serviço: o poder do Apache Solr e uma capacidade de aprendizado de máquina sofisticada. Esta combinação fornece aos usuários resultados mais relevantes por reranking-los automaticamente usando estes algoritmos de aprendizado de máquina.
+
+----------------
+
+Quais passos para criação e treino do Retrieve and Rank?
+
+São 6 os passos: (1) criar as credenciais, (2) subir as configurações do solr, (3) criar a coleção, (4) criar a coleção, (5) indexar os arquivos e (6) último passo, mais não obrigatório, a criação e treino do ranqueamento. 
+
+----------------
+
+Posso deletar um cluster do Retrieve and Rank?
+
+Sim. Em qualquer momento.
+
+----------------
+
+Posso deletar um Rank?
+
+Sim. Em qualquer momento.
+
+----------------
+
+Como usar o serviço do Retrieve and Rank
+
+O processo de criação e uso do Retrieve and Rank se dá por 3 passos: recolher e carregar o conteúdo, treinar o modelo de aprendizagem de máquina e, por fim, realizar queries e avaliar os melhores resultados.
+
+----------------
+
+Quais são os benefícios do Retrieve and Rank
+
+O serviço do Recuperar e Rank pode melhorar a recuperação de informação, em comparação com resultados normais. Utilizando o modelo Rank você pode trazer consultas mais revelantes.
+
+----------------
+
+O que é o Apache Solr?
+
+Solr é um projeto Open Source de um servidor de buscas de alta performance do projeto Apache Lucene. É desenvolvido em Java e utiliza o Lucene Core como base para indexação e busca, além de fornecer APIs baseadas em REST o que lhe permite ser integrado a praticamente qualquer linguagem de programação.
+
+----------------
+
+Posso criar uma instância free do Retrieve and Rank?
+
+Sim. O cluster free permite tem no máximo 50MB de espaço e não garante nenhuma quantidade específica de RAM.
+
+----------------
+
+Como consigo as credenciais do serviço do Retrieve and Rank?
+
+São 3 passos: (1) entre em catálogo do Bluemix, (2) crie a instância do serviço e (3) copie as credenciais (login e senha).
+
+----------------
+
+Como crio o cluster do serviço do Retrieve and Rank?
+
+Utilizando o comando <comando>. A resposta, caso com sucesso, é um solr_cluster_id.
+
+----------------
+
+Como crio as configurações do serviço do Retrieve and Rank?
+
+Utilizando o comando <comando>. A configuração Solr identifica como indexar os documentos para que você possa procurar os campos importantes.
+
+----------------
+
+Como crio uma coleção do serviço do Retrieve and Rank?
+
+Utilizando o comando <comando>. Para criação da coleção preciso que o cluster esteja criado e com as configurações (Solr Config) definidas.
+
+ 
+ 

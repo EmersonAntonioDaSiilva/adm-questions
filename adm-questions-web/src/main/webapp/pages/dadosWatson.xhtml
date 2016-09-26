@@ -19,7 +19,7 @@
 			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
 			</afirmanet:selectOneMenu>	
 
-			<afirmanet:selectOneMenu label="Topico" value="#{manager.searchParam.typeServico}" >
+			<afirmanet:selectOneMenu label="API-Watson" value="#{manager.searchParam.typeServico}" >
 			    <f:selectItems value="#{manager.lstTypeServicoEnum}" var="typeServico" itemValue="#{typeServico}" itemLabel="#{typeServico}" />
 			</afirmanet:selectOneMenu>
 
@@ -29,7 +29,7 @@
 	<ui:define name="searchResultBlock">
 		<afirmanet:column headerText="Cliente" value="#{entity.cliente.descricao}" />
 		<afirmanet:column headerText="Topico" value="#{entity.topico.descricao}" />
-		<afirmanet:column headerText="Serviço Watson" value="#{entity.typeServico}" />
+		<afirmanet:column headerText="API-Watson" value="#{entity.typeServico}" />
 		<afirmanet:column headerText="Usuário" value="#{entity.usuario}" />
 		<afirmanet:column headerText="Senha" value="#{entity.senha}" />
 		<afirmanet:column headerText="Data Cadastro" value="#{entity.dataCadastro}" />
@@ -40,7 +40,7 @@
 		<p:panelGrid columns="1">
 			<afirmanet:outputText label="Cliente" value="#{manager.entity.cliente.descricao}" />
 			<afirmanet:outputText label="Topico" value="#{manager.entity.topico.descricao}" />
-			<afirmanet:outputText label="Serviço Watson" value="#{manager.entity.typeServico}" />
+			<afirmanet:outputText label="API-Watson" value="#{manager.entity.typeServico}" />
 			<afirmanet:outputText label="Usuário" value="#{manager.entity.usuario}" />
 			<afirmanet:outputText label="Senha" value="#{manager.entity.senha}" />
 			<afirmanet:outputText label="Data Cadastro" value="#{manager.entity.dataCadastro}" />
@@ -58,7 +58,7 @@
 			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
 			</afirmanet:selectOneMenu>	
 
-			<afirmanet:selectOneMenu label="Topico" value="#{manager.entity.typeServico}" required="true">
+			<afirmanet:selectOneMenu label="API-Watson" value="#{manager.entity.typeServico}" required="true">
 			    <f:selectItems value="#{manager.lstTypeServicoEnum}" var="typeServico" itemValue="#{typeServico}" itemLabel="#{typeServico}" />
 			</afirmanet:selectOneMenu>
 

@@ -79,13 +79,13 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 
 	private Topico topico;
 	private Cliente cliente;
-
-	private void initDados() throws ApplicationException {
+	
+	private void initDados(String nomeCliente) throws ApplicationException {
 		entityManager = entityManagerFactory.createEntityManager();
 		setEntityManager(entityManager);
 
 		ClienteDAO clieteDAO = new ClienteDAO(entityManager);
-		cliente = clieteDAO.findByNome("m.watson");
+		cliente = clieteDAO.findByNome(nomeCliente);
 
 		TopicoDAO topicoDAO = new TopicoDAO(entityManager);
 		topico = topicoDAO.findbyCliente(cliente).get(0);
@@ -94,7 +94,11 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		setCliente(cliente);
 
 		service = getServiceDialog();
-		serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
+		try {
+			serviceRetrieveAndRank = new ServiceRetrieveAndRank(cliente, entityManager);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 
 	}
 
@@ -105,7 +109,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 			Classificacao classificacaoEntity = new Classificacao();
 
 			classificacaoEntity.setDataCadastro(LocalDateTime.now());
-			classificacaoEntity.setConfidence(classificacao.getClasses().get(0).getConfidence());
+			classificacaoEntity.setConfidence(classificacao.getTopConfidence());
 			classificacaoEntity.setPergunta(classificacao.getText());
 			classificacaoEntity.setResposta(classificacao.getTopClass());
 			classificacaoEntity.setSentimento(sentimento);
@@ -141,12 +145,17 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 				classificacao.setText(converse.getInput());
 				classificacao.setTopClass(topClass);
 				classificacao.setId(converse.getDialogId());
+				classificacao.setTopConfidence(confidente);
 
 				if (WatsonServiceFactory.CONFIDENCE_MINIMO_NLC > confidente
 						&& WatsonServiceFactory.CONFIDENCE_MINIMO_RR < confidente) {
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
-					resposta = searchRetrieve(converse.getInput());
-
+					if(serviceRetrieveAndRank != null){
+						resposta = searchRetrieve(converse.getInput());
+					}else{
+						RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+						resposta = respostaDAO.findByDescricao(topClass);
+					}
 				} else if (WatsonServiceFactory.CONFIDENCE_MINIMO_NLC <= confidente) {
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_POSITIVO);
 
@@ -301,7 +310,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 
 	private String getIdDialog() {
 		// Pega todos os Dialog configurados
-		List<Dialog> dialogs = service.getDialogs().execute();
+		List<Dialog> dialogs = service.getDialogs();
 				
 		// Retorna o id do Dialog encontrado
 		return dialogs.get(0).getId();
@@ -356,13 +365,13 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		}
 
 		Conversation conversation = getConversation(conversaVO);
-		conversation = service.converse(conversation, conversaVO.getLocucao()).execute();
+		conversation = service.converse(conversation, conversaVO.getLocucao());
 
 		InterlocucaoVO interlocucaoVO = new InterlocucaoVO();
 		interlocucaoVO.setHorario(TimeUtils.timeNow());
 		interlocucaoVO.setIdCliente(conversation.getClientId().toString());
 		interlocucaoVO.setIdConversation(conversation.getId().toString());
-		interlocucaoVO.setNome("M.Watson");
+		interlocucaoVO.setNome(cliente.getDescricao());
 		interlocucaoVO.setInterlocutor(tratarRespostas(conversation));
 
 		
@@ -376,6 +385,7 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 		conversaVO.setIdConversation(conversation.getId().toString());
 		conversaVO.setIdDialog(conversation.getDialogId());
 		conversaVO.getLstInterlocucaoVO().add(interlocucaoVO);
+		conversaVO.setCliente(cliente.getDescricao());
 		
 		return conversaVO;
 	}
@@ -386,16 +396,16 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 	@Produces({ "application/json" })
 	@Transactional
 	public ConversaVO dialog(final ConversaVO locutor) {
-		initDados();
+		initDados(locutor.getCliente());
 
 		return getProfileUser(locutor);
 	}
 	
 	@GET
-	@Path("/dialogForeHand/{email}")
+	@Path("/dialogForeHand/{email}/{cliente}")
 	@Transactional
-	public ConversaVO dialogForeHand(@PathParam("email") String email) {
-		initDados();
+	public ConversaVO dialogForeHand(@PathParam("email") String email, @PathParam("cliente") String cliente) {
+		initDados(cliente);
 
 		ConversaVO conversaVO = new ConversaVO();
 		conversaVO.setEmail(email);

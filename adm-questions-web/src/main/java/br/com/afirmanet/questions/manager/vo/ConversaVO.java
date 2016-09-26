@@ -20,5 +20,6 @@ public class ConversaVO implements Serializable {
 	private String dataNasci;
 	private String horario;
 	private String locucao;
+	private String cliente;
 	private List<InterlocucaoVO> lstInterlocucaoVO;
 }

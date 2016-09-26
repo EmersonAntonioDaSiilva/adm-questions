@@ -79,15 +79,6 @@ public class CamposRelacionadosManager extends GenericCRUD<CamposRelacionados, I
 	}
 	
 	private void validarDados() throws ApplicationException {
-		try {
-			RespostaDAO respostaDAO = new RespostaDAO(entityManager);
-			Resposta byDescricao = respostaDAO.findByNome(entity.getCampo());
-			
-			if(byDescricao != null && !entity.equals(byDescricao)){
-				throw new ApplicationException("Já existe um registro em Resposta com esta Descrição: " + entity.getCampo());
-			}
-		} catch (Exception e) {
-			throw new ApplicationException(e.getMessage(),e);
-		}
+
 	}
 }

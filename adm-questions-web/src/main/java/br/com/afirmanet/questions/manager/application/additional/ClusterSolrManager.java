@@ -62,18 +62,16 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 	}
 	
 	@Override
-	protected void beforeUpdate() throws ApplicationException {
+	protected void beforeUpdate() {
 		if(entity.getIdCluster() != null) {
-			FacesContext facesContext = getFacesContext();
-			facesContext.addMessage("clusterMessages", new FacesMessage("Não é permitido alterar um cluster sincronizado"));
-			throw new ApplicationException("Não é permitido alterar um cluster sincronizado");
+			addInfoMessage("Não é permitido alterar um cluster sincronizado");
 		}
 	}
 	
 	@Transactional
 	public void sincronizarCluster() {
 		
-		SolrCluster cluster = service.sincronizarConfiguracao(entity.getNomeCluster());
+		SolrCluster cluster = service.sincronizarConfiguracao();
 		FacesContext facesContext = getFacesContext();
 		
 		if(cluster == null) {
@@ -94,8 +92,8 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 	public void criarCluster() {
 		FacesContext facesContext = getFacesContext();
 		try {
-			service.createClusterSolr(entity.getNomeCluster(), entity.getUnitCluster(), entity.getNomeConfig(), entity.getNomeCollection());
-			SolrCluster cluster = service.sincronizarConfiguracao(entity.getNomeCluster());
+			service.createClusterSolr();
+			SolrCluster cluster = service.sincronizarConfiguracao();
 			facesContext.addMessage("clusterMessages", new FacesMessage("Cluster sincronizado"));
 			entity.setIdCluster(cluster.getId());
 			
@@ -109,8 +107,8 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 	@Transactional
 	public void apagarCluster() {
 		FacesContext context = FacesContext.getCurrentInstance();
-		service.deleteClusterSolr(entity.getIdCluster());
-		SolrCluster cluster = service.sincronizarConfiguracao(entity.getNomeCluster());
+		service.deleteClusterSolr();
+		SolrCluster cluster = service.sincronizarConfiguracao();
 		
 		if(cluster == null) {
 			entity.setIdCluster(null);
@@ -127,8 +125,8 @@ public class ClusterSolrManager extends GenericCRUD<ClusterSolr, Integer, Cluste
 	public void atualizarConfiguracao() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		try {
-			if(service.existClusterConfig(entity.getIdCluster(), entity.getNomeConfig())) {
-				service.updateClusterSolr(entity.getNomeCluster(), entity.getNomeConfig(), entity.getNomeCollection());
+			if(service.existClusterConfig()) {
+				service.updateClusterSolr();
 				context.addMessage("clusterMessages", new FacesMessage("Atualização feita com sucesso"));
 			} else { 
 				context.addMessage("clusterMessages", new FacesMessage("Não pode ser a atualização, cluster não existente"));

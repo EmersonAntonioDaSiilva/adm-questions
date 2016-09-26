@@ -115,7 +115,7 @@ public class DialogRHManager extends AbstractManager implements Serializable {
 				actionUsuarioPerfil = Boolean.FALSE;
 				actionDialog = Boolean.TRUE;
 
-				dialogVO = client.target(getRestServiceDialog()).path("/dialogForeHand/{email}").resolveTemplate("email", email).request().get(ConversaVO.class);
+				dialogVO = client.target(getRestServiceDialog()).path("/dialogForeHand/{email}/{cliente}").resolveTemplate("email", email).resolveTemplate("cliente", "m.watson").request().get(ConversaVO.class);
 
 				InterlocucaoVO interlocucaoVO = dialogVO.getLstInterlocucaoVO().get(dialogVO.getLstInterlocucaoVO().size() -1);
 				

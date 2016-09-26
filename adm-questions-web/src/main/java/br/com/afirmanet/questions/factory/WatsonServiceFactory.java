@@ -7,6 +7,7 @@ import com.ibm.watson.developer_cloud.document_conversion.v1.DocumentConversion;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
 import com.ibm.watson.developer_cloud.retrieve_and_rank.v1.RetrieveAndRank;
 import com.ibm.watson.developer_cloud.service.WatsonService;
+import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
 
 import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.questions.dao.DadosWatsonDAO;
@@ -46,6 +47,7 @@ public abstract class WatsonServiceFactory  {
 	private DialogService serviceDialog;
 	private RetrieveAndRank serviceRR;
 	private DocumentConversion serviceDC;
+	private TextToSpeech serviceTTS;
 
 	private WatsonService service() throws ApplicationException {
 		WatsonService watsonService = null;
@@ -54,21 +56,23 @@ public abstract class WatsonServiceFactory  {
 			DadosWatsonDAO dadosWatsonDAO = new DadosWatsonDAO(entityManager);
 			credenciais = dadosWatsonDAO.findByClienteAndTypeServico(cliente, typeServico);
 			
-			if(TypeServicoEnum.NATURAL_LANGUAGE_CLASSIFIER.equals(typeServico)){
-				watsonService = new NaturalLanguageClassifier();
-
-			}else if(TypeServicoEnum.DIALOG.equals(typeServico)){
-				watsonService = new DialogService();
-				
-			}else if(TypeServicoEnum.DOCUMENT_CONVERSION.equals(typeServico)){
-				watsonService = new DocumentConversion(DocumentConversion.VERSION_DATE_2015_12_01);
-				
-			}else if(TypeServicoEnum.RETRIEVE_AND_RANK.equals(typeServico)){
-				watsonService = new RetrieveAndRank();
+			if(credenciais != null){
+				if(TypeServicoEnum.NATURAL_LANGUAGE_CLASSIFIER.equals(typeServico)){
+					watsonService = new NaturalLanguageClassifier();
+	
+				}else if(TypeServicoEnum.DIALOG.equals(typeServico)){
+					watsonService = new DialogService();
+					
+				}else if(TypeServicoEnum.DOCUMENT_CONVERSION.equals(typeServico)){
+					watsonService = new DocumentConversion(DocumentConversion.VERSION_DATE_2015_12_01);
+					
+				}else if(TypeServicoEnum.RETRIEVE_AND_RANK.equals(typeServico)){
+					watsonService = new RetrieveAndRank();
+				}else if(TypeServicoEnum.TEXT_TO_SPEECH.equals(typeServico)){
+					watsonService = new TextToSpeech();
+				}
+				watsonService.setUsernameAndPassword(credenciais.getUsuario(), credenciais.getSenha());
 			}
-
-			watsonService.setUsernameAndPassword(credenciais.getUsuario(), credenciais.getSenha());
-			
 		} catch (Exception e) {
 			throw new ApplicationException(e.getMessage(), e); 
 		}
@@ -94,5 +98,10 @@ public abstract class WatsonServiceFactory  {
 	protected DocumentConversion getServiceDC() throws ApplicationException {
 		serviceDC = (DocumentConversion) service();
 		return serviceDC;
+	}
+
+	protected TextToSpeech getServiceTTS() throws ApplicationException {
+		serviceTTS = (TextToSpeech) service();
+		return serviceTTS;
 	}
 }

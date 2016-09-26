@@ -75,8 +75,8 @@ public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolr, Integer> 
 
 	}
 	
-	public List<ClusterSolr> findByCliente(Cliente cliente) throws DaoException {
-		List<ClusterSolr> retornoClusters = null;
+	public ClusterSolr findByCliente(Cliente cliente) throws DaoException {
+		ClusterSolr retornoClusters = null;
 		
 		try {
 			CriteriaQuery<ClusterSolr> criteriaQuery = createCriteriaQuery();
@@ -89,7 +89,7 @@ public @Stateless class ClusterSolrDAO extends GenericDAO<ClusterSolr, Integer> 
 			if(!predicates.isEmpty()){
 				criteriaQuery.select(root).where(predicates.toArray(new Predicate[] {}));
 
-				retornoClusters = entityManager.createQuery(criteriaQuery).getResultList();
+				retornoClusters = entityManager.createQuery(criteriaQuery).getSingleResult();
 			}
 			
 		} catch(Exception e) {

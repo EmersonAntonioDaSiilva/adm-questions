@@ -6,7 +6,7 @@
 				xmlns:afirmanet="http://afirmanet.com.br/componentes" 
 				template="/templates/crud.xhtml">
 	
-	<ui:param name="entityName" value="Resposta" />
+	<ui:param name="entityName" value="Intenções" />
 	<ui:param name="manager" value="#{respostaManager}" />
 	
 	<ui:define name="searchFilterBlock">
@@ -28,7 +28,7 @@
 			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
 			</afirmanet:selectOneMenu>	
 
-			<afirmanet:inputText label="Resposta" 
+			<afirmanet:inputText label="Intenção" 
 								 id="searchNome" 
 								 value="#{manager.searchParam.titulo}" 
 								 maxlength="100" size="80"
@@ -39,7 +39,7 @@
 	<ui:define name="searchResultBlock">
 		<afirmanet:column headerText="Cliente" value="#{entity.cliente.descricao}" />
 		<afirmanet:column headerText="Topico" value="#{entity.topico.descricao}" />
-		<afirmanet:column headerText="Titulo" value="#{entity.titulo}" />
+		<afirmanet:column headerText="Intenção" value="#{entity.titulo}" />
 		<afirmanet:column headerText="Qtde Pergunta"  width="5px" value="#{entity.perguntas.size()}" />
 	</ui:define>
 	<!-- ./searchResultBlock -->
@@ -48,7 +48,7 @@
 		<p:panelGrid columns="1">
 			<afirmanet:outputText label="Cliente" value="#{manager.entity.cliente.descricao}" />
 			<afirmanet:outputText label="Topico" value="#{manager.entity.topico.descricao}" />
-			<afirmanet:outputText label="Titulo" value="#{manager.entity.titulo}" />
+			<afirmanet:outputText label="Intenção" value="#{manager.entity.titulo}" />
 			<afirmanet:outputText label="Definição" value="#{manager.entity.definicao}" />			
 		</p:panelGrid>
 		
@@ -69,7 +69,7 @@
 
 	<ui:define name="recordInsertEditBlock">
 		<p:panelGrid columns="1">
-			<afirmanet:selectOneMenu label="Topico" value="#{manager.entity.cliente}" listener="#{respostaManager.carregaDescricaoClasse}" required="true">
+			<afirmanet:selectOneMenu label="Cliente" value="#{manager.entity.cliente}" listener="#{respostaManager.carregaDescricaoClasse}" required="true">
 			    <f:selectItems value="#{manager.lstCliente}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}" />
 			</afirmanet:selectOneMenu>	
 
@@ -77,8 +77,8 @@
 			    <f:selectItems value="#{manager.lstTopico}" var="topico" itemValue="#{topico}" itemLabel="#{topico.descricao}" />
 			</afirmanet:selectOneMenu>		
 		
-			<afirmanet:inputText label="Titulo" id="insertDescricao" value="#{manager.entity.titulo}" maxlength="100" size="80" required="true" />
-			<afirmanet:inputTextarea label="Definição da Resposta" id="insertDefinicao" value="#{manager.entity.definicao}" maxlength="800" cols="80" rows="10" required="true" />
+			<afirmanet:inputText label="Intenção" id="insertDescricao" value="#{manager.entity.titulo}" maxlength="100" size="80" required="true" />
+			<afirmanet:inputTextarea label="Definição da Intenção" id="insertDefinicao" value="#{manager.entity.definicao}" maxlength="800" cols="80" rows="10" required="true" />
 		 
 		</p:panelGrid>		
 	</ui:define>

@@ -53,12 +53,26 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	}
 
 	@Override
+	public void prepareInsert() {
+		super.prepareInsert();
+		
+		if(searchParam.getCliente() != null){
+			entity.setCliente(searchParam.getCliente());
+		}
+		
+		if(searchParam.getTopico() != null){
+			entity.setTopico(searchParam.getTopico());
+		}
+	}
+	
+	@Override
 	protected void beforeSave() {
 		descricaoPergunta = "";
 		perguntas = null;
+
 		validarDados();
 	}
-
+	
 	@Override
 	protected void beforeUpdate() {
 		descricaoPergunta = "";
@@ -88,7 +102,7 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	private void validarDados() throws ApplicationException {
 		try {
 			RespostaDAO respostaDAO = new RespostaDAO(entityManager);
-			Resposta byDescricao = respostaDAO.findByNome(entity.getTitulo());
+			Resposta byDescricao = respostaDAO.findByTitulo(entity);
 
 			if (byDescricao != null && !entity.equals(byDescricao)) {
 				throw new ApplicationException("Já existe um registro em Resposta com esta Descrição: "
@@ -106,7 +120,7 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 	}
 
 	@Transactional
-	public void insertPergunta() throws ApplicationException {
+	public void insertPergunta() {
 		if (descricaoPergunta==null)
 			addErrorMessage("Favor inserir uma descrição");
 		
@@ -121,7 +135,7 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 			descricaoPergunta = "";
 			beforeDetail();
 		} else {
-			throw new ApplicationException("Já existe um registro em Pergunta com esta Descrição: " + descricaoPergunta);
+			addErrorMessage("Já existe um registro em Pergunta com esta Descrição: " + descricaoPergunta);
 		}
 	}
 
@@ -134,7 +148,7 @@ public class RespostaManager extends GenericCRUD<Resposta, Integer, RespostaDAO>
 
 			beforeDetail();
 		} catch (Exception e) {
-			throw new ApplicationException(e.getMessage(), e);
+			addErrorMessage(e.getMessage(), e);
 		}
 	}
 
