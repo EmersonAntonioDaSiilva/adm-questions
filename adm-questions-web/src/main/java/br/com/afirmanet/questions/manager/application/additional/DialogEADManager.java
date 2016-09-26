@@ -1,5 +1,6 @@
 package br.com.afirmanet.questions.manager.application.additional;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,15 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.omnifaces.cdi.ViewScoped;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import br.com.afirmanet.core.exception.ApplicationException;
 import br.com.afirmanet.core.manager.AbstractManager;
 import br.com.afirmanet.core.producer.ApplicationManaged;
 import br.com.afirmanet.core.util.TimeUtils;
+import br.com.afirmanet.questions.dao.ClienteDAO;
+import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Topico;
 import br.com.afirmanet.questions.manager.vo.ConversaVO;
 import br.com.afirmanet.questions.manager.vo.InterlocucaoVO;
@@ -69,6 +74,7 @@ public class DialogEADManager extends AbstractManager implements Serializable {
 	private Boolean actionDialog;
 
 	private ConversaVO dialogVO;
+	private Cliente cliente;
 	
 	@PostConstruct
 	protected void inicializar() {
@@ -78,7 +84,10 @@ public class DialogEADManager extends AbstractManager implements Serializable {
 			actionUsuarioPerfil = Boolean.FALSE;
 			actionDialog = Boolean.FALSE;
 			
-			serviceTextSpeech = new ServiceTextSpeech();
+			ClienteDAO clieteDAO = new ClienteDAO(entityManager);
+			cliente = clieteDAO.findByNome("Alura");
+			
+			serviceTextSpeech = new ServiceTextSpeech(cliente,entityManager);
 			
 			defineCliente();
 		} catch (ApplicationException e) {
@@ -151,4 +160,11 @@ public class DialogEADManager extends AbstractManager implements Serializable {
 	public void geraAudioReproducao(String texto){
 		serviceTextSpeech.executa(FacesContext.getCurrentInstance().getExternalContext().getRealPath(""),texto);
 	}
+	
+	public StreamedContent getMedia() throws Exception{
+		InputStream stream = null; // 
+		return new DefaultStreamedContent(stream, "video/quicktime");
+	}
+	
+	
 }
