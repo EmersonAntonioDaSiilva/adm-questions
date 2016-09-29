@@ -151,7 +151,13 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 						&& WatsonServiceFactory.CONFIDENCE_MINIMO_RR < confidente) {
 					gravaPerguntaEncontrada(topico, classificacao, WatsonServiceFactory.SENTIMENTO_NEGATIVO);
 					if(serviceRetrieveAndRank != null){
-						resposta = searchRetrieve(converse.getInput());
+						String respostaRR = searchRetrieve(converse.getInput());
+						if (respostaRR != null && !"".equals(respostaRR)){
+							resposta = respostaRR;
+						} else {
+							RespostaDAO respostaDAO = new RespostaDAO(entityManager);
+							resposta = respostaDAO.findByDescricao(topClass);
+						}
 					}else{
 						RespostaDAO respostaDAO = new RespostaDAO(entityManager);
 						resposta = respostaDAO.findByDescricao(topClass);
@@ -177,14 +183,17 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 	}
 
 	private String searchRetrieve(String pergunta) {
+		String resposta = "";
 		QueryResponse queryResponse = serviceRetrieveAndRank.searchAllDocs(pergunta);
 
 		SolrDocumentList results = queryResponse.getResults();
-
-		SolrDocument solrDocument = results.get(0);
-		Object fieldValue = solrDocument.getFieldValue("body");
-		String resposta = fieldValue.toString();
-		resposta = resposta.substring(1, resposta.length() - 1);
+		
+		if (results != null && results.size() > 0) {
+			SolrDocument solrDocument = results.get(0);
+			Object fieldValue = solrDocument.getFieldValue("body");
+			resposta = fieldValue.toString();
+			resposta = resposta.substring(1, resposta.length() - 1);
+		}
 
 		return resposta;
 	}
