@@ -61,7 +61,7 @@
 	</session-config>
 
 	<welcome-file-list>
-		<welcome-file>/pages/perguntaRH.xhtml</welcome-file>
+		<welcome-file>/pages/dialogRH.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<mime-mapping>
