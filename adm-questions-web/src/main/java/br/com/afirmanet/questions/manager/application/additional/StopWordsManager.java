@@ -40,6 +40,16 @@ public class StopWordsManager extends GenericCRUD<StopWords, Integer, StopWordsD
 	}	
 
 	@Override
+	public void prepareInsert() {
+		super.prepareInsert();
+		
+		if(searchParam.getCliente() != null){
+			entity.setCliente(searchParam.getCliente());
+		}
+	}
+	
+	
+	@Override
 	protected void beforeSave() {
 		validarDados();
 	}

@@ -16,13 +16,10 @@ import br.com.afirmanet.questions.constante.ExtensaoEnum;
 import br.com.afirmanet.questions.constante.SolrConfigEnum;
 import br.com.afirmanet.questions.dao.ClienteDAO;
 import br.com.afirmanet.questions.dao.ProtWordsDAO;
-import br.com.afirmanet.questions.dao.SynonymsDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.ProtWords;
-import br.com.afirmanet.questions.entity.Synonyms;
 import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
 import br.com.afirmanet.questions.utils.ProtWordsArquivoUtils;
-import br.com.afirmanet.questions.utils.SynonymsArquivoUtils;
 import lombok.Getter;
 
 @Named
@@ -44,6 +41,15 @@ public class ProtWordsManager extends GenericCRUD<ProtWords, Integer, ProtWordsD
 		lstCliente = clienteDAO.findAll();
 	}	
 
+	@Override
+	public void prepareInsert() {
+		super.prepareInsert();
+		
+		if(searchParam.getCliente() != null){
+			entity.setCliente(searchParam.getCliente());
+		}
+	}
+	
 	@Override
 	protected void beforeSave() {
 		validarDados();

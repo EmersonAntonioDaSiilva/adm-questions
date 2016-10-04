@@ -19,7 +19,6 @@ import br.com.afirmanet.questions.dao.SynonymsDAO;
 import br.com.afirmanet.questions.entity.Cliente;
 import br.com.afirmanet.questions.entity.Synonyms;
 import br.com.afirmanet.questions.utils.ApplicationPropertiesUtils;
-import br.com.afirmanet.questions.utils.ArquivoUtils;
 import br.com.afirmanet.questions.utils.SynonymsArquivoUtils;
 import lombok.Getter;
 
@@ -40,6 +39,16 @@ public class SynonymsManager extends GenericCRUD<Synonyms, Integer, SynonymsDAO>
 		lstCliente = clienteDAO.findAll();
 	}	
 
+	@Override
+	public void prepareInsert() {
+		super.prepareInsert();
+		
+		if(searchParam.getCliente() != null){
+			entity.setCliente(searchParam.getCliente());
+		}
+	}
+	
+	
 	@Override
 	protected void beforeSave() {
 		validarDados(); // verifica se os campos estão preenchidos

@@ -1,0 +1,12 @@
+<h1>Welcome to my face detection app</h1>
+<h2>Recognize anyone?</h2>
+<form action="{{req._parsedUrl.pathname}}">
+    <img src="http://cdn.movieweb.com/img.news.tops/NEziWvRdflxmCH_1_b.jpg" height='200'/>
+    <img src="http://i.forbesimg.com/media/lists/people/michelle-obama_416x416.jpg" height='200'/>
+    <img src="http://cp91279.biography.com/BIO_Bio-Shorts_Michael-Jordan-Mini-Biography_0_181278_SF_HD_768x432-16x9.jpg" height='200'/>
+    <br/>Right-click one of the above images and select Copy image location and paste the URL in the box below.
+    <br>Do an image search for faces, try multiple faces. After you click on an image, to the right it usually says "View image" click that to get the URL.
+    <br/>Image URL:
+    <input type="text" name="imageurl"/>
+    <input type="submit" value="Analyze"/>
+</form>

@@ -1,0 +1,36 @@
+<h2>Image Analysis</h2>
+<p>Analyzed image:
+    <br/></br>
+    <img id="alchemy_image" src="{{result.images.0.resolved_url}}" height="50"/>
+</p>
+{{^result}}
+    <p>No Face detected</p>
+{{/result}}
+</br>
+<table border='1'>
+    <thread>
+        <tr>
+        <th>AgeRange</th>
+        <th>Score</th>
+        <th>Gender</th>
+        <th>Score</th>
+        <th>Name</th>
+        </tr>
+    </thead>
+    {{#result.images.0.faces}}
+    <tr>
+        <td><b>{{age.min}} – {{age.max}}</b></td>
+        <td><i>{{age.score}}</i></td>
+        <td>{{gender.gender}}</td>
+        <td>{{gender.score}}</td>
+        {{#identity}}
+        <td>{{identity.name}} ({{identity.score}})</td>
+        {{/identity}} 
+    </tr>
+    {{/result.images.0.faces}}
+</table>
+
+<form action="{{req._parsedUrl.pathname}}">
+    <br>
+    <input type="submit" value="Try again or go back to the home page"/>
+</form>

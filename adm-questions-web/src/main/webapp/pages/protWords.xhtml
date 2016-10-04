@@ -10,11 +10,19 @@
 	<ui:param name="manager" value="#{protWordsManager}" />
 		
 	<ui:define name="searchFilterBlock">
-		<p:panelGrid columns="2">
-			<p:growl id="generatedFile" showDetail="true" sticky="true" /> 
-			<afirmanet:inputText label="Nome da ProtWords" id="searchNome" value="#{manager.searchParam.descricao}" maxlength="100"/>
+		<p:panelGrid columns="1">
+			<afirmanet:selectOneMenu  value="#{manager.searchParam.cliente}" label="Clientes" required="true">
+				<f:selectItems value="#{manager.lstCliente}" var ="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}"/>
+			</afirmanet:selectOneMenu>
+
+			<afirmanet:inputText label="Nome da ProtWords" id="searchNome" value="#{manager.searchParam.descricao}"  maxlength="100" size="90"  />
 		</p:panelGrid>
 	</ui:define>
+
+	<ui:define name="lastButtonsFormSearchFilter">
+		<p:commandButton id="generateFileTXT" value="Gerar arquivo TXT" action="#{manager.gerarArquivoTxt}" rendered="#{manager.searchAction and manager.entityList.rowCount gt 0}" update="@form"  />
+	</ui:define>	
+
 	<!-- ./searchFilterBlock -->
 
 	<ui:define name="searchResultBlock">
@@ -30,21 +38,13 @@
 	</ui:define>
 	<!-- ./recordDetailBlock -->
 
-	<ui:define name="generateFilebutton">
-		<p:commandButton action="#{manager.gerarArquivoTxt}" 
-						 id="generateFileTXT"
-						 style="margin: 10px auto;" 
-						 rendered="#{manager.entityList != null and manager.entityList.rowCount > 0}"		 					 
-						 value="Gerar arquivo TXT" ajax="true" update="generatedFile" />
-	</ui:define>	
-
 	<ui:define name="recordInsertEditBlock">
 		<p:panelGrid columns="1">
 			<afirmanet:selectOneMenu  value="#{manager.entity.cliente}" label="Clientes">
 				<f:selectItems value="#{manager.lstCliente}" var ="cliente" itemValue="#{cliente}" itemLabel="#{cliente.descricao}"/>
 			</afirmanet:selectOneMenu>
 		
-			<afirmanet:inputText label="Nome da ProtWords" id="insertNome" value="#{manager.entity.descricao}" maxlength="100" />
+			<afirmanet:inputText label="Nome da ProtWords" id="insertNome" value="#{manager.entity.descricao}" maxlength="100" size="90" />
 		</p:panelGrid>		
 	</ui:define>
 	<!-- ./recordInsertEditBlock -->
