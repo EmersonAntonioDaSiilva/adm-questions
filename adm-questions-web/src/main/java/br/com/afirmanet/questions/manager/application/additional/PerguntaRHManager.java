@@ -182,13 +182,13 @@ public class PerguntaRHManager extends AbstractManager implements Serializable {
 	}
 
 	private String getIdClassificacao() {
-		Classifiers classifiers;
+//		Classifiers classifiers;
 		try {
-			classifiers = serviceNLC.getService().getClassifiers();
-			List<Classifier> lstClassifiers = classifiers.getClassifiers();
-			Classifier classifier = lstClassifiers.get(0);
+//			classifiers = serviceNLC.getService().getClassifiers();
+//			List<Classifier> lstClassifiers = classifiers.getClassifiers();
+//			Classifier classifier = lstClassifiers.get(0);
 
-			return classifier.getId();
+			return "2d7ac0x100-nlc-517";
 		} catch (RuntimeException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();

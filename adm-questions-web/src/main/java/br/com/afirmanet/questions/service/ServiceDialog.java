@@ -80,6 +80,15 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 	private Topico topico;
 	private Cliente cliente;
 	
+	/* TODO estes dados deve ser retirados apos a apresentação para a IBM 06/10 */
+	private static final int M_WATSON = 1;
+	private static final int BANCO_ORIGINAL = 2;
+	private static final int ALURA = 3;
+	private static final int SAUDE_CONTROLE = 4;
+
+	
+	
+	
 	private void initDados(String nomeCliente) throws ApplicationException {
 		entityManager = entityManagerFactory.createEntityManager();
 		setEntityManager(entityManager);
@@ -318,11 +327,40 @@ public class ServiceDialog extends WatsonServiceFactory implements Serializable 
 	}
 
 	private String getIdDialog() {
-		// Pega todos os Dialog configurados
-		List<Dialog> dialogs = service.getDialogs();
+		Integer id = cliente.getId();
+		String nameCliente;
+		
+		switch (id) {
+			case M_WATSON:
+				nameCliente = "dialog_rh_ferias";
+				break;
+	
+			case BANCO_ORIGINAL:
+				nameCliente = "watsoninvestimentos";
+				break;
+
+			case ALURA:
+				nameCliente = "watsonead";
+				break;
 				
+			case SAUDE_CONTROLE:
+				nameCliente = "watsonsaude";
+				break;				
+			
+			default:
+				nameCliente = "";
+				break;
+		}
+
+		// Pega todos os Dialog configurados
+		 List<Dialog> dialogs = service.getDialogs();
+		 Dialog dialog = dialogs.stream().filter(m -> m.getName().equals(nameCliente)).findFirst().get();
+		 
+		 
 		// Retorna o id do Dialog encontrado
-		return dialogs.get(0).getId();
+		// return dialogs.get(0).getId();
+		
+		return dialog.getId();
 	}
 
 	private ConversaVO getProfileUser(ConversaVO conversaVO) {

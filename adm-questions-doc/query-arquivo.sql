@@ -8,3 +8,11 @@ Order by r.titulo asc;
 
 
 select * from clientes
+
+
+
+
+Select 	r.titulo
+from 	respostas r 
+Where	id_cliente = 1
+Order by r.titulo asc;
